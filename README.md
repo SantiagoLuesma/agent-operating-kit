@@ -17,7 +17,7 @@ same rules, evidence standards, and delivery workflow.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: **0.2.0** — see [`VERSION`](./VERSION).
+Current kit version: **0.3.0** — see [`VERSION`](./VERSION).
 
 ## Principles
 
@@ -106,10 +106,13 @@ Live inventory: `.agents/skills/*/SKILL.md`.
 | Inherited codebase | `audit-existing-project` |
 | Validate critical assumptions | `validate-assumptions` |
 | Freeze increment scope | `define-product-scope` |
+| Information architecture | `design-information-architecture` |
 | Quality attributes | `define-quality-attributes` |
+| Design architecture | `design-architecture` |
+| Review architecture | `review-architecture` |
+| Walking skeleton | `build-walking-skeleton` |
 | Design a feature | `design-feature` |
 | Review feature design | `review-feature` |
-| Review architecture | `review-architecture` |
 | Execution plan | `create-exec-plan` |
 | Implement a slice | `implement-vertical-slice` |
 | Verify acceptance | `verify-acceptance-criteria` |
@@ -120,6 +123,7 @@ Live inventory: `.agents/skills/*/SKILL.md`.
 | Session handoff | `generate-handoff` |
 | Prepare pull request | `prepare-pr` |
 | Verify integration branch | `verify-main` |
+| Prepare release | `prepare-release` |
 
 ## Layout
 

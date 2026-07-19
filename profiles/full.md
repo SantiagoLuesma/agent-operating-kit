@@ -11,15 +11,16 @@ large migrations, or inherited codebases with weak documentation.
 1. `discover-product`
 2. `validate-assumptions` for lethal unknowns
 3. `define-product-scope`
-4. UX / information architecture work as needed (skill if present; otherwise
-   document under `docs/ux/` with explicit open questions)
+4. `design-information-architecture` when navigation/objects need structure
 5. `define-quality-attributes`
-6. Architecture design (document under `docs/architecture/`) → `review-architecture`
-7. `design-feature` → `review-feature` per capability
-8. `create-exec-plan`
-9. Walking skeleton / first vertical slices via `implement-vertical-slice`
-10. `verify-acceptance-criteria` → `review-change` → specialist reviews
-11. `update-documentation`, `generate-handoff`, `prepare-pr`, `verify-main`
+6. `design-architecture` → `review-architecture`
+7. `build-walking-skeleton` (thin end-to-end proof)
+8. `design-feature` → `review-feature` per capability
+9. `create-exec-plan` for remaining MUST slices
+10. `implement-vertical-slice` (repeat)
+11. `verify-acceptance-criteria` → `review-change` (+ security/migration as needed)
+12. `update-documentation`, `generate-handoff`, `prepare-pr`
+13. After merge: `verify-main` → `prepare-release` (human still approves deploy)
 
 ### Existing / opaque codebase
 
@@ -32,9 +33,10 @@ large migrations, or inherited codebases with weak documentation.
 
 - Separate facts, decisions, assumptions, and unknowns
 - Independent review before merge for material changes
-- Human gates: scope, irreversible decisions, PR, production
+- Human gates: scope, irreversible decisions, PR, production/release
 - Prefer evidence over confidence
 - Do not implement while critical requirements contradict each other
+- Do not skip `review-architecture` after designing non-trivial structure
 
 ## Skills often in play
 

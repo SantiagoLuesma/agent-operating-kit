@@ -13,24 +13,28 @@ clear acceptance criteria.
 3. If behavior is not specified well enough:
    - `design-feature` → `review-feature`
 4. If cross-cutting quality or architecture is affected:
-   - `define-quality-attributes` and/or `review-architecture` as needed
+   - `define-quality-attributes` and/or `design-architecture` →
+     `review-architecture` as needed
 5. `create-exec-plan` for non-trivial implementation.
-6. `implement-vertical-slice` for one milestone at a time.
+6. `implement-vertical-slice` for one milestone at a time
+   (use `build-walking-skeleton` only when introducing a new architectural path).
 7. `verify-acceptance-criteria` (independent session when possible).
 8. `review-change`; add `review-security` / `review-migration` when relevant.
 9. `update-documentation` + `generate-handoff` at interruptions.
 10. `prepare-pr` → human PR approval.
-11. After merge: `verify-main` when integration health matters.
+11. After merge: `verify-main` when integration health matters;
+    `prepare-release` when shipping a versioned release.
 
 ## Skills often in play
 
 | Phase | Skills |
 | --- | --- |
 | Specify | `design-feature`, `review-feature` |
+| Structure | `design-architecture`, `review-architecture` (when needed) |
 | Plan | `create-exec-plan` |
 | Build | `implement-vertical-slice` |
 | Prove | `verify-acceptance-criteria`, `review-change` |
-| Ship | `update-documentation`, `prepare-pr`, `verify-main` |
+| Ship | `update-documentation`, `prepare-pr`, `verify-main`, `prepare-release` |
 
 ## Do not skip
 

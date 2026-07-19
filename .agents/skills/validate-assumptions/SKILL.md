@@ -1,95 +1,339 @@
 ---
 name: validate-assumptions
-description: Identify, classify, prioritize, and validate critical assumptions for a product, feature, or architecture. Turn uncertainty into evidence-based decisions. Design ethical experiments, evaluate signals, and recommend proceed, pivot, or stop.
+description: >
+  Identify, classify, prioritize, and validate critical assumptions for a
+  product, feature, or architecture. Turn uncertainty into evidence-based
+  decisions by designing falsifiable experiments, evaluating behavioral
+  signals, and recommending proceed, pivot, or stop. Use after discovery or
+  when a design depends on unproven claims. Produces an assumption register,
+  experiment plans, and a validation summary with an explicit gate. Does not
+  implement product code, contact users without approval, or invent evidence.
 ---
 
-# SKILL: Validate Assumptions
+# Validate Assumptions
 
-## 1. IDENTITY AND PURPOSE
-Act as a hybrid team of Product Researcher, Experiment Designer, and Risk Analyst. Your goal is to discover what must be true for a product or feature to work, prioritize the most lethal assumptions, and design minimal experiments that refute or support them with behavior-based evidence (not opinions).
+## Purpose
+
+Discover what must be true for a product, feature, or architecture decision to
+succeed; prioritize the most lethal assumptions; and design the cheapest
+ethical experiments that can refute or support them with behavior-based
+evidence—not opinions.
 
 **Core formula:**
+
 `Plausibility ≠ Evidence ≠ Validation ≠ Absolute guarantee`
-*Success is not confirming ideas; it is reducing uncertainty enough to make responsible decisions (proceed, pivot, or stop).*
 
-## 2. RULES AND CONSTRAINTS (GUARDRAILS)
-You MUST follow these rules at all times:
-1. **Mandatory falsifiability:** Design experiments that seek to *refute* the idea. If any result can be interpreted as success, the experiment is invalid.
-2. **Predefined criteria:** Set success, failure, and inconclusive thresholds *before* analyzing results. Never move the goalposts after the fact.
-3. **Behavior > Opinion:** Prefer observing real friction or commitment (time, money, migration) over declarative questions ("Would you use this?").
-4. **Absolute prohibitions (require a human):** Do not contact users, charge money, alter production environments, launch harmful fake doors, or collect PII (sensitive personal data) without explicit human approval.
-5. **Do not invent evidence:** Work only with the data provided. If information is missing, mark the evidence gap and request the data.
+Success is reducing uncertainty enough for a responsible decision: proceed,
+pivot, or stop.
 
-## 3. MAIN WORKFLOW
-Follow this sequence step by step when the skill is invoked. If the context is large, advance phase by phase and ask the user for confirmation so responses stay within limits.
+This skill validates. It does not implement production features, silently
+expand scope, or treat stakeholder confidence as proof.
 
-### Phase 1: Extraction and Normalization
-- Review documentation (vision, roadmap, stories, feedback).
-- Extract implicit and explicit claims (watch for words such as "obviously," "intuitive," "scalable," "people want").
-- Decompose compound assumptions into independent, testable statements.
-- Classify each by category: *Problem, User, Value, Usability, Adoption, Retention, Monetization, Technical, Data, Legal.*
+## When to use
 
-### Phase 2: Prioritization (Risk Scoring)
-Evaluate each normalized assumption using:
-- **Impact if false:** (Low/Medium/High/Critical)
-- **Current uncertainty:** (Low/Medium/High)
-- **Decision irreversibility:** (Easy/Moderate/Difficult/Irreversible)
-*Immediately prioritize assumptions with high uncertainty, high impact, and low reversibility ("lethal assumptions").*
+Use when:
 
-### Phase 3: Existing Evidence Assessment
-- Classify evidence provided by the user (Level 0: Opinion → Level 3: Analytics/Behavior → Level 6: Live production operation).
-- Assign a status to each assumption: `Unexamined`, `Planned`, `Testing`, `Supported`, `Partially Supported`, `Refuted`, `Inconclusive`, `Accepted Risk`.
+* discovery produced critical unknowns;
+* a feature or architecture decision depends on unproven user, market, or
+  technical claims;
+* stakeholders disagree on what “must be true”;
+* the cost of being wrong is high (security, billing, multi-tenant data,
+  irreversible UX);
+* experiments are needed before freezing scope or building a large slice.
 
-### Phase 4: Experiment Design
-For critical assumptions without sufficient evidence, design the cheapest viable experiment (interview, usability test, prototype, concierge, ethical fake door, technical spike).
-- Use the template: *"For [segment], when [context], we expect [X%] to perform [behavior] within [time], because [mechanism]."*
+Do not use as a substitute for:
 
-### Phase 5: Analysis and Decision
-Once results are available, compare them to the predefined criteria and recommend a gate:
-- `VALIDATED TO PROCEED` (Sufficient evidence; proceed).
-- `CONDITIONAL PROCEED` (Limited rollout / with guardrails).
-- `MORE EVIDENCE REQUIRED` (Inconclusive or invalid sample).
-- `PIVOT RECOMMENDED` (Problem valid, but solution/segment refuted).
-- `STOP RECOMMENDED` (Core assumptions refuted; unacceptable risk).
+* full product discovery (`discover-product`);
+* feature specification (`design-feature`);
+* implementation or production experiments without approval.
 
-## 4. EXPECTED OUTPUT FORMATS (ARTIFACTS)
-Produce documentation using only these Markdown schemas.
+## Compatibility
 
-### A. Assumption Register (`assumption-register.md`)
-```markdown
-## [ID e.g. ASM-001]: [Short title]
-*   **Statement:** (Normalized claim)
-*   **Category:** (Problem | Value | Usability | Technical | etc.)
-*   **Risk Profile:** Impact [High] | Uncertainty [High] | Reversibility [Low] -> Priority: P0
-*   **If false:** (Fatal consequence for the product)
-*   **Status:** (Unexamined | Supported | Refuted | Inconclusive)
+Model- and client-agnostic. Repository documentation is the source of truth.
+Chat history is supporting context only.
+
+## Expected inputs
+
+Review when available:
+
+* `AGENTS.md` and `docs/project-status.md`;
+* product docs (`docs/product/`), discovery outputs, scope;
+* feature specs and open questions;
+* architecture and quality-attribute docs when technical assumptions matter;
+* prior research, analytics, support tickets, sales notes (as labeled evidence);
+* legal/compliance constraints that bound experiments.
+
+Do not invent interviews, metrics, or market demand.
+
+## Guardrails
+
+1. **Falsifiability:** experiments must be able to fail. If every outcome can
+   be spun as success, redesign the experiment.
+2. **Predefined criteria:** set success, failure, and inconclusive thresholds
+   before analyzing results.
+3. **Behavior over opinion:** prefer observed action and commitment (time,
+   money, migration effort) over “Would you use this?”
+4. **No invented evidence:** missing data is an explicit gap.
+5. **Human approval required before:** contacting real users, charging money,
+   collecting PII, running production-affecting or harmful fake doors, or
+   accessing customer data.
+6. **Autonomy:** extract and prioritize assumptions from the repository first;
+   do not open with a generic questionnaire.
+
+## Evidence levels
+
+| Level | Meaning |
+| ---: | --- |
+| 0 | Opinion / preference |
+| 1 | Stakeholder assertion without observation |
+| 2 | Analogy or competitor claim |
+| 3 | Lightweight behavioral signal (prototype, waitlist with friction) |
+| 4 | Structured research (interviews with observed tasks, usability tests) |
+| 5 | Analytics / commitment metrics in a controlled setting |
+| 6 | Production behavior under real incentives |
+
+Higher levels can still be wrong. Record limitations.
+
+## Assumption statuses
+
+`Unexamined` | `Planned` | `Testing` | `Supported` | `Partially Supported` |
+`Refuted` | `Inconclusive` | `Accepted Risk`
+
+## Procedure
+
+### 1. Establish validation context
+
+Record:
+
+* decision this validation unblocks;
+* product area or feature;
+* planning horizon;
+* what happens if we proceed wrongly;
+* constraints (legal, ethics, budget, time);
+* available evidence sources.
+
+### 2. Extract and normalize assumptions
+
+From docs and stakeholder claims, extract implicit and explicit statements.
+
+Watch for soft language: “obviously,” “intuitive,” “users want,” “scalable,”
+“everyone needs.”
+
+Decompose compound claims into independent, testable statements:
+
+> Bad: “SMBs will pay for automatic reporting because it saves time.”  
+> Better: (a) SMBs spend material time on reporting; (b) they trust automation
+> enough to adopt; (c) they will pay price P within period T.
+
+Classify each assumption:
+
+* Problem
+* User / segment
+* Value / willingness to pay
+* Usability
+* Adoption / activation
+* Retention
+* Monetization
+* Technical feasibility
+* Data availability / quality
+* Legal / compliance / privacy
+* Operational / support
+
+### 3. Score and prioritize
+
+For each assumption score:
+
+| Dimension | Scale |
+| --- | --- |
+| Impact if false | Low / Medium / High / Critical |
+| Uncertainty | Low / Medium / High |
+| Reversibility of dependent decision | Easy / Moderate / Difficult / Irreversible |
+
+**Lethal assumptions** = high/critical impact + high uncertainty + difficult or
+irreversible decision dependency.
+
+Prioritize lethal assumptions first. Do not run expensive experiments on
+cosmetic unknowns.
+
+### 4. Assess existing evidence
+
+For each priority assumption:
+
+* list available evidence with level 0–6;
+* note sample bias and recency;
+* assign status;
+* decide: enough to decide, needs experiment, or accept risk with owner.
+
+### 5. Design experiments
+
+For each lethal assumption lacking sufficient evidence, design the cheapest
+ethical test that can refute it.
+
+Methods (examples):
+
+* task-based interview / observation;
+* usability test on prototype;
+* concierge / wizard-of-oz;
+* ethical fake door with clear follow-up;
+* pricing or commitment smoke test (with approval);
+* technical spike with pass/fail metrics;
+* analysis of existing support/usage data.
+
+Each experiment must include:
+
+* target assumption IDs;
+* hypothesis in behavioral form;
+* method and participants/data source;
+* success criteria (pre-registered);
+* failure criteria;
+* inconclusive criteria;
+* duration and cost bound;
+* ethics / privacy guardrails;
+* decision enabled by the result.
+
+Hypothesis template:
+
+> For [segment], when [context], we expect [measurable behavior] within
+> [time], because [mechanism].
+
+### 6. Execute or plan execution
+
+* If evidence already exists in the repository or provided artifacts, analyze
+  it now against pre-registered criteria.
+* If new fieldwork is required, produce experiment plans and stop for human
+  approval before contacting users or spending budget.
+* Never fabricate results to close the gate.
+
+### 7. Analyze and recommend a gate
+
+Compare results to predefined thresholds. Do not move goalposts.
+
+Separate:
+
+* supported assumptions;
+* refuted assumptions;
+* inconclusive items;
+* accepted residual risks (owner + monitoring).
+
+Recommend product consequences: freeze scope, narrow segment, change solution,
+defer build, or stop.
+
+### 8. Synchronize repository state
+
+Update:
+
+* `docs/product/assumptions.md` (or `docs/product/assumption-register.md`);
+* experiment plans under `docs/product/` or `docs/plans/active/` as fits;
+* validation summary;
+* `docs/project-status.md` (gate, blockers, next skill).
+
+## Deliverables
+
+Create or update:
+
+```text
+docs/product/assumptions.md          # register (canonical preferred path)
+docs/product/experiments.md          # optional experiment plans
+docs/product/validation-summary.md   # gate and decisions
+docs/project-status.md
 ```
-### B. Experiment Design (`experiment-plan.md`)
+
+If the project already uses other paths from discovery, update those canonical
+files instead of duplicating.
+
+### Assumption register entry
+
 ```markdown
-## [ID e.g. EXP-001]: [Experiment title]
-*   **Target Assumptions:** [ASM-001, ASM-002]
-*   **Method:** (Technical spike, Concierge, Usability Test, etc.)
-*   **Hypothesis:** For [segment], we expect [observable behavior] because [mechanism].
-*   **Success Criteria:** (e.g. >70% complete without assistance)
-*   **Failure Criteria:** (e.g. <40% complete or >20% hit a destructive error)
-*   **Guardrails/Ethics:** (Safety constraints or biases to avoid)
+## ASM-001: <short title>
+- **Statement:**
+- **Category:**
+- **Impact if false:**
+- **Uncertainty:**
+- **Reversibility of dependent decision:**
+- **Priority:** P0 | P1 | P2
+- **Evidence (levels):**
+- **Status:**
+- **If false:**
+- **Experiment:** EXP-00N | none
+- **Owner:**
 ```
-### C. Decision Summary (`validation-summary.md`)
+
+### Experiment entry
+
 ```markdown
-# Validation Summary & Gate
-**GATE RECOMMENDATION:** [VALIDATED / PIVOT / STOP / MORE EVIDENCE]
-
-*   **Evidence Evaluated:** (Brief summary of data/interviews analyzed)
-*   **Supported Assumptions:** (List of IDs)
-*   **Refuted Assumptions:** (List of IDs and why)
-*   **Residual Risks:** (Accepted risks that require monitoring)
-*   **Next Actions:** (Recommended scope adjustments or handoff to the next skill)
+## EXP-001: <title>
+- **Target assumptions:** ASM-001
+- **Method:**
+- **Hypothesis:**
+- **Success criteria:**
+- **Failure criteria:**
+- **Inconclusive criteria:**
+- **Guardrails / ethics:**
+- **Status:** Planned | Running | Complete
+- **Result:**
+- **Decision enabled:**
 ```
-## 5. INVOCATION INSTRUCTIONS
-When the user runs this skill without additional parameters:
 
-1. Ask them to provide product/feature context and any prior research or analytics.
+## Gates
 
-2. Start automatically with Phases 1 and 2, delivering an initial assumption-register.md.
+### VALIDATED TO PROCEED
 
-3. Stop and ask the user which priority assumptions they want experiment designs for (Phase 4).
+Lethal assumptions are supported or safely bounded; dependent decisions may
+continue (usually to `define-product-scope` or design skills).
+
+### CONDITIONAL PROCEED
+
+Proceed only under explicit guardrails, limited rollout, or time-boxed
+accepted risk with owners.
+
+### MORE EVIDENCE REQUIRED
+
+Critical uncertainty remains; experiments are designed or in progress.
+
+### PIVOT RECOMMENDED
+
+Problem may remain valid, but solution, segment, or model is refuted or weakly
+supported; recommend a concrete pivot direction.
+
+### STOP RECOMMENDED
+
+Core assumptions refuted or residual risk unacceptable; do not invest in the
+current direction without a new discovery cycle.
+
+### BLOCKED
+
+Cannot validate safely without authority, data access, or ethics approval.
+
+## Prohibitions
+
+Do not:
+
+* invent users, quotes, metrics, or interview results;
+* contact users or collect PII without approval;
+* run production-impacting experiments without approval;
+* treat opinions as Level 5–6 evidence;
+* bury refuted assumptions;
+* expand product scope under the guise of “learning”;
+* implement production features as a “quick test” without an experiment frame;
+* declare VALIDATED TO PROCEED while lethal assumptions remain Unexamined.
+
+## Final report
+
+Include:
+
+1. Gate outcome  
+2. Decision this validation was meant to unlock  
+3. Lethal assumptions and statuses  
+4. Experiments designed / evidence analyzed  
+5. Refuted or pivoted claims  
+6. Accepted residual risks and owners  
+7. Documentation updated  
+8. Next recommended skill  
+9. Human approvals still required  
+
+Typical next skills:
+
+* `define-product-scope` when validation supports an increment;
+* `discover-product` when the problem framing itself failed;
+* `design-feature` / `design-architecture` when assumptions are local to a design;
+* `audit-existing-project` when the unknown is the current system, not the market.

@@ -6,30 +6,34 @@
 | --- | --- |
 | Project | Agent operating kit (`starter-project`) |
 | Kind | Portable kit (process + skills + doc skeleton), not an application |
-| Kit version | `0.2.0` (see `VERSION`) |
+| Kit version | `0.3.0` (see `VERSION`) |
 | Branch policy | Work on feature branches (e.g. `grok`); archive snapshot on `version-original` / tag `original-baseline` |
 
 ## Current phase
 
-**Kit packaging — Phase 2 complete (scripts & portability)**
+**Kit packaging — Phase 3 complete (pipeline skills)**
 
 ## Gate
 
-`KIT PHASE 2 READY`
+`KIT PHASE 3 READY`
 
 ## Objective
 
-Produce a cloneable, agent-agnostic kit that can be copied into new or existing
-software projects without depending on a specific model or vendor workflow.
+Produce a cloneable, agent-agnostic kit covering product → design → build →
+verify → release preparation without depending on a specific model or vendor.
 
 ## Completed
 
-- Baseline skills under `.agents/skills/` (English)
-- Canonical `AGENTS.md` with authority hierarchy and full skill catalog
-- Git archive: `main`, `version-original`, tag `original-baseline`
-- Work branch: `grok`
-- Phase 1: README, profiles, adapters, templates, basic scripts
-- Phase 2: script contracts, hooks, bootstrap, list-skills, kit CI, VERSION 0.2.0
+- Phase 1: packaging (AGENTS, profiles, adapters, templates, README)
+- Phase 2: script contracts, bootstrap, CI, VERSION 0.2.x
+- All skills in English
+- Phase 3 pipeline skills:
+  - expanded `validate-assumptions`
+  - `design-information-architecture`
+  - `design-architecture`
+  - `build-walking-skeleton`
+  - `prepare-release`
+- Catalog and profiles updated for full lifecycle
 
 ## In progress
 
@@ -37,8 +41,9 @@ software projects without depending on a specific model or vendor workflow.
 
 ## Next
 
-- Phase 3 (optional): pipeline skill gaps (UX/architecture design, release)
-- Dry-run bootstrap + standard profile on a tiny real or sample product
+- Dry-run: bootstrap kit into a sample/real mini-project
+- Optional: merge `grok` → `main` and tag `v0.3.0`
+- Optional later: design-ux visual skill, incident/postmortem skill
 
 ## Authoritative documents
 
@@ -46,9 +51,9 @@ software projects without depending on a specific model or vendor workflow.
 | --- | --- |
 | Agent rules | `AGENTS.md` |
 | Tooling baseline | `TOOLING.md` |
+| Script contracts | `docs/kit/scripts.md` |
 | Profiles | `profiles/` |
 | Skills | `.agents/skills/` |
-| Templates | `docs/**/_templates/`, `docs/decisions/adr/_template.md` |
 
 ## Blockers
 
@@ -56,17 +61,17 @@ None.
 
 ## Risks
 
-- Skill catalog is deeper than onboarding; profiles must prevent over-process.
-- Some skills still vary in depth/language; normalize gradually.
-- No application stack yet by design; `scripts/verify` may report not configured
-  until a project instance adds a stack.
+- Full profile is long by design; agents must still pick the smallest profile
+  that matches risk (`quick` / `standard` / `full`).
+- New skills are procedural templates—not a substitute for project-specific
+  architecture decisions.
 
 ## Next recommended action
 
-Continue kit packaging on branch `grok`; do not invent product scope for a
-fictional app inside this repository.
+Use the kit on a real or sample product (`bootstrap-project`), or merge/tag
+0.3.0 when satisfied.
 
 ## Next recommended skill
 
-None for product work. For kit maintenance, follow `AGENTS.md` and update docs
-with `update-documentation` when packaging changes behavior of the kit itself.
+None for kit maintenance. For a new product instance: `discover-product` or
+`audit-existing-project`.

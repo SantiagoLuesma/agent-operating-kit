@@ -107,10 +107,13 @@ Read and execute: .agents/skills/<skill-name>/SKILL.md
 | Inherited or opaque codebase | `audit-existing-project` |
 | Critical assumptions need evidence | `validate-assumptions` |
 | Scope must be frozen for an increment | `define-product-scope` |
+| Navigation / object structure (IA) | `design-information-architecture` |
 | Quality attributes must be measurable | `define-quality-attributes` |
+| Architecture must be proposed | `design-architecture` |
+| Architecture needs adversarial review | `review-architecture` |
+| First runnable end-to-end proof | `build-walking-skeleton` |
 | Feature needs a full specification | `design-feature` |
 | Feature design needs adversarial review | `review-feature` |
-| Architecture needs adversarial review | `review-architecture` |
 | Approved change needs an ExecPlan | `create-exec-plan` |
 | Approved slice must be implemented | `implement-vertical-slice` |
 | Acceptance must be independently verified | `verify-acceptance-criteria` |
@@ -121,6 +124,7 @@ Read and execute: .agents/skills/<skill-name>/SKILL.md
 | Session/agent transfer needs continuity | `generate-handoff` |
 | Branch is ready to present as a PR | `prepare-pr` |
 | Integration branch health after merge | `verify-main` |
+| Release package / go-no-go prep | `prepare-release` |
 
 When a new skill appears under `.agents/skills/`, use it if it matches the
 task—even if it is not listed above. Prefer updating this table when adding a

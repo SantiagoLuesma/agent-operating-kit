@@ -8,10 +8,11 @@
 
 ## Changing skills
 
-1. Edit `.agents/skills/<name>/SKILL.md`.
-2. Ensure YAML frontmatter has `name` and `description`.
+1. Edit `.agents/skills/<name>/SKILL.md` (English, full procedure, gates).
+2. Ensure YAML frontmatter has `name` and `description` (name = directory).
 3. Update the catalog table in `AGENTS.md` and `README.md` when adding skills.
-4. Run `./scripts/check-docs`.
+4. Update `profiles/*` if the default lifecycle path changes.
+5. Run `./scripts/check-docs` and `./scripts/list-skills`.
 
 ## Changing AGENTS.md
 
