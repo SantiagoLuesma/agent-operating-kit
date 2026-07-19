@@ -89,6 +89,12 @@ copy_tree() {
 kit_info "bootstrap: kit=$ROOT"
 kit_info "bootstrap: target=$TARGET force=$FORCE"
 
+# Detect pre-existing product status before we copy kit docs
+had_project_status=0
+if [[ -f "$TARGET/docs/project-status.md" ]]; then
+  had_project_status=1
+fi
+
 # Root kit files (README handled separately)
 for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md SECURITY.md CHANGELOG.md .gitignore; do
   copy_file "$f"
@@ -148,16 +154,15 @@ if [[ -d "$TARGET/scripts" ]]; then
     "$TARGET"/scripts/list-skills "$TARGET"/scripts/bootstrap-project 2>/dev/null || true
 fi
 
-# Prefer template project-status for instances if force or missing filled status
-if [[ ! -f "$TARGET/docs/project-status.md" || "$FORCE" -eq 1 ]]; then
-  if [[ -f "$ROOT/docs/_templates/project-status.md" ]]; then
-    # only replace with template when missing; if force and file is kit's own status, overwrite with template
-    if [[ ! -f "$TARGET/docs/project-status.md" ]]; then
-      copy_file "docs/_templates/project-status.md" "docs/project-status.md"
-    elif [[ "$FORCE" -eq 1 ]]; then
-      cp "$ROOT/docs/_templates/project-status.md" "$TARGET/docs/project-status.md"
-      kit_ok "reset docs/project-status.md from template (--force)"
-    fi
+# Instances must not inherit the kit repository's own project-status.
+# Use the blank template unless the target already had a status (and no --force).
+if [[ -f "$ROOT/docs/_templates/project-status.md" ]]; then
+  if [[ "$had_project_status" -eq 0 || "$FORCE" -eq 1 ]]; then
+    mkdir -p "$TARGET/docs"
+    cp "$ROOT/docs/_templates/project-status.md" "$TARGET/docs/project-status.md"
+    kit_ok "installed docs/project-status.md from template (instance, not kit status)"
+  else
+    kit_info "kept pre-existing docs/project-status.md"
   fi
 fi
 

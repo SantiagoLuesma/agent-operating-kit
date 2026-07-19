@@ -17,9 +17,11 @@ same rules, evidence standards, and delivery workflow.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: **0.3.1** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
+Current kit version: **0.3.2** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
 
-Kit completeness criteria: [`docs/kit/completeness.md`](./docs/kit/completeness.md) (Level A = merge-ready packaging).
+Kit completeness: [`docs/kit/completeness.md`](./docs/kit/completeness.md)  
+Level A = packaging · Level B = dry-run (`./scripts/smoke-level-b`, report in
+[`docs/kit/level-b-report.md`](./docs/kit/level-b-report.md)).
 
 ## Principles
 
@@ -166,6 +168,7 @@ docs/kit/scripts.md       # script contracts
 ./scripts/verify
 ./scripts/test            # NOT CONFIGURED until a stack exists
 ./scripts/list-skills
+./scripts/smoke-level-b   # Level B dry-run (bootstrap + quick + standard)
 
 # After an app stack exists, enforce hooks in CI:
 STRICT=1 ./scripts/verify

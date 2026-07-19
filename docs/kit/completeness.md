@@ -38,9 +38,19 @@ Verify:
 
 Level A, plus:
 
-1. Dry-run: `./scripts/bootstrap-project /tmp/kit-smoke && (cd /tmp/kit-smoke && ./scripts/check-docs && ./scripts/verify)`
-2. At least one `quick` and one `standard` path exercised on a sample or real repo
-3. Fixes from dry-run landed; tag if needed (`v0.3.1+`)
+1. Automated dry-run: `./scripts/smoke-level-b`
+2. Report: `docs/kit/level-b-report.md` shows **LEVEL B SMOKE PASSED**
+3. Covers: bootstrap, instance status template, profile **quick**, profile **standard**,
+   `STRICT=1` verify/test with project hooks
+4. Friction fixes from the dry-run are merged (e.g. bootstrap must not copy kit
+   `project-status` into instances)
+
+Re-run anytime:
+
+```bash
+./scripts/smoke-level-b
+# optional: ./scripts/smoke-level-b /tmp/my-smoke-parent
+```
 
 ## Level C — Optional long-term
 

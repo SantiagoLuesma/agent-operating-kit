@@ -81,8 +81,23 @@ Copy the kit into another repository:
 ./scripts/bootstrap-project /path/to/project --force
 ```
 
-Writes `docs/kit-version.md` with the kit version stamp. Does not invent
-product scope. Skips existing files unless `--force`.
+Writes `docs/kit-version.md` with the kit version stamp. Installs
+`docs/project-status.md` from the **template** (does not copy the kit repo’s
+own status). Does not invent product scope. Skips existing files unless
+`--force` (except instance status template install rules above).
+
+## scripts/smoke-level-b
+
+Level B dry-run harness:
+
+```bash
+./scripts/smoke-level-b
+./scripts/smoke-level-b /tmp/smoke-parent
+```
+
+Bootstraps a temp app, runs structural checks, exercises **quick** and
+**standard** documentation/implementation smoke paths with `STRICT=1` hooks,
+and writes `docs/kit/level-b-report.md` when run from the kit repo.
 
 ## Agent rules
 

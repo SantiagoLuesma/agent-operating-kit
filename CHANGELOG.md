@@ -2,6 +2,18 @@
 
 All notable changes to the **agent operating kit** are documented here.
 
+## [0.3.2] — 2026-07-19
+
+### Added
+
+- `scripts/smoke-level-b` Level B dry-run harness (bootstrap + quick + standard).
+- `docs/kit/level-b-report.md` evidence from the dry-run.
+
+### Fixed
+
+- Bootstrap no longer copies the kit repository’s own `docs/project-status.md`
+  into project instances; installs the blank template instead.
+
 ## [0.3.1] — 2026-07-19
 
 ### Added

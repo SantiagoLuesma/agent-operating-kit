@@ -1,0 +1,322 @@
+#!/usr/bin/env bash
+# Level B dry-run harness: bootstrap + quick path + standard path + verify.
+# Usage:
+#   scripts/smoke-level-b              # uses a temp directory
+#   scripts/smoke-level-b /path/to/dir # uses given parent directory
+#
+# Exit 0 on success; 1 on failure. Does not modify the kit working tree
+# except when writing the report path under docs/kit/ (caller may copy report).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/common.sh
+source "$ROOT/scripts/lib/common.sh"
+
+PARENT="${1:-}"
+if [[ -z "$PARENT" ]]; then
+  PARENT="$(mktemp -d "${TMPDIR:-/tmp}/kit-level-b.XXXXXX")"
+else
+  mkdir -p "$PARENT"
+  PARENT="$(cd "$PARENT" && pwd)"
+fi
+
+APP="$PARENT/app"
+REPORT="$PARENT/level-b-report.md"
+KIT_VERSION="$(tr -d '[:space:]' < "$ROOT/VERSION")"
+
+log() { printf '%s\n' "$*"; }
+section() { printf '\n## %s\n\n' "$*" >> "$REPORT"; }
+bullet() { printf -- '- %s\n' "$*" >> "$REPORT"; }
+
+rm -rf "$APP"
+mkdir -p "$PARENT"
+: > "$REPORT"
+
+{
+  echo "# Level B dry-run report"
+  echo
+  echo "| Field | Value |"
+  echo "| --- | --- |"
+  echo "| Kit version | $KIT_VERSION |"
+  echo "| Kit root | \`$ROOT\` |"
+  echo "| Smoke parent | \`$PARENT\` |"
+  echo "| App path | \`$APP\` |"
+  echo "| Started (UTC) | $(date -u +"%Y-%m-%dT%H:%M:%SZ") |"
+  echo
+} >> "$REPORT"
+
+log "smoke-level-b: parent=$PARENT"
+
+# --- 1. Bootstrap ---
+section "1. Bootstrap"
+"$ROOT/scripts/bootstrap-project" "$APP"
+bullet "bootstrap-project completed"
+
+# --- 2. Structural checks ---
+section "2. Structural checks (fresh instance)"
+(
+  cd "$APP"
+  ./scripts/check-docs
+  ./scripts/verify
+  count="$(./scripts/list-skills --paths | wc -l | tr -d ' ')"
+  test "$count" -eq 22
+  ./scripts/test
+)
+bullet "check-docs passed"
+bullet "verify passed"
+bullet "list-skills count = 22"
+bullet "test NOT CONFIGURED (expected for kit-only instance)"
+
+# --- 3. Assert instance status is not kit status ---
+section "3. Instance project-status"
+if grep -q 'Agent operating kit' "$APP/docs/project-status.md"; then
+  kit_fail "instance docs/project-status.md still describes the kit itself"
+  bullet "FAIL: project-status inherited kit content"
+  exit "$KIT_EXIT_FAIL"
+fi
+if ! grep -q 'Kit version' "$APP/docs/project-status.md"; then
+  kit_fail "instance project-status missing template fields"
+  exit "$KIT_EXIT_FAIL"
+fi
+bullet "project-status is instance template (not kit status)"
+
+# --- 4. Quick path ---
+section "4. Profile quick (chore + hooks + handoff)"
+(
+  cd "$APP"
+  git init -b main >/dev/null 2>&1
+  mkdir -p src docs/handoffs/active
+  cat > src/hello.sh <<'EOF'
+#!/usr/bin/env bash
+# tiny sample app surface for smoke tests
+set -euo pipefail
+echo "hello-kit"
+EOF
+  chmod +x src/hello.sh
+
+  # intentional "bug" then fix (quick path)
+  if ! ./src/hello.sh | grep -q 'hello-kit'; then
+    exit 1
+  fi
+
+  cp scripts/project-verify.example scripts/project-verify
+  cat > scripts/project-verify <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+test -x src/hello.sh
+out="$(./src/hello.sh)"
+test "$out" = "hello-kit"
+echo "project-verify: hello path ok"
+EOF
+  chmod +x scripts/project-verify
+
+  cp scripts/project-test.example scripts/project-test
+  cat > scripts/project-test <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+./src/hello.sh | grep -qx 'hello-kit'
+echo "project-test: ok"
+EOF
+  chmod +x scripts/project-test
+
+  cat > docs/handoffs/active/quick-hello.md <<'EOF'
+# Handoff: quick-hello
+
+## Purpose and scope
+Quick-profile smoke: prove scripts/project-verify and a tiny script path.
+
+## Authoritative references
+- `profiles/quick.md`
+- `AGENTS.md`
+
+## Repository state
+| Field | Value |
+| --- | --- |
+| Branch | main |
+| Work | src/hello.sh + project hooks |
+
+## Work status
+### Completed
+- hello script
+- project-verify / project-test wired
+
+### Explicitly excluded
+- product discovery, features, architecture
+
+## Next safe action
+```text
+Next action: none for quick smoke
+Recommended skill: none
+```
+EOF
+
+  ./scripts/verify
+  STRICT=1 ./scripts/verify
+  ./scripts/test
+  STRICT=1 ./scripts/test
+
+  git add -A
+  git -c user.email="kit-smoke@example.com" -c user.name="Kit Smoke" commit -m "chore: quick path hello smoke" >/dev/null
+)
+bullet "quick path: hello script + hooks + STRICT verify/test + commit"
+bullet "handoff: docs/handoffs/active/quick-hello.md"
+
+# --- 5. Standard path ---
+section "5. Profile standard (scope + feature pack + plan + handoff)"
+(
+  cd "$APP"
+  # minimal scope
+  cat > docs/product/scope.md <<'EOF'
+# Product scope
+
+> Smoke-filled for Level B dry-run (not a real product).
+
+## Metadata
+| Field | Value |
+| --- | --- |
+| Status | `SCOPE READY` (smoke) |
+| Increment | hello-greeting |
+| Last updated | smoke-level-b |
+
+## Objective outcome
+A local operator can run a greeting script and see `hello-kit`.
+
+## Priority actors
+| Actor | Role | In this increment? |
+| --- | --- | --- |
+| Operator | primary | yes |
+
+## Core loop
+1. Operator runs `./src/hello.sh`
+2. System prints `hello-kit`
+
+## Capabilities
+| ID | Capability | Priority | Notes |
+| --- | --- | --- | --- |
+| C1 | Print greeting | MUST | smoke |
+
+## Non-goals
+| Non-goal | Why excluded |
+| --- | --- |
+| Web UI | smoke only |
+| Multi-tenant SaaS | smoke only |
+
+## Gate
+`SCOPE READY`
+EOF
+
+  name="greeting"
+  mkdir -p "docs/features/$name" docs/plans/active docs/handoffs/active
+  cp docs/features/_templates/spec.md "docs/features/$name/spec.md"
+  cp docs/features/_templates/test-plan.md "docs/features/$name/test-plan.md"
+  cp docs/features/_templates/open-questions.md "docs/features/$name/open-questions.md"
+  cp docs/features/_templates/review.md "docs/features/$name/review.md"
+
+  # mark feature smoke fields
+  cat >> "docs/features/$name/spec.md" <<'EOF'
+
+## Smoke acceptance
+```text
+AC-SMOKE-001
+Given: repository with src/hello.sh
+When: operator runs ./src/hello.sh
+Then: output is exactly hello-kit
+```
+
+## Final gate
+`READY FOR PLANNING` (smoke)
+EOF
+
+  cp docs/plans/_templates/exec-plan.md docs/plans/active/greeting-smoke.md
+  cat >> docs/plans/active/greeting-smoke.md <<'EOF'
+
+## Smoke milestone status
+- Milestone 1 greeting path: complete (src/hello.sh + project-test)
+- Profile: standard (documentation slice only; implementation already from quick path)
+EOF
+
+  cat > docs/handoffs/active/standard-greeting.md <<'EOF'
+# Handoff: standard-greeting
+
+## Purpose and scope
+Standard-profile smoke: scope + feature pack + exec plan for greeting capability.
+
+## Authoritative references
+- `docs/product/scope.md`
+- `docs/features/greeting/spec.md`
+- `docs/plans/active/greeting-smoke.md`
+- `profiles/standard.md`
+
+## Work status
+### Completed
+- Scope smoke
+- Feature templates instantiated
+- Exec plan smoke
+- Automated verify/test green
+
+### Explicitly excluded
+- Real product discovery
+- Architecture redesign
+
+## Next safe action
+```text
+Next action: end of Level B standard smoke
+Recommended skill: none
+```
+EOF
+
+  # project status for instance
+  cat > docs/project-status.md <<EOF
+# Project status
+
+## Identity
+| Field | Value |
+| --- | --- |
+| Project | kit-level-b-smoke |
+| Kind | kit instance (smoke) |
+| Kit version | $KIT_VERSION |
+
+## Current phase
+Level B standard path smoke
+
+## Gate
+\`PASS\` (smoke)
+
+## Objective
+Exercise standard documentation path after quick implementation smoke.
+
+## Next recommended skill
+none
+EOF
+
+  ./scripts/check-docs
+  STRICT=1 ./scripts/verify
+  STRICT=1 ./scripts/test
+
+  git add -A
+  git -c user.email="kit-smoke@example.com" -c user.name="Kit Smoke" commit -m "docs: standard path smoke artifacts" >/dev/null
+)
+bullet "standard path: scope + feature pack + exec plan + handoff + STRICT verify"
+bullet "feature: docs/features/greeting/"
+bullet "plan: docs/plans/active/greeting-smoke.md"
+
+# --- 6. Summary ---
+section "6. Result"
+bullet "**LEVEL B SMOKE PASSED**"
+bullet "Finished (UTC): $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+# Copy report into kit docs for permanence when running from kit repo
+if [[ -d "$ROOT/docs/kit" ]]; then
+  cp "$REPORT" "$ROOT/docs/kit/level-b-report.md"
+  # strip absolute machine-specific parent if desired — keep full paths for evidence
+  log "smoke-level-b: wrote $ROOT/docs/kit/level-b-report.md"
+fi
+
+log "smoke-level-b: PASSED"
+log "smoke-level-b: report=$REPORT"
+log "smoke-level-b: app=$APP"
+exit "$KIT_EXIT_OK"

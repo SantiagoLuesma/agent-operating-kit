@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Make scripts executable
-        run: chmod +x scripts/check-docs scripts/verify scripts/test scripts/list-skills scripts/bootstrap-project
+        run: chmod +x scripts/check-docs scripts/verify scripts/test scripts/list-skills scripts/bootstrap-project scripts/smoke-level-b
 
       - name: check-docs
         run: ./scripts/check-docs
@@ -26,3 +26,6 @@ jobs:
 
       - name: test (allow not configured)
         run: ./scripts/test
+
+      - name: Level B smoke
+        run: ./scripts/smoke-level-b

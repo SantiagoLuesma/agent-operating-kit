@@ -114,7 +114,7 @@ do
 done
 
 # --- Scripts ---
-for s in check-docs verify test list-skills bootstrap-project; do
+for s in check-docs verify test list-skills bootstrap-project smoke-level-b; do
   if [[ -f "scripts/$s" ]]; then
     if [[ -x "scripts/$s" ]]; then
       ok "executable scripts/$s"
