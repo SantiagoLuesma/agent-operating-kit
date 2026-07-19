@@ -1,8 +1,7 @@
 ---
-
 name: implement-vertical-slice
 description: Implement one approved vertical slice end to end, producing complete, testable behavior with executed evidence and synchronized repository documentation.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Implement Vertical Slice
 

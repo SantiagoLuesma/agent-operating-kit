@@ -11,6 +11,21 @@ If a nested `AGENTS.md` exists in a subdirectory, apply the nearest file for
 local conventions. Nested files may narrow or specialize rules; they must not
 weaken security, approval gates, or source-of-truth requirements in this file.
 
+## Kit identity
+
+This repository is an **agent operating kit**: portable process, skills, and
+documentation skeleton for software work with AI agents.
+
+- Canonical rules: this file.
+- Canonical skills: `.agents/skills/*/SKILL.md` (single inventory).
+- Rigor profiles: `profiles/quick.md`, `profiles/standard.md`, `profiles/full.md`.
+- Tooling notes: `TOOLING.md`.
+- Kit version: see `VERSION`.
+
+Do not create parallel instruction files per model or agent
+(`CODEX_AGENTS.md`, `GROK_RULES.md`, etc.). Use thin adapters only
+(for example `CLAUDE.md`).
+
 ## Sources of truth
 
 Repository documentation and code outrank chat history.
@@ -57,6 +72,8 @@ Before non-trivial work, inspect at least:
 - Chat history is not a source of truth.
 - An empty, missing, or placeholder document means “not decided,” not
   “anything is allowed.”
+- Templates under `docs/**/_templates/` and `docs/**/_template.md` are forms,
+  not product decisions.
 - When chat instructions change product behavior, architecture, scope, or
   contracts, update the corresponding repository documentation in the same
   change.
@@ -69,15 +86,20 @@ Before non-trivial work, inspect at least:
 
 Reusable procedures live under `.agents/skills/*/SKILL.md`.
 
-That directory is the **live inventory**. Skills are still being added; do not
-treat any table in this file as complete or final. Before non-trivial work:
+That directory is the **live inventory**. Before non-trivial work:
 
 1. List `.agents/skills/`.
 2. Read the matching `SKILL.md` when one covers the task.
 3. Prefer an existing skill over improvising a weaker process.
 4. If no skill fits, follow this working agreement and record the gap.
 
-### Currently available (baseline; may grow)
+If the agent client does not auto-discover skills, invoke by path:
+
+```text
+Read and execute: .agents/skills/<skill-name>/SKILL.md
+```
+
+### Catalog (baseline; may grow)
 
 | Situation | Skill |
 | --- | --- |
@@ -92,15 +114,35 @@ treat any table in this file as complete or final. Before non-trivial work:
 | Approved change needs an ExecPlan | `create-exec-plan` |
 | Approved slice must be implemented | `implement-vertical-slice` |
 | Acceptance must be independently verified | `verify-acceptance-criteria` |
+| Change needs independent engineering review | `review-change` |
+| Security-sensitive design or diff | `review-security` |
+| Migration needs independent review | `review-migration` |
+| Docs must match implemented reality | `update-documentation` |
+| Session/agent transfer needs continuity | `generate-handoff` |
+| Branch is ready to present as a PR | `prepare-pr` |
+| Integration branch health after merge | `verify-main` |
 
 When a new skill appears under `.agents/skills/`, use it if it matches the
-task—even if it is not listed above. Prefer updating this baseline table when
-adding a skill, but absence from the table never blocks use of a skill that
-exists in the repository.
+task—even if it is not listed above. Prefer updating this table when adding a
+skill, but absence from the table never blocks use of a skill that exists in
+the repository.
 
 Skills provide procedures. This file provides repository-wide authority and
 gates. If a skill conflicts with this file on safety or approvals, this file
 wins.
+
+## Rigor profiles
+
+Choose the **smallest** profile that covers the risk. Do not run the full SDLC
+for a trivial change.
+
+| Profile | File | Use when |
+| --- | --- | --- |
+| `quick` | `profiles/quick.md` | Clear bug, chore, small docs, low risk |
+| `standard` | `profiles/standard.md` | Normal feature or change inside approved scope |
+| `full` | `profiles/full.md` | New product area, high uncertainty, security/data-critical work |
+
+Default for non-trivial product work: **standard**.
 
 ## General behavior
 
@@ -144,16 +186,17 @@ option, record the assumption, and continue. Never invent a critical decision.
 
 1. Read `AGENTS.md` and any nested instructions that apply.
 2. Read `docs/project-status.md`.
-3. Read the active ExecPlan and latest relevant handoff, when they exist.
-4. Read the relevant feature specification, UX, architecture, ADRs, and
+3. Select a rigor profile (`quick` / `standard` / `full`).
+4. Read the active ExecPlan and latest relevant handoff, when they exist.
+5. Read the relevant feature specification, UX, architecture, ADRs, and
    contracts.
-5. Inspect the current implementation, tests, and migrations.
-6. Identify assumptions, dependencies, risks, and non-goals.
-7. Confirm the work is inside approved scope.
-8. Create or update an execution plan for complex work
+6. Inspect the current implementation, tests, and migrations.
+7. Identify assumptions, dependencies, risks, and non-goals.
+8. Confirm the work is inside approved scope.
+9. Create or update an execution plan for complex work
    (`docs/plans/active/`).
-9. Do not implement when critical requirements contradict each other or when a
-   blocking decision remains unresolved.
+10. Do not implement when critical requirements contradict each other or when a
+    blocking decision remains unresolved.
 
 For non-implementation tasks (discovery, audit, design, review, planning,
 verification), follow the matching skill instead of forcing an implementation
@@ -212,7 +255,13 @@ the approved scope and established conventions.
 
 ## Validation
 
-Run the relevant checks for the change:
+Prefer repository scripts when present:
+
+- `scripts/verify`
+- `scripts/test`
+- `scripts/check-docs`
+
+Otherwise run the relevant checks for the change:
 
 - formatting;
 - lint;
@@ -268,8 +317,13 @@ Also update, when the task changes them:
 - handoff under `docs/handoffs/active/` — branch, revision, commands, next
   safe action.
 
+Canonical product scope path: `docs/product/scope.md`.
+
 Do not duplicate implementation details that are already obvious from code.
 Do not replace stable documentation with temporary chat conclusions.
+
+Copy document forms from `docs/**/_templates/` or `docs/**/_template.md` when
+creating new stable docs. Do not treat template headings as approved scope.
 
 ## Git
 
@@ -313,3 +367,10 @@ For skill-driven tasks, also report the skill-specific gate when one is defined
 (for example `EXECUTION READY`, `SLICE COMPLETE`, `PASS`, or `BLOCKED`).
 
 Never report completion without evidence appropriate to the task.
+
+## Project-specific
+
+Add project-only conventions below this heading when instantiating the kit.
+Do not weaken security, approval gates, or source-of-truth rules above.
+
+_No project-specific overrides yet. This repository is the kit itself._

@@ -1,8 +1,7 @@
 ---
-
 name: update-documentation
 description: Update repository documentation after an approved change so behavior, contracts, decisions, operations, and project state remain accurate, traceable, safe, and non-duplicated.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Update Documentation
 

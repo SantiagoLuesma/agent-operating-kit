@@ -1,3 +1,16 @@
+---
+name: review-feature
+description: >
+  Revisa adversarialmente una feature ya diseñada antes de planificar o
+  implementar. Busca contradicciones, ambigüedades, scope creep, permisos
+  incorrectos, flujos incompletos, criterios no verificables y riesgos no
+  tratados. No implementa ni rediseña en silencio. Úsala tras design-feature o
+  antes de create-exec-plan. Produce docs/features/<feature>/review.md y un
+  gate (APPROVED FOR PLANNING, APPROVED WITH CONDITIONS, CHANGES REQUIRED,
+  MORE EVIDENCE REQUIRED, SECURITY REVIEW REQUIRED, ARCHITECTURE REVIEW
+  REQUIRED, BLOCKED, REJECTED).
+---
+
 # review-feature
 
 ## Propósito

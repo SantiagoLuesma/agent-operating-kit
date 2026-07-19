@@ -1,3 +1,18 @@
+---
+name: define-quality-attributes
+description: >
+  Transforma necesidades de producto, negocio, usuarios y operación en
+  atributos de calidad explícitos, medibles, priorizados y verificables antes
+  de diseñar la arquitectura. Define escenarios con métricas y umbrales para
+  seguridad, disponibilidad, rendimiento, consistencia, operabilidad y otros
+  atributos, sin seleccionar stack ni diseñar componentes definitivos. Úsala
+  cuando el alcance del incremento esté definido y se necesiten drivers
+  arquitectónicos o trade-offs no funcionales. Produce
+  docs/architecture/quality-attributes.md y un gate (QUALITY ATTRIBUTES READY,
+  CONDITIONALLY READY, MEASUREMENT REQUIRED, REFINEMENT REQUIRED, SPECIALIST
+  REVIEW REQUIRED, BLOCKED).
+---
+
 # define-quality-attributes
 
 ## Propósito

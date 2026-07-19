@@ -1,8 +1,7 @@
 ---
-
 name: review-change
 description: Independently and adversarially review a complete implemented change for correctness, safety, scope compliance, architecture, test quality, and merge readiness without modifying code during the initial pass.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Review Change
 

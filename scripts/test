@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Test entrypoint. Kit default: no application tests.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+if [[ -f "package.json" ]] && command -v npm >/dev/null 2>&1; then
+  if grep -q '"test"' package.json; then
+    npm test
+    exit 0
+  fi
+fi
+
+echo "test: NOT CONFIGURED"
+echo "test: add project test runner wiring in scripts/test when a stack exists"
+exit 0

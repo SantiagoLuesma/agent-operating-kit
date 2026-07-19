@@ -1,8 +1,7 @@
 ---
-
 name: verify-acceptance-criteria
 description: Independently verify whether an implemented change satisfies every approved acceptance criterion using executed, criterion-specific evidence.
-----------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Verify Acceptance Criteria
 

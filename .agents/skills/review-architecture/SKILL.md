@@ -1,3 +1,17 @@
+---
+name: review-architecture
+description: >
+  Perform an independent, adversarial review of a proposed or existing software
+  architecture before implementation, expansion, or major modification. Checks
+  product alignment, quality attributes, boundaries, data ownership, security,
+  failure handling, operability, and accidental complexity. Does not implement
+  changes or silently redesign the system. Use when architecture is proposed or
+  about to drive a walking skeleton or major change. Produces
+  docs/architecture/review.md and a gate (APPROVED, CONDITIONALLY APPROVED,
+  CHANGES REQUIRED, SPIKES REQUIRED, SECURITY REVIEW REQUIRED, MORE PRODUCT OR
+  QUALITY INPUT REQUIRED, BLOCKED, REJECTED).
+---
+
 # review-architecture
 
 ## Purpose

@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Structural checks for the agent kit (and project instances that keep the layout).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+errors=0
+
+fail() {
+  echo "FAIL: $*" >&2
+  errors=$((errors + 1))
+}
+
+ok() {
+  echo "OK: $*"
+}
+
+require_file() {
+  if [[ -f "$1" ]]; then
+    ok "found $1"
+  else
+    fail "missing required file: $1"
+  fi
+}
+
+require_file "AGENTS.md"
+require_file "VERSION"
+require_file "docs/project-status.md"
+require_file "docs/product/scope.md"
+require_file "TOOLING.md"
+require_file "profiles/quick.md"
+require_file "profiles/standard.md"
+require_file "profiles/full.md"
+
+if [[ ! -d ".agents/skills" ]]; then
+  fail "missing .agents/skills directory"
+else
+  skill_count=0
+  while IFS= read -r -d '' skill; do
+    skill_count=$((skill_count + 1))
+    if ! grep -q '^name:' "$skill"; then
+      fail "skill missing frontmatter name: $skill"
+    fi
+    if ! grep -q '^description:' "$skill"; then
+      fail "skill missing frontmatter description: $skill"
+    fi
+    # Basic YAML frontmatter fence
+    if ! head -1 "$skill" | grep -q '^---$'; then
+      fail "skill missing opening frontmatter ---: $skill"
+    fi
+  done < <(find .agents/skills -name SKILL.md -print0 | sort -z)
+
+  if [[ "$skill_count" -eq 0 ]]; then
+    fail "no skills found under .agents/skills"
+  else
+    ok "$skill_count skills with SKILL.md"
+  fi
+fi
+
+if grep -R --line-number -E 'TODO\(|FIXME\(|xxxSECRET' AGENTS.md TOOLING.md profiles adapters 2>/dev/null | grep -v 'check-docs'; then
+  fail "suspicious markers found"
+else
+  ok "no suspicious markers in core kit docs"
+fi
+
+if [[ "$errors" -gt 0 ]]; then
+  echo "check-docs: $errors error(s)" >&2
+  exit 1
+fi
+
+echo "check-docs: passed"

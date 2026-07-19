@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Project health entrypoint. Kit default: structural docs checks.
+# When instantiating for an app, extend this script to call stack checks.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+echo "verify: running kit structural checks"
+"$ROOT/scripts/check-docs"
+
+if [[ -f "package.json" ]] || [[ -f "pyproject.toml" ]] || [[ -f "go.mod" ]] || [[ -f "Cargo.toml" ]] || [[ -f "Gemfile" ]]; then
+  echo "verify: application stack manifests detected"
+  echo "verify: configure stack-specific checks in scripts/verify for this project"
+else
+  echo "verify: no application stack configured (expected for the kit itself)"
+fi
+
+echo "verify: passed"

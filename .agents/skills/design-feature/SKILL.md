@@ -1,3 +1,17 @@
+---
+name: design-feature
+description: >
+  Diseña una feature de forma completa, explícita y verificable antes de
+  planificar su implementación. Convierte una capacidad del alcance en
+  comportamiento concreto: actores, flujos, reglas, permisos, estados,
+  errores, criterios de aceptación, testing y slices candidatos. No implementa
+  código ni elige stack. Úsala cuando la feature esté en alcance aprobado y
+  necesite una especificación usable por varios agentes. Produce
+  docs/features/<feature>/spec.md, test-plan.md y open-questions.md, con gate
+  (READY FOR PLANNING, CONDITIONALLY READY, DESIGN REVIEW REQUIRED, REFINEMENT
+  REQUIRED, MORE EVIDENCE REQUIRED, ARCHITECTURE INPUT REQUIRED, BLOCKED).
+---
+
 # design-feature
 
 ## Propósito

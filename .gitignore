@@ -1,0 +1,38 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local env and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and build (for future project instances)
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.next/
+target/
+vendor/
+
+# Python
+__pycache__/
+.venv/
+venv/
+
+# Logs and caches
+*.log
+.cache/
+tmp/
+temp/

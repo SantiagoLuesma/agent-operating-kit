@@ -1,8 +1,7 @@
 ---
-
 name: review-security
 description: Independently perform a risk-based security review of a feature, design, implementation, diff, or existing module without modifying code during the initial review.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # Review Security
 
