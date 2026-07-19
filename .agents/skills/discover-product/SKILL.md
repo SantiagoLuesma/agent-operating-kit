@@ -1,514 +1,512 @@
 ---
 name: discover-product
 description: >
-  Descubre, cuestiona y estructura un producto de software antes de diseñar
-  su arquitectura o implementarlo. Úsala al iniciar un proyecto, redefinir
-  un producto existente, evaluar una idea incompleta o detectar requisitos,
-  actores, reglas, riesgos, supuestos y oportunidades omitidas. Produce
-  documentación de producto basada en evidencia, un registro de incertidumbres,
-  una propuesta de alcance y una recomendación explícita sobre si el proyecto
-  está preparado para avanzar. No debe implementar código ni seleccionar
-  prematuramente el stack técnico.
+  Discover, challenge, and structure a software product before designing its
+  architecture or implementing it. Use when starting a project, redefining an
+  existing product, evaluating an incomplete idea, or detecting omitted
+  requirements, actors, rules, risks, assumptions, and opportunities. Produces
+  evidence-based product documentation, an uncertainty register, a scope
+  proposal, and an explicit recommendation on whether the project is ready to
+  advance. Must not implement code or prematurely select the technical stack.
 ---
 
 # Discover Product
 
-## Resumen ejecutivo
+## Executive summary
 
-Esta skill opera en **tres fases secuenciales**:
+This skill operates in **three sequential phases**:
 
-| Fase | Etapas | Propósito |
-|------|--------|-----------|
-| **A. Contexto** | 1–5 | Entender el terreno: problema real, actores, proceso actual |
-| **B. Diseño** | 6–14 | Definir qué se construye: valor, capacidades, reglas, estados |
-| **C. Validación** | 15–22 | Cuestionar y blindar: riesgos, supuestos, consistencia, gate |
+| Phase | Stages | Purpose |
+|------|--------|---------|
+| **A. Context** | 1–5 | Understand the terrain: real problem, actors, current process |
+| **B. Design** | 6–14 | Define what is built: value, capabilities, rules, states |
+| **C. Validation** | 15–22 | Challenge and harden: risks, assumptions, consistency, gate |
 
-Las etapas pueden **acortarse, fusionarse o saltarse** si la información
-ya existe y está verificada. Ver sección *Niveles de profundidad* al final.
+Stages may be **shortened, merged, or skipped** when the information
+already exists and is verified. See the *Depth levels* section at the end.
 
 ---
 
-## Índice
+## Table of contents
 
-1. [Propósito](#1-propósito)
-2. [Resultado esperado](#2-resultado-esperado)
-3. [Cuándo usar esta skill](#3-cuándo-usar-esta-skill)
-4. [Cuándo no usar esta skill](#4-cuándo-no-usar-esta-skill)
-5. [Rol del agente](#5-rol-del-agente)
-6. [Principios obligatorios](#6-principios-obligatorios)
-7. [Política de autonomía](#7-política-de-autonomía)
-8. [Fuentes de información](#8-fuentes-de-información)
-9. [Entradas](#9-entradas)
-10. [Artefactos esperados](#10-artefactos-esperados)
-11. [Proceso de ejecución](#11-proceso-de-ejecución)
-12. [Diferencias nuevo vs. existente](#12-diferencias-nuevo-vs-existente)
-13. [Reglas de documentación](#13-reglas-de-documentación)
-14. [Prohibiciones](#14-prohibiciones)
+1. [Purpose](#1-purpose)
+2. [Expected outcome](#2-expected-outcome)
+3. [When to use this skill](#3-when-to-use-this-skill)
+4. [When not to use this skill](#4-when-not-to-use-this-skill)
+5. [Agent role](#5-agent-role)
+6. [Mandatory principles](#6-mandatory-principles)
+7. [Autonomy policy](#7-autonomy-policy)
+8. [Information sources](#8-information-sources)
+9. [Inputs](#9-inputs)
+10. [Expected artifacts](#10-expected-artifacts)
+11. [Execution process](#11-execution-process)
+12. [New vs. existing differences](#12-new-vs-existing-differences)
+13. [Documentation rules](#13-documentation-rules)
+14. [Prohibitions](#14-prohibitions)
 15. [Stop conditions](#15-stop-conditions)
-16. [Anti-patrones del agente](#16-anti-patrones-del-agente)
-17. [Criterios de calidad](#17-criterios-de-calidad)
-18. [Checklist de autoevaluación](#18-checklist-de-autoevaluación)
-19. [Formato del informe final](#19-formato-del-informe-final)
-20. [Invocación recomendada](#20-invocación-recomendada)
-21. [Handoff hacia la siguiente skill](#21-handoff-hacia-la-siguiente-skill)
-22. [Niveles de profundidad](#22-niveles-de-profundidad)
+16. [Agent anti-patterns](#16-agent-anti-patterns)
+17. [Quality criteria](#17-quality-criteria)
+18. [Self-assessment checklist](#18-self-assessment-checklist)
+19. [Final report format](#19-final-report-format)
+20. [Recommended invocation](#20-recommended-invocation)
+21. [Handoff to the next skill](#21-handoff-to-the-next-skill)
+22. [Depth levels](#22-depth-levels)
 
 ---
 
-# 1. Propósito
+# 1. Purpose
 
-Esta skill convierte una idea, requerimiento informal o producto parcialmente
-definido en una **base de producto coherente, cuestionada y verificable**.
+This skill turns an idea, informal requirement, or partially defined product
+into a **coherent, challenged, and verifiable product foundation**.
 
-Su **objetivo no es confirmar** la idea del usuario. Su objetivo es descubrir:
+Its **goal is not to confirm** the user's idea. Its goal is to discover:
 
-* qué problema se intenta resolver;
-* para quién se intenta resolver;
-* qué resultado espera conseguir cada actor;
-* cómo se resuelve actualmente;
-* por qué alguien cambiaría su comportamiento;
-* qué partes de la idea son hechos y cuáles son supuestos;
-* qué funcionalidades, reglas o actores fueron omitidos;
-* qué complejidad puede eliminarse;
-* qué riesgos podrían descubrirse demasiado tarde;
-* qué decisiones necesitan evidencia;
-* qué debe validarse antes de diseñar arquitectura o implementar.
+* what problem is being solved;
+* for whom it is being solved;
+* what outcome each actor expects to achieve;
+* how it is currently solved;
+* why someone would change their behavior;
+* which parts of the idea are facts and which are assumptions;
+* which capabilities, rules, or actors were omitted;
+* which complexity can be eliminated;
+* which risks might be discovered too late;
+* which decisions need evidence;
+* what must be validated before designing architecture or implementing.
 
-La skill debe producir una definición del producto suficientemente clara como
-para permitir posteriormente:
+The skill must produce a product definition clear enough to later enable:
 
-1. validar los supuestos más riesgosos;
-2. diseñar la experiencia de usuario;
-3. establecer un alcance inicial;
-4. modelar reglas y permisos;
-5. definir atributos de calidad;
-6. diseñar la arquitectura;
-7. descomponer el producto en incrementos verificables.
+1. validating the riskiest assumptions;
+2. designing the user experience;
+3. establishing an initial scope;
+4. modeling rules and permissions;
+5. defining quality attributes;
+6. designing the architecture;
+7. decomposing the product into verifiable increments.
 
-Esta skill **no debe diseñar la solución técnica definitiva**.
+This skill **must not design the definitive technical solution**.
 
 ---
 
-# 2. Resultado esperado
+# 2. Expected outcome
 
-Al finalizar, el repositorio debe contener una representación explícita,
-consistente y **priorizada** de:
+When finished, the repository must contain an explicit, consistent, and
+**prioritized** representation of:
 
-## Imprescindibles
+## Must-haves
 
-1. definición del problema (sin mencionar la solución);
-2. actores principales con sus necesidades;
-3. propuesta de valor verificable;
-4. alcance candidato y no objetivos;
-5. supuestos críticos con plan de validación;
-6. riesgos con mitigación o plan de validación;
-7. recomendación de gate (PASS / CONDITIONAL PASS / BLOCKED);
-8. estado actualizado del proyecto.
+1. problem definition (without mentioning the solution);
+2. primary actors with their needs;
+3. verifiable value proposition;
+4. candidate scope and non-goals;
+5. critical assumptions with a validation plan;
+6. risks with mitigation or a validation plan;
+7. gate recommendation (PASS / CONDITIONAL PASS / BLOCKED);
+8. updated project status.
 
-## Recomendados
+## Recommended
 
-* jobs to be done por actor;
-* proceso actual documentado;
-* alternativas existentes analizadas;
-* ciclo principal del producto;
-* reglas de negocio explícitas;
-* permisos y ownership preliminares;
-* estados y transiciones;
-* edge cases identificados y clasificados;
-* preguntas abiertas;
-* experimentos de validación diseñados.
+* jobs to be done per actor;
+* documented current process;
+* analyzed existing alternatives;
+* product core loop;
+* explicit business rules;
+* preliminary permissions and ownership;
+* states and transitions;
+* identified and classified edge cases;
+* open questions;
+* designed validation experiments.
 
-## Clasificación de certeza
+## Certainty classification
 
-El agente debe diferenciar claramente entre:
+The agent must clearly distinguish between:
 
-| Etiqueta | Definición |
+| Label | Definition |
 |----------|------------|
-| `Comprobado` | Verificado con datos observables y reproducibles |
-| `Declarado` | Afirmado por el usuario o stakeholder, no verificado |
-| `Observado` | Visto en comportamiento real pero no medido sistemáticamente |
-| `Inferido` | Deducido lógicamente a partir de otra información |
-| `Supuesto` | Se asume cierto sin evidencia directa |
-| `Desconocido` | No hay información disponible |
+| `Verified` | Confirmed with observable, reproducible data |
+| `Stated` | Affirmed by the user or stakeholder, not verified |
+| `Observed` | Seen in real behavior but not systematically measured |
+| `Inferred` | Logically deduced from other information |
+| `Assumption` | Taken as true without direct evidence |
+| `Unknown` | No information available |
 
-**Nunca presentar una inferencia como un hecho.**
-
----
-
-# 3. Cuándo utilizar esta skill
-
-Usar esta skill cuando ocurra **una o más** de estas situaciones:
-
-## Señales fuertes (usar siempre)
-
-* Se está iniciando un producto nuevo.
-* Existe solamente una idea general.
-* El usuario tiene una lista de funcionalidades pero no una definición del problema.
-* El producto fue pensado desde las pantallas o la tecnología.
-* Se heredó un proyecto sin documentación confiable.
-* No están claros los roles, permisos o límites de propiedad.
-* Se necesita una baseline de producto antes de diseñar UX o arquitectura.
-
-## Señales moderadas (evaluar)
-
-* Los requisitos son extensos pero contienen contradicciones.
-* Se desea agregar una nueva línea de producto.
-* Se necesita redefinir un producto existente.
-* El producto ha crecido de manera desordenada.
-* Los distintos participantes interpretan el producto de formas diferentes.
-* Existen funcionalidades pero no se conocen sus resultados esperados.
-* Una feature parece demasiado grande y probablemente contiene varios problemas.
-* Se está considerando una inversión significativa en implementación.
+**Never present an inference as a fact.**
 
 ---
 
-# 4. Cuándo no utilizar esta skill
+# 3. When to use this skill
 
-No utilizarla como proceso principal cuando:
+Use this skill when **one or more** of these situations apply:
 
-* El producto ya está definido y solo debe implementarse un cambio pequeño.
-* La tarea es corregir un bug bien reproducido.
-* La tarea es refactorizar código sin modificar comportamiento.
-* La tarea es escribir tests para comportamiento ya especificado.
-* La tarea es revisar una migración concreta.
-* La tarea es realizar un code review.
-* La tarea es decidir una tecnología específica dentro de una arquitectura aprobada.
-* La tarea es diseñar visualmente una pantalla con comportamiento ya definido.
-* La tarea es desplegar una versión existente.
+## Strong signals (always use)
 
-**Excepción**: si durante otra tarea se descubre que el problema o comportamiento
-no está suficientemente definido, se puede utilizar `discover-product` de manera
-acotada (nivel `quick`, ver sección 22).
+* A new product is being started.
+* Only a general idea exists.
+* The user has a feature list but no problem definition.
+* The product was conceived from screens or technology.
+* A project was inherited without reliable documentation.
+* Roles, permissions, or ownership boundaries are unclear.
+* A product baseline is needed before designing UX or architecture.
+
+## Moderate signals (evaluate)
+
+* Requirements are extensive but contain contradictions.
+* A new product line is to be added.
+* An existing product needs redefinition.
+* The product has grown in a disordered way.
+* Different participants interpret the product differently.
+* Features exist but their expected outcomes are unknown.
+* A feature seems too large and likely contains several problems.
+* A significant implementation investment is being considered.
 
 ---
 
-# 5. Rol del agente
+# 4. When not to use this skill
 
-## Roles que debe desempeñar simultáneamente
+Do not use it as the primary process when:
 
-* Product Manager senior
+* The product is already defined and only a small change must be implemented.
+* The task is to fix a well-reproduced bug.
+* The task is to refactor code without changing behavior.
+* The task is to write tests for already specified behavior.
+* The task is to review a concrete migration.
+* The task is to perform a code review.
+* The task is to choose a specific technology within an approved architecture.
+* The task is to visually design a screen with already defined behavior.
+* The task is to deploy an existing version.
+
+**Exception**: if during another task it is discovered that the problem or
+behavior is not sufficiently defined, `discover-product` may be used in a
+scoped way (`quick` level, see section 22).
+
+---
+
+# 5. Agent role
+
+## Roles to play simultaneously
+
+* Senior Product Manager
 * Product Designer
 * UX Researcher
 * Service Designer
 * Business Analyst
 * Domain Analyst
 * Systems Thinker
-* Software Architect en fase de descubrimiento
-* Especialista en riesgos
-* Crítico independiente
+* Software Architect in discovery phase
+* Risk specialist
+* Independent critic
 
-## Roles que debe evitar
+## Roles to avoid
 
-* Vendedor de la idea
-* Asistente complaciente
-* Generador indiscriminado de funcionalidades
-* Arquitecto enamorado de patrones
-* Diseñador visual prematuro
-* Programador ansioso por comenzar a implementar
+* Idea salesperson
+* Compliant assistant
+* Indiscriminate feature generator
+* Architect enamored with patterns
+* Premature visual designer
+* Programmer eager to start implementing
 
-## Actitud obligatoria: cuestionar respetuosamente
+## Mandatory attitude: challenge respectfully
 
-* la existencia del problema;
-* la gravedad del problema;
-* la frecuencia del problema;
-* la persona que realmente lo experimenta;
-* la solución propuesta;
-* el modelo de negocio;
-* el alcance;
-* las dependencias;
-* los supuestos implícitos;
-* la complejidad innecesaria;
-* las funcionalidades copiadas de otros productos;
-* las decisiones que parecen obvias pero no tienen evidencia.
+* the existence of the problem;
+* the severity of the problem;
+* the frequency of the problem;
+* who actually experiences it;
+* the proposed solution;
+* the business model;
+* the scope;
+* the dependencies;
+* implicit assumptions;
+* unnecessary complexity;
+* features copied from other products;
+* decisions that seem obvious but lack evidence.
 
-## Sesgos cognitivos a vigilar activamente
+## Cognitive biases to actively watch for
 
-El agente debe reconocer y contrarrestar estos sesgos en su propio análisis:
+The agent must recognize and counteract these biases in its own analysis:
 
-| Sesgo | Riesgo | Antídoto |
+| Bias | Risk | Antidote |
 |-------|--------|----------|
-| **Sesgo de confirmación** | Buscar solo evidencia que apoye la idea | Buscar activamente evidencia en contra |
-| **Sesgo de anclaje** | Fijarse en la primera solución propuesta | Reformular el problema desde cero |
-| **Sesgo de supervivencia** | Copiar solo lo que funcionó en otros | Analizar también lo que falló |
-| **Sesgo de disponibilidad** | Sobrevalorar ejemplos recientes o vívidos | Buscar datos sistemáticos |
-| **Sesgo de proyección** | Asumir que el usuario piensa como el creador | Contrastar con evidencia de comportamiento real |
-| **Falacia del costo hundido** | Defender una decisión porque ya se invirtió en ella | Evaluar cada decisión por su valor futuro |
+| **Confirmation bias** | Seeking only evidence that supports the idea | Actively seek counter-evidence |
+| **Anchoring bias** | Fixating on the first proposed solution | Reframe the problem from scratch |
+| **Survivorship bias** | Copying only what worked elsewhere | Also analyze what failed |
+| **Availability bias** | Overvaluing recent or vivid examples | Seek systematic data |
+| **Projection bias** | Assuming the user thinks like the creator | Contrast with real behavioral evidence |
+| **Sunk cost fallacy** | Defending a decision because investment was already made | Evaluate each decision by its future value |
 
 ---
 
-# 6. Principios obligatorios
+# 6. Mandatory principles
 
-## 6.1 El problema precede a la solución
+## 6.1 The problem precedes the solution
 
-No definir funcionalidades sin comprender primero:
+Do not define features without first understanding:
 
-* situación → actor → necesidad → resultado deseado → alternativa actual → fricción → frecuencia → impacto.
+* situation → actor → need → desired outcome → current alternative → friction → frequency → impact.
 
-## 6.2 La evidencia precede a la certeza
+## 6.2 Evidence precedes certainty
 
-Toda afirmación relevante debe etiquetarse usando la clasificación de la sección 2.
+Every relevant claim must be labeled using the classification in section 2.
 
-## 6.3 No confundir usuario con comprador
+## 6.3 Do not confuse user with buyer
 
-Identificar por separado, cuando corresponda:
+Identify separately when applicable:
 
-* usuario final, comprador, administrador, propietario, operador, beneficiario;
-* aprobador, soporte, auditor, integrador, actor externo, afectado indirectamente.
+* end user, buyer, administrator, owner, operator, beneficiary;
+* approver, support, auditor, integrator, external actor, indirectly affected party.
 
-## 6.4 No asumir que una funcionalidad es necesaria
+## 6.4 Do not assume a feature is necessary
 
-Cada funcionalidad propuesta debe vincularse con:
+Each proposed feature must be linked to:
 
-* un problema → un actor → un resultado → una regla → evidencia o hipótesis → forma de validar.
+* a problem → an actor → an outcome → a rule → evidence or hypothesis → a way to validate.
 
-## 6.5 La simplicidad es una restricción de diseño
+## 6.5 Simplicity is a design constraint
 
-Antes de agregar complejidad, evaluar si puede:
+Before adding complexity, evaluate whether it can:
 
-* eliminarse, postergarse, resolverse manualmente, resolverse con una política,
-  resolverse con operación administrativa, combinarse con otra función, limitarse inicialmente.
+* be eliminated, deferred, solved manually, solved with a policy,
+  solved with administrative operations, combined with another function, limited initially.
 
-## 6.6 No seleccionar arquitectura prematuramente
+## 6.6 Do not select architecture prematurely
 
-Documentar restricciones técnicas conocidas pero **no elegir**:
+Document known technical constraints but **do not choose**:
 
-* framework, base de datos, ORM, proveedor cloud, colas, cache,
-  microservicios, monorepo, arquitectura de eventos, librerías de UI.
+* framework, database, ORM, cloud provider, queues, cache,
+  microservices, monorepo, event architecture, UI libraries.
 
-Las decisiones técnicas deben derivarse posteriormente de requisitos y atributos de calidad.
+Technical decisions must later derive from requirements and quality attributes.
 
-## 6.7 La documentación del repositorio es la fuente de verdad
+## 6.7 Repository documentation is the source of truth
 
-El historial del chat no debe considerarse documentación oficial.
+Chat history must not be treated as official documentation.
 
-Cuando se descubre o acuerda información importante, debe actualizarse el archivo correspondiente.
+When important information is discovered or agreed, the corresponding file must be updated.
 
-## 6.8 No inventar validación
+## 6.8 Do not invent validation
 
-El agente no debe afirmar sin evidencia explícita que:
+The agent must not claim without explicit evidence that:
 
-* los usuarios quieren una funcionalidad;
-* pagarían determinado precio;
-* entienden determinada interfaz;
-* existe demanda;
-* una competencia funciona de cierta forma;
-* una métrica mejorará.
+* users want a feature;
+* they would pay a certain price;
+* they understand a certain interface;
+* demand exists;
+* a competitor works a certain way;
+* a metric will improve.
 
-Debe formularlo como **hipótesis**.
+Formulate these as **hypotheses**.
 
-## 6.9 Las contradicciones deben hacerse visibles
+## 6.9 Contradictions must be made visible
 
-No resolver silenciosamente una contradicción importante.
+Do not silently resolve an important contradiction.
 
-Debe: (1) identificarla, (2) explicar su impacto, (3) proponer alternativas,
-(4) recomendar una, (5) registrar si requiere decisión humana.
+Must: (1) identify it, (2) explain its impact, (3) propose alternatives,
+(4) recommend one, (5) record whether it requires a human decision.
 
-## 6.10 El descubrimiento debe terminar
+## 6.10 Discovery must end
 
-La skill no debe producir análisis infinito. Debe buscar una baseline
-suficientemente buena para avanzar, aunque existan incertidumbres no críticas.
+The skill must not produce infinite analysis. It must seek a baseline
+good enough to advance, even when non-critical uncertainties remain.
 
-Cada etapa debería consumir un esfuerzo proporcional a su impacto.
-Las etapas 1-5 son imprescindibles. Las etapas 6-22 pueden acortarse
-si existe documentación previa verificada.
-
----
-
-# 7. Política de autonomía
-
-## 7.1 Regla general
-
-El agente debe comenzar trabajando con toda la información disponible.
-**No debe iniciar la sesión enviando un cuestionario genérico al usuario.**
-
-Primero debe:
-
-1. inspeccionar el repositorio;
-2. leer los documentos existentes;
-3. analizar la idea;
-4. identificar contradicciones;
-5. construir una primera hipótesis;
-6. documentar lo que pueda resolver de manera autónoma.
-
-## 7.2 Decisiones que puede tomar autónomamente
-
-* reorganizar documentación;
-* eliminar duplicaciones documentales;
-* proponer vocabulario y clasificar supuestos;
-* proponer actores, identificar estados, detectar edge cases;
-* proponer no objetivos y simplificar propuestas;
-* diseñar experimentos de validación y crear documentos faltantes;
-* marcar contradicciones y formular alternativas;
-* realizar inferencias **claramente etiquetadas**;
-* definir una estructura provisional y sugerir prioridades.
-
-## 7.3 Decisiones que requieren aprobación humana
-
-Solicitar aprobación cuando la decisión afecte significativamente:
-
-* visión del producto, público objetivo, modelo de negocio, monetización;
-* límites contractuales, recopilación de datos sensibles, privacidad;
-* obligaciones legales, políticas de moderación, propiedad de los datos;
-* permisos críticos, eliminación de funcionalidades consideradas centrales;
-* compromiso comercial, alcance que pueda multiplicar el costo;
-* estrategia difícil de revertir;
-* experiencia que afecte sustancialmente a usuarios reales.
-
-## 7.4 Política de preguntas
-
-**No preguntar** lo que pueda descubrirse mediante:
-
-* lectura del repositorio, inspección del producto existente, análisis de documentos;
-* inferencia razonable, comparación entre requisitos, investigación permitida.
-
-**Cuando sea necesario preguntar:**
-
-* agrupar las preguntas por tema;
-* priorizar las de mayor impacto;
-* explicar qué decisión depende de cada respuesta;
-* evitar preguntas abstractas o que puedan responderse con "depende";
-* no pedir confirmación sobre decisiones locales y reversibles;
-* **no superar cinco preguntas críticas por ronda**.
-
-**Si trabaja en modo desatendido y no puede preguntar:**
-
-* registrar el supuesto indicando su impacto;
-* adoptar la opción más reversible;
-* evitar decisiones irreversibles;
-* continuar con el resto del análisis.
-
-## 7.5 Manejo de desacuerdo del usuario
-
-Si el usuario cuestiona o rechaza una conclusión del agente:
-
-1. no defender la conclusión por orgullo;
-2. identificar si el desacuerdo proviene de información que el agente no tenía;
-3. si el usuario aporta nueva información, incorporarla y reevaluar;
-4. si el desacuerdo es interpretativo, documentar ambas perspectivas con sus fundamentos;
-5. si afecta una decisión reversible, aceptar la dirección del usuario y registrar el riesgo;
-6. si afecta una decisión irreversible, explicar las consecuencias y solicitar confirmación explícita.
+Each stage should consume effort proportional to its impact.
+Stages 1–5 are mandatory. Stages 6–22 may be shortened
+if verified prior documentation exists.
 
 ---
 
-# 8. Fuentes de información
+# 7. Autonomy policy
 
-## 8.1 Orden de inspección recomendado
+## 7.1 General rule
 
-Cuando exista un repositorio, revisar en este orden:
+The agent must start by working with all available information.
+**It must not begin the session by sending a generic questionnaire to the user.**
+
+It must first:
+
+1. inspect the repository;
+2. read existing documents;
+3. analyze the idea;
+4. identify contradictions;
+5. build a first hypothesis;
+6. document what it can resolve autonomously.
+
+## 7.2 Decisions it may take autonomously
+
+* reorganize documentation;
+* remove documentary duplications;
+* propose vocabulary and classify assumptions;
+* propose actors, identify states, detect edge cases;
+* propose non-goals and simplify proposals;
+* design validation experiments and create missing documents;
+* mark contradictions and formulate alternatives;
+* make **clearly labeled** inferences;
+* define a provisional structure and suggest priorities.
+
+## 7.3 Decisions that require human approval
+
+Request approval when the decision significantly affects:
+
+* product vision, target audience, business model, monetization;
+* contractual boundaries, sensitive data collection, privacy;
+* legal obligations, moderation policies, data ownership;
+* critical permissions, removal of capabilities considered central;
+* commercial commitment, scope that may multiply cost;
+* strategy that is hard to reverse;
+* experience that substantially affects real users.
+
+## 7.4 Question policy
+
+**Do not ask** what can be discovered through:
+
+* reading the repository, inspecting the existing product, analyzing documents;
+* reasonable inference, comparison across requirements, permitted research.
+
+**When asking is necessary:**
+
+* group questions by topic;
+* prioritize highest impact;
+* explain which decision depends on each answer;
+* avoid abstract questions or ones answerable with "it depends";
+* do not seek confirmation on local, reversible decisions;
+* **do not exceed five critical questions per round**.
+
+**If working unattended and unable to ask:**
+
+* record the assumption and its impact;
+* adopt the most reversible option;
+* avoid irreversible decisions;
+* continue with the rest of the analysis.
+
+## 7.5 Handling user disagreement
+
+If the user challenges or rejects an agent conclusion:
+
+1. do not defend the conclusion out of pride;
+2. identify whether the disagreement comes from information the agent lacked;
+3. if the user provides new information, incorporate it and re-evaluate;
+4. if the disagreement is interpretive, document both perspectives with their rationale;
+5. if it affects a reversible decision, accept the user's direction and record the risk;
+6. if it affects an irreversible decision, explain the consequences and request explicit confirmation.
+
+---
+
+# 8. Information sources
+
+## 8.1 Recommended inspection order
+
+When a repository exists, review in this order:
 
 1. `AGENTS.md`
-2. Archivo de estado del proyecto
-3. Documentación de producto
-4. Documentación de UX
-5. Documentación de arquitectura
-6. Especificaciones de features
-7. ADR y registros de decisiones
-8. Issues, planes o handoffs activos
+2. Project status file
+3. Product documentation
+4. UX documentation
+5. Architecture documentation
+6. Feature specifications
+7. ADRs and decision records
+8. Active issues, plans, or handoffs
 9. `README.md`
-10. Estructura del repositorio
-11. Código relacionado (solo si el producto ya existe)
+10. Repository structure
+11. Related code (only if the product already exists)
 12. Tests
-13. Contratos o schemas
-14. Configuración de despliegue
-15. Historial Git relevante (si está disponible)
+13. Contracts or schemas
+14. Deployment configuration
+15. Relevant Git history (if available)
 
-## 8.2 Jerarquía de confianza
+## 8.2 Trust hierarchy
 
-| Nivel | Fuente |
+| Level | Source |
 |-------|--------|
-| 1 | Comportamiento observado y reproducible |
-| 2 | Requisitos aprobados y vigentes |
-| 3 | Decisiones aceptadas (ADR) |
-| 4 | Contratos públicos |
-| 5 | Tests confiables |
-| 6 | Documentación actualizada |
-| 7 | Declaraciones directas de responsables |
-| 8 | Código sin validación |
-| 9 | Documentación antigua |
-| 10 | Inferencias del agente |
+| 1 | Observed and reproducible behavior |
+| 2 | Approved and current requirements |
+| 3 | Accepted decisions (ADR) |
+| 4 | Public contracts |
+| 5 | Reliable tests |
+| 6 | Updated documentation |
+| 7 | Direct statements from responsible parties |
+| 8 | Code without validation |
+| 9 | Old documentation |
+| 10 | Agent inferences |
 
-Una fuente más alta **puede igualmente estar equivocada**.
-Las contradicciones entre fuentes deben registrarse explícitamente.
+A higher source **can still be wrong**.
+Contradictions between sources must be recorded explicitly.
 
-## 8.3 Proyecto nuevo
+## 8.3 New project
 
-Si no existe código, trabajar con:
+If no code exists, work with:
 
-* idea inicial, contexto del usuario, documentos aportados;
-* restricciones, investigación disponible, hipótesis explícitas.
+* initial idea, user context, provided documents;
+* constraints, available research, explicit hypotheses.
 
-## 8.4 Proyecto existente
+## 8.4 Existing project
 
-**No asumir que la documentación refleja el producto real.**
+**Do not assume documentation reflects the real product.**
 
-Comparar sistemáticamente:
+Systematically compare:
 
-* comportamiento documentado;
-* comportamiento implementado;
-* comportamiento probado;
-* comportamiento esperado;
-* comportamiento observado en uso real.
+* documented behavior;
+* implemented behavior;
+* tested behavior;
+* expected behavior;
+* behavior observed in real use.
 
-Cuando exista discrepancia, documentar las **cuatro perspectivas**
-(documentada, implementada, probada, esperada) sin resolverlas automáticamente.
-
----
-
-# 9. Entradas
-
-## 9.1 Entradas mínimas
-
-La skill puede comenzar con cualquiera de estas:
-
-* una idea de producto;
-* una descripción informal;
-* una lista de funcionalidades;
-* un repositorio existente;
-* documentación parcial;
-* un prototipo;
-* una solicitud de nueva línea de producto;
-* una feature compleja que necesita descubrirse.
-
-## 9.2 Entradas recomendadas
-
-Cuando estén disponibles:
-
-* usuarios conocidos, problema observado, proceso actual;
-* restricciones de negocio, competidores, requisitos legales;
-* métricas, feedback, entrevistas, tickets de soporte, datos de uso;
-* decisiones previas, limitaciones técnicas, estrategia comercial, prototipos.
-
-## 9.3 Tratamiento de información faltante
-
-**No detener todo el proceso porque falte información.**
-
-Clasificar cada dato faltante según:
-
-* criticidad, impacto, urgencia, reversibilidad, posibilidad de validación.
-
-Continuar con lo disponible y registrar lo faltante como `Desconocido` o `Supuesto`.
+When there is a discrepancy, document the **four perspectives**
+(documented, implemented, tested, expected) without resolving them automatically.
 
 ---
 
-# 10. Artefactos esperados
+# 9. Inputs
 
-No todos los archivos son obligatorios en todos los proyectos.
-El agente debe crear o actualizar **solamente los que aporten valor**.
+## 9.1 Minimum inputs
 
-## Estructura recomendada
+The skill may start with any of:
+
+* a product idea;
+* an informal description;
+* a feature list;
+* an existing repository;
+* partial documentation;
+* a prototype;
+* a request for a new product line;
+* a complex feature that needs discovery.
+
+## 9.2 Recommended inputs
+
+When available:
+
+* known users, observed problem, current process;
+* business constraints, competitors, legal requirements;
+* metrics, feedback, interviews, support tickets, usage data;
+* prior decisions, technical limitations, commercial strategy, prototypes.
+
+## 9.3 Handling missing information
+
+**Do not halt the entire process because information is missing.**
+
+Classify each missing data point by:
+
+* criticality, impact, urgency, reversibility, possibility of validation.
+
+Continue with what is available and record gaps as `Unknown` or `Assumption`.
+
+---
+
+# 10. Expected artifacts
+
+Not every file is mandatory on every project.
+The agent must create or update **only those that add value**.
+
+## Recommended structure
 
 ```text
 docs/
 ├── project-status.md
 └── product/
-    ├── discovery-report.md        ← Imprescindible: informe consolidado
-    ├── problem.md                 ← Imprescindible
-    ├── users-and-jobs.md          ← Imprescindible
+    ├── discovery-report.md        ← Must-have: consolidated report
+    ├── problem.md                 ← Must-have
+    ├── users-and-jobs.md          ← Must-have
     ├── value-proposition.md
-    ├── scope.md                   ← Imprescindible
-    ├── assumptions.md             ← Imprescindible
-    ├── risks.md                   ← Imprescindible
-    ├── validation-plan.md         ← Imprescindible
+    ├── scope.md                   ← Must-have
+    ├── assumptions.md             ← Must-have
+    ├── risks.md                   ← Must-have
+    ├── validation-plan.md         ← Must-have
     ├── open-questions.md
     ├── current-journey.md
     ├── outcomes.md
@@ -519,1276 +517,1276 @@ docs/
     └── glossary.md
 ```
 
-## 10.1 Artefactos mínimos obligatorios
+## 10.1 Mandatory minimum artifacts
 
-Al finalizar deben existir (directamente o mediante documentos equivalentes):
+On completion the following must exist (directly or via equivalent documents):
 
-1. definición del problema;
-2. actores y necesidades;
-3. supuestos con plan de validación;
-4. riesgos con mitigación o bloqueo;
-5. alcance candidato y no objetivos;
-6. preguntas abiertas;
-7. recomendación de gate;
-8. estado actualizado del proyecto.
+1. problem definition;
+2. actors and needs;
+3. assumptions with a validation plan;
+4. risks with mitigation or blockage;
+5. candidate scope and non-goals;
+6. open questions;
+7. gate recommendation;
+8. updated project status.
 
 ---
 
-# 11. Proceso de ejecución
+# 11. Execution process
 
-## Diagrama de flujo
+## Flow diagram
 
 ```text
-ETAPA 1 ──→ ETAPA 2 ──→ ETAPA 3 ──→ ETAPA 4 ──→ ETAPA 5
-(Contexto)  (Problema)  (Actores)   (Jobs)      (Proceso)
+STAGE 1 ──→ STAGE 2 ──→ STAGE 3 ──→ STAGE 4 ──→ STAGE 5
+(Context)   (Problem)   (Actors)    (Jobs)      (Process)
 
     ↓
-ETAPA 6 ──→ ETAPA 7 ──→ ETAPA 8 ──→ ETAPA 9 ──→ ETAPA 10
-(Alternat.) (Valor)     (Resultados)(Core loop) (Capacidades)
+STAGE 6 ──→ STAGE 7 ──→ STAGE 8 ──→ STAGE 9 ──→ STAGE 10
+(Altern.)   (Value)     (Outcomes)  (Core loop) (Capabilities)
 
     ↓
-ETAPA 11 ──→ ETAPA 12 ──→ ETAPA 13 ──→ ETAPA 14
-(Reglas)    (Ownership)  (Permisos)   (Estados)
+STAGE 11 ──→ STAGE 12 ──→ STAGE 13 ──→ STAGE 14
+(Rules)     (Ownership)  (Permissions)(States)
 
     ↓
-ETAPA 15 ──→ ETAPA 16 ──→ ETAPA 17 ──→ ETAPA 18 ──→ ETAPA 19
-(Edge cases)(Riesgos)    (Supuestos)  (Experimentos)(Simplificar)
+STAGE 15 ──→ STAGE 16 ──→ STAGE 17 ──→ STAGE 18 ──→ STAGE 19
+(Edge cases)(Risks)      (Assumptions)(Experiments)(Simplify)
 
     ↓
-ETAPA 20 ──→ ETAPA 21 ──→ ETAPA 22
-(Alcance)    (Consist.)   (Adversarial)
+STAGE 20 ──→ STAGE 21 ──→ STAGE 22
+(Scope)      (Consist.)   (Adversarial)
 
     ↓
-ETAPA 23 ──→ ETAPA 24
-(Actualizar) (Gate)
+STAGE 23 ──→ STAGE 24
+(Update)     (Gate)
 ```
 
-**Regla de backtracking**: si una etapa descubre una contradicción con una
-etapa anterior, volver a la etapa afectada y corregir. No seguir adelante
-arrastrando inconsistencias.
+**Backtracking rule**: if a stage discovers a contradiction with an earlier
+stage, return to the affected stage and correct it. Do not continue
+carrying inconsistencies forward.
 
-**Regla de fusión**: cuando la información ya existe y está verificada,
-se pueden fusionar etapas consecutivas (ej: 3+4 si los jobs están documentados).
+**Merge rule**: when information already exists and is verified,
+consecutive stages may be merged (e.g., 3+4 if jobs are already documented).
 
 ---
 
-## Etapa 1 — Contextualizar el descubrimiento
+## Stage 1 — Contextualize discovery
 
-### Objetivo
+### Objective
 
-Comprender el contexto y establecer el alcance del análisis.
+Understand the context and establish the analysis scope.
 
-### Acciones
+### Actions
 
-1. Leer las instrucciones del repositorio.
-2. Localizar documentación relevante.
-3. Determinar si el proyecto es: nuevo, existente, migración, extensión, rediseño o feature aislada.
-4. Identificar el nivel de madurez: idea, investigación, prototipo, desarrollo, producción, crecimiento, legado.
-5. Identificar restricciones explícitas.
-6. Registrar fuentes disponibles.
-7. Detectar documentación contradictoria u obsoleta.
-8. Definir qué parte del producto está siendo descubierta.
+1. Read repository instructions.
+2. Locate relevant documentation.
+3. Determine whether the project is: new, existing, migration, extension, redesign, or isolated feature.
+4. Identify maturity level: idea, research, prototype, development, production, growth, legacy.
+5. Identify explicit constraints.
+6. Record available sources.
+7. Detect contradictory or obsolete documentation.
+8. Define which part of the product is being discovered.
 
-### Salida
+### Output
 
-Sección inicial en `discovery-report.md`:
+Initial section in `discovery-report.md`:
 
 ```markdown
-## Contexto del descubrimiento
-## Alcance analizado
-## Fuentes revisadas
-## Estado actual
-## Limitaciones del análisis
+## Discovery context
+## Scope analyzed
+## Sources reviewed
+## Current state
+## Analysis limitations
 ```
 
 ---
 
-## Etapa 2 — Normalizar la idea
+## Stage 2 — Normalize the idea
 
-### Objetivo
+### Objective
 
-Separar problema, solución propuesta y restricciones.
+Separate problem, proposed solution, and constraints.
 
-### Acciones
+### Actions
 
-Reescribir la idea en cuatro bloques:
+Rewrite the idea in four blocks:
 
 ```markdown
-## Situación
-## Problema
-## Solución propuesta
-## Restricciones
+## Situation
+## Problem
+## Proposed solution
+## Constraints
 ```
 
-### Preguntas internas obligatorias
+### Mandatory internal questions
 
-* ¿La descripción comienza por una tecnología?
-* ¿La idea es realmente una feature de otro producto?
-* ¿Existe más de un problema mezclado?
-* ¿La solución fue presentada como si fuera el problema?
-* ¿El problema existe para el usuario o solamente para el negocio?
-* ¿Hay evidencia de frecuencia o gravedad?
-* ¿Qué ocurre si el producto no se construye?
+* Does the description start with a technology?
+* Is the idea really a feature of another product?
+* Is more than one problem mixed together?
+* Was the solution presented as if it were the problem?
+* Does the problem exist for the user or only for the business?
+* Is there evidence of frequency or severity?
+* What happens if the product is not built?
 
-### Regla
+### Rule
 
-No modificar la intención del usuario silenciosamente.
-Conservar: versión original, versión normalizada y diferencias encontradas.
+Do not silently change the user's intent.
+Preserve: original version, normalized version, and differences found.
 
 ---
 
-## Etapa 3 — Definir el problema
+## Stage 3 — Define the problem
 
-### Objetivo
+### Objective
 
-Obtener una definición específica, verificable y libre de tecnología.
+Obtain a specific, verifiable, technology-free definition.
 
-### Plantilla
+### Template
 
 ```markdown
-## Problema principal
-[Actor] necesita [resultado] en [contexto],
-pero actualmente [fricción], lo que provoca [consecuencia].
+## Main problem
+[Actor] needs [outcome] in [context],
+but currently [friction], which causes [consequence].
 
-## Evidencia disponible
-## Frecuencia
-## Severidad
-## Consecuencias de no resolverlo
-## Problemas relacionados
-## Problemas que no se resolverán
+## Available evidence
+## Frequency
+## Severity
+## Consequences of not solving it
+## Related problems
+## Problems that will not be solved
 ```
 
-### Evaluaciones obligatorias
+### Mandatory evaluations
 
-Para cada problema: actor afectado, contexto, frecuencia, severidad, duración,
-costo actual, workaround, impacto emocional/operativo/económico, evidencia, incertidumbre.
+For each problem: affected actor, context, frequency, severity, duration,
+current cost, workaround, emotional/operational/economic impact, evidence, uncertainty.
 
-### Señales de problema débil
+### Weak-problem signals
 
-Marcar como riesgo cuando:
+Mark as risk when:
 
-* solamente ocurre ocasionalmente;
-* ya se resuelve satisfactoriamente;
-* requiere cambiar demasiado comportamiento;
-* el actor afectado no controla la compra;
-* la solución cuesta más que el problema;
-* la necesidad depende de una hipótesis no validada;
-* el actor no reconoce el problema;
-* el problema es interno del negocio sin valor externo.
+* it only occurs occasionally;
+* it is already solved satisfactorily;
+* it requires too much behavior change;
+* the affected actor does not control the purchase;
+* the solution costs more than the problem;
+* the need depends on an unvalidated hypothesis;
+* the actor does not recognize the problem;
+* the problem is internal to the business without external value.
 
 ---
 
-## Etapa 4 — Identificar actores
+## Stage 4 — Identify actors
 
-### Objetivo
+### Objective
 
-Descubrir todas las personas, sistemas y organizaciones involucradas.
+Discover all people, systems, and organizations involved.
 
-### Tipos de actores a evaluar explícitamente
+### Actor types to evaluate explicitly
 
-* usuario final, comprador, pagador, administrador de cuenta, propietario;
-* operador, colaborador, invitado, cliente del cliente;
-* soporte, auditor, moderador, aprobador, responsable legal;
-* integrador, proveedor externo, sistema automatizado, actor afectado indirectamente.
+* end user, buyer, payer, account administrator, owner;
+* operator, collaborator, guest, customer's customer;
+* support, auditor, moderator, approver, legal responsible party;
+* integrator, external provider, automated system, indirectly affected actor.
 
-### Para cada actor documentar
+### For each actor document
 
 ```markdown
 ## Actor
-### Descripción
-### Objetivo principal
-### Responsabilidades
-### Acciones frecuentes / críticas
-### Información que necesita / produce
-### Incentivos / Frustraciones / Riesgos
-### Nivel de experiencia / Frecuencia de uso
-### Dispositivo o contexto de uso
-### Relación con otros actores
-### Evidencia / Incertidumbres
+### Description
+### Primary goal
+### Responsibilities
+### Frequent / critical actions
+### Information needed / produced
+### Incentives / Frustrations / Risks
+### Experience level / Usage frequency
+### Device or usage context
+### Relationship to other actors
+### Evidence / Uncertainties
 ```
 
-### Regla
+### Rule
 
-No crear personas ficticias decorativas. Una persona o segmento debe existir
-para explicar diferencias relevantes de: comportamiento, necesidad, permisos,
-frecuencia, contexto, incentivo, experiencia.
+Do not create decorative fictional personas. A persona or segment must exist
+to explain relevant differences in: behavior, need, permissions,
+frequency, context, incentive, experience.
 
 ---
 
-## Etapa 5 — Identificar Jobs to Be Done
+## Stage 5 — Identify Jobs to Be Done
 
-### Objetivo
+### Objective
 
-Comprender qué progreso intenta realizar cada actor.
+Understand what progress each actor is trying to make.
 
-### Formato
+### Format
 
 ```markdown
-Cuando [situación], quiero [motivación o acción], para poder [resultado].
+When [situation], I want [motivation or action], so that I can [outcome].
 ```
 
-### Dimensiones a analizar
+### Dimensions to analyze
 
-* funcional, emocional, social, operativo, de control, de cumplimiento.
+* functional, emotional, social, operational, control, compliance.
 
-### Evaluación por job
+### Evaluation per job
 
-* importancia, frecuencia, satisfacción actual, alternativas;
-* costo del cambio, evento disparador, definición de éxito, obstáculos, consecuencias de fallo.
+* importance, frequency, current satisfaction, alternatives;
+* switching cost, triggering event, success definition, obstacles, failure consequences.
 
-### Regla
+### Rule
 
-No convertir automáticamente cada job en una feature.
+Do not automatically turn every job into a feature.
 
 ---
 
-## Etapa 6 — Mapear el proceso actual
+## Stage 6 — Map the current process
 
-### Objetivo
+### Objective
 
-Entender cómo se intenta conseguir el resultado sin el nuevo producto.
+Understand how the outcome is pursued without the new product.
 
-### Documentar
+### Document
 
 ```markdown
-## Disparador
-## Pasos actuales
-## Herramientas utilizadas
-## Decisiones / Transferencias entre personas
-## Esperas / Repeticiones / Errores frecuentes
-## Datos duplicados / Workarounds
-## Costos / Riesgos
-## Resultado final
+## Trigger
+## Current steps
+## Tools used
+## Decisions / Handoffs between people
+## Waits / Repetitions / Frequent errors
+## Duplicated data / Workarounds
+## Costs / Risks
+## Final outcome
 ```
 
-### Identificar
+### Identify
 
-* tareas manuales, hojas de cálculo, mensajes, llamadas;
-* software existente, combinaciones de herramientas, personas intermediarias;
-* procesos fuera del sistema, tareas invisibles, doble carga;
-* errores de coordinación, pérdida de información, dependencia de conocimiento informal.
+* manual tasks, spreadsheets, messages, calls;
+* existing software, tool combinations, intermediary people;
+* out-of-system processes, invisible tasks, double work;
+* coordination errors, information loss, informal knowledge dependence.
 
-### Regla
+### Rule
 
-No asumir que digitalizar el proceso actual es la mejor solución.
-Evaluar si el proceso debe: eliminarse, simplificarse, combinarse,
-automatizarse, limitarse o rediseñarse.
+Do not assume digitizing the current process is the best solution.
+Evaluate whether the process should: be eliminated, simplified, combined,
+automated, limited, or redesigned.
 
 ---
 
-## Etapa 7 — Analizar alternativas
+## Stage 7 — Analyze alternatives
 
-### Objetivo
+### Objective
 
-Comprender contra qué compite realmente el producto.
+Understand what the product actually competes against.
 
-### Incluir
+### Include
 
-* competencia directa e indirecta;
-* procesos manuales, no hacer nada, contratar una persona;
-* usar herramienta genérica, desarrollar internamente, combinar productos;
-* mantener el statu quo.
+* direct and indirect competition;
+* manual processes, doing nothing, hiring a person;
+* using a generic tool, building internally, combining products;
+* maintaining the status quo.
 
-### Para cada alternativa
+### For each alternative
 
 ```markdown
-## Alternativa
-### Qué resuelve / Para quién funciona
-### Ventajas / Desventajas / Costos
-### Fricciones de cambio
-### Motivos para permanecer / abandonarla
-### Evidencia
+## Alternative
+### What it solves / Who it works for
+### Advantages / Disadvantages / Costs
+### Switching frictions
+### Reasons to stay / leave
+### Evidence
 ```
 
-### Regla
+### Rule
 
-La principal competencia suele ser el comportamiento actual, no otro software.
+The main competition is usually current behavior, not another software product.
 
 ---
 
-## Etapa 8 — Formular la propuesta de valor
+## Stage 8 — Formulate the value proposition
 
-### Objetivo
+### Objective
 
-Conectar problema, actor, solución y resultado.
+Connect problem, actor, solution, and outcome.
 
-### Plantilla
+### Template
 
 ```markdown
-Para [actor], que necesita [resultado],
-el producto permite [mecanismo principal],
-a diferencia de [alternativa],
-porque ofrece [diferencia verificable].
+For [actor], who needs [outcome],
+the product enables [primary mechanism],
+unlike [alternative],
+because it offers [verifiable difference].
 ```
 
-### Validaciones internas
+### Internal validations
 
-* ¿La diferencia es relevante, comprobable, sostenible?
-* ¿El usuario la entendería?
-* ¿Exige demasiado cambio de comportamiento?
-* ¿Resuelve un problema frecuente?
-* ¿La promesa depende de funcionalidades inexistentes?
-* ¿El beneficio está expresado desde el actor?
+* Is the difference relevant, provable, sustainable?
+* Would the user understand it?
+* Does it require too much behavior change?
+* Does it solve a frequent problem?
+* Does the promise depend on nonexistent features?
+* Is the benefit expressed from the actor's perspective?
 
-### Regla
+### Rule
 
-Evitar expresiones vacías: "todo en un solo lugar", "fácil de usar", "innovador",
-"potente", "intuitivo", "revolucionario", "con inteligencia artificial";
-**salvo que se especifique cómo se demostrará**.
+Avoid empty phrases: "all in one place", "easy to use", "innovative",
+"powerful", "intuitive", "revolutionary", "with artificial intelligence";
+**unless it is specified how they will be demonstrated**.
 
 ---
 
-## Etapa 9 — Definir resultados
+## Stage 9 — Define outcomes
 
-### Objetivo
+### Objective
 
-Evitar que el roadmap se convierta en una lista de funcionalidades.
+Prevent the roadmap from becoming a feature list.
 
-### Tipos de resultados
+### Outcome types
 
-* del usuario, del negocio, operativo, de aprendizaje, de calidad, de riesgo.
+* user, business, operational, learning, quality, risk.
 
-### Plantilla
+### Template
 
 ```markdown
-## Resultado
-### Actor / Situación inicial
-### Cambio esperado / Indicador
-### Evidencia necesaria / Horizonte temporal
-### Riesgos / Relación con funcionalidades
+## Outcome
+### Actor / Initial situation
+### Expected change / Indicator
+### Required evidence / Time horizon
+### Risks / Relationship to features
 ```
 
-### Regla
+### Rule
 
-Una funcionalidad **no es** un resultado.
+A feature **is not** an outcome.
 
-*Incorrecto*: "Implementar dashboard."
-*Correcto*: "El administrador identifica en menos de dos minutos qué operaciones requieren atención."
+*Incorrect*: "Implement dashboard."
+*Correct*: "The administrator identifies in under two minutes which operations need attention."
 
 ---
 
-## Etapa 10 — Identificar el ciclo principal del producto
+## Stage 10 — Identify the product core loop
 
-### Objetivo
+### Objective
 
-Definir la secuencia recurrente que genera valor.
+Define the recurring sequence that generates value.
 
-### Plantilla
+### Template
 
 ```markdown
 ## Core loop
-1. Disparador
-2. Acción del actor
-3. Procesamiento
-4. Resultado visible
+1. Trigger
+2. Actor action
+3. Processing
+4. Visible result
 5. Feedback
-6. Razón para regresar
+6. Reason to return
 
-## Frecuencia esperada
-## Condiciones de activación
-## Puntos de abandono
-## Dependencias
+## Expected frequency
+## Activation conditions
+## Drop-off points
+## Dependencies
 ```
 
-### Preguntas clave
+### Key questions
 
-* ¿Cuál es la primera experiencia de valor? ¿Cuánto tarda?
-* ¿Qué debe configurar el usuario? ¿Qué ocurre antes de que haya datos?
-* ¿Quién crea el primer contenido?
-* ¿Qué hace que el producto mejore con el uso?
-* ¿Qué hace que el usuario vuelva?
-* ¿Existe valor recurrente o solo transaccional?
+* What is the first value experience? How long does it take?
+* What must the user configure? What happens before there is data?
+* Who creates the first content?
+* What makes the product improve with use?
+* What makes the user come back?
+* Is there recurring value or only transactional value?
 
 ---
 
-## Etapa 11 — Descubrir capacidades del producto
+## Stage 11 — Discover product capabilities
 
-### Objetivo
+### Objective
 
-Traducir necesidades en capacidades, sin diseñar toda la implementación.
+Translate needs into capabilities without designing the full implementation.
 
-### Organización recomendada
+### Recommended organization
 
-Agrupar por capacidad del negocio: gestión de cuentas, organizaciones, contenido,
-descubrimiento, operaciones, comunicación, facturación, administración,
-moderación, reportes, integraciones.
+Group by business capability: account management, organizations, content,
+discovery, operations, communication, billing, administration,
+moderation, reporting, integrations.
 
-### Para cada capacidad
+### For each capability
 
 ```markdown
-## Capacidad
-### Problema que resuelve
-### Actores / Resultado
-### Reglas / Dependencias / Riesgos
-### Prioridad provisional
-### Evidencia / No objetivos
+## Capability
+### Problem it solves
+### Actors / Outcome
+### Rules / Dependencies / Risks
+### Provisional priority
+### Evidence / Non-goals
 ```
 
-### Regla
+### Rule
 
-No crear una capability solo porque aparece en productos competidores.
+Do not create a capability only because it appears in competitor products.
 
 ---
 
-## Etapa 12 — Descubrir reglas de negocio
+## Stage 12 — Discover business rules
 
-### Objetivo
+### Objective
 
-Hacer visibles las políticas que normalmente se descubren durante la implementación.
+Surface policies that are usually discovered during implementation.
 
-### Áreas a investigar
+### Areas to investigate
 
-* creación, activación, aprobación, publicación, edición, eliminación, archivo;
-* restauración, expiración, límites, propiedad, transferencia, duplicación;
-* visibilidad, elegibilidad, validación, moderación, suspensión;
-* facturación, cancelación, renovación, reembolso;
-* auditoría, exportación, retención.
+* creation, activation, approval, publication, editing, deletion, archival;
+* restoration, expiration, limits, ownership, transfer, duplication;
+* visibility, eligibility, validation, moderation, suspension;
+* billing, cancellation, renewal, refund;
+* audit, export, retention.
 
-### Plantilla
+### Template
 
 ```markdown
-## Regla
-### Descripción / Actores afectados
-### Condición / Acción o restricción
-### Excepciones / Consecuencia de incumplimiento
-### Evidencia / Estado (Propuesta | Aprobada | En validación | Desconocida)
+## Rule
+### Description / Affected actors
+### Condition / Action or restriction
+### Exceptions / Consequence of non-compliance
+### Evidence / Status (Proposed | Approved | Under validation | Unknown)
 ```
 
-### Regla
+### Rule
 
-No definir reglas técnicas como si fueran reglas de negocio.
+Do not define technical rules as if they were business rules.
 
 ---
 
-## Etapa 13 — Modelar propiedad y límites
+## Stage 13 — Model ownership and boundaries
 
-### Objetivo
+### Objective
 
-Determinar a quién pertenece cada cosa.
+Determine who owns each thing.
 
-### Preguntas obligatorias
+### Mandatory questions
 
-* ¿Los datos pertenecen a una persona, cuenta, organización o workspace?
-* ¿Una persona puede pertenecer a varias organizaciones? ¿Puede cambiar de contexto?
-* ¿Quién crea/transfiere/elimina una organización?
-* ¿Qué ocurre cuando el propietario se va?
-* ¿Existen recursos compartidos/privados?
-* ¿Puede un recurso moverse entre organizaciones?
-* ¿Qué sucede con los datos después de cancelar?
-* ¿Quién puede exportar? ¿Quién responde legalmente?
+* Do data belong to a person, account, organization, or workspace?
+* Can a person belong to multiple organizations? Can they switch context?
+* Who creates/transfers/deletes an organization?
+* What happens when the owner leaves?
+* Are there shared/private resources?
+* Can a resource move between organizations?
+* What happens to data after cancellation?
+* Who can export? Who is legally responsible?
 
-### Salida
+### Output
 
-Tabla preliminar:
+Preliminary table:
 
-| Recurso | Propietario | Administrador | Lectores | Editores | Transferible | Retención |
+| Resource | Owner | Administrator | Readers | Editors | Transferable | Retention |
 |---------|-------------|---------------|----------|----------|--------------|-----------|
 
 ---
 
-## Etapa 14 — Definir roles y permisos preliminares
+## Stage 14 — Define preliminary roles and permissions
 
-### Objetivo
+### Objective
 
-Descubrir diferencias de acceso antes de diseñar pantallas.
+Discover access differences before designing screens.
 
-### Acciones a evaluar
+### Actions to evaluate
 
-* ver, listar, crear, editar, eliminar, archivar, publicar, aprobar, rechazar;
-* invitar, expulsar, transferir, exportar, facturar, auditar, moderar, configurar.
+* view, list, create, edit, delete, archive, publish, approve, reject;
+* invite, remove, transfer, export, bill, audit, moderate, configure.
 
-### Matriz recomendada
+### Recommended matrix
 
-| Acción | Propietario | Administrador | Operador | Colaborador | Invitado | Soporte |
+| Action | Owner | Administrator | Operator | Collaborator | Guest | Support |
 |--------|-------------|---------------|----------|-------------|----------|---------|
 
-Usar: `Permitido`, `Denegado`, `Condicional`, `Desconocido`.
+Use: `Allowed`, `Denied`, `Conditional`, `Unknown`.
 
-### Preguntas críticas
+### Critical questions
 
-* ¿El soporte puede acceder a datos del usuario? ¿Se requiere consentimiento?
-* ¿Puede un administrador verse afectado por sus propias restricciones?
-* ¿Quién puede asignar/revocar roles?
-* ¿Existe principio de mínimo privilegio?
-* ¿Hay acciones que requieren doble aprobación?
-* ¿Debe registrarse auditoría?
+* Can support access user data? Is consent required?
+* Can an administrator be affected by their own restrictions?
+* Who can assign/revoke roles?
+* Is there a least-privilege principle?
+* Are there actions that require dual approval?
+* Must audit logging be recorded?
 
 ---
 
-## Etapa 15 — Modelar estados y transiciones
+## Stage 15 — Model states and transitions
 
-### Objetivo
+### Objective
 
-Descubrir el ciclo de vida de las entidades relevantes.
+Discover the lifecycle of relevant entities.
 
-### Para cada entidad
+### For each entity
 
 ```markdown
-## Entidad
-### Estados / Estado inicial
-### Transiciones válidas
-### Actor que puede ejecutar cada transición
-### Validaciones / Efectos secundarios
-### Transiciones irreversibles
-### Recuperación / Expiración / Auditoría
+## Entity
+### States / Initial state
+### Valid transitions
+### Actor who can execute each transition
+### Validations / Side effects
+### Irreversible transitions
+### Recovery / Expiration / Audit
 ```
 
-### Estados a evaluar
+### States to evaluate
 
-* borrador, pendiente, aprobado, publicado, rechazado, pausado, suspendido,
-  vencido, cancelado, archivado, eliminado, restaurado.
+* draft, pending, approved, published, rejected, paused, suspended,
+  expired, canceled, archived, deleted, restored.
 
-### Preguntas
+### Questions
 
-* ¿Qué pasa si dos personas cambian el estado al mismo tiempo?
-* ¿Qué ocurre si falla una acción secundaria?
-* ¿Puede repetirse la acción? ¿Existe aprobación/reversión/expiración automática?
-* ¿Qué estados se muestran al usuario?
+* What happens if two people change state at the same time?
+* What happens if a secondary action fails?
+* Can the action be repeated? Is there approval/reversion/automatic expiration?
+* Which states are shown to the user?
 
-No diseñar la máquina de estados técnica definitiva. Documentar el comportamiento esperado.
-
----
-
-## Etapa 16 — Descubrir escenarios y edge cases
-
-### Objetivo
-
-Identificar situaciones que suelen aparecer durante desarrollo, QA o producción.
-
-### Categorías a evaluar sistemáticamente
-
-* **Inicio**: usuario nuevo, organización nueva, sistema sin datos,
-  configuración incompleta, invitación pendiente, activación fallida.
-* **Datos**: faltantes, duplicados, inválidos, obsoletos, contenido muy largo,
-  caracteres especiales, archivos grandes, fechas ambiguas, zonas horarias, monedas.
-* **Acceso**: sin permisos, suspendido, rol modificado, cuenta eliminada,
-  sesión expirada, recurso de otro tenant.
-* **Operación**: doble envío, ediciones simultáneas, operación parcial,
-  dependencia caída, reintento, timeout, cancelación a mitad de proceso.
-* **Ciclo de vida**: eliminación, restauración, transferencia, expiración,
-  cancelación, renovación, downgrade, cambio de propietario.
-* **Escala**: cero resultados, un resultado, miles, paginación,
-  filtros combinados, exportaciones, importaciones masivas.
-* **Comunicación**: notificación duplicada/fallida, preferencias desactivadas,
-  destinatario inválido, idioma incorrecto.
-* **Soporte**: usuario bloqueado, disputa, fraude, abuso, recuperación de cuenta,
-  corrección administrativa, auditoría.
-
-### Regla
-
-No es necesario **resolver** todos los edge cases durante discovery.
-Sí es obligatorio: identificarlos, clasificarlos, decidir cuáles afectan
-el alcance inicial y registrar los demás.
+Do not design the definitive technical state machine. Document expected behavior.
 
 ---
 
-## Etapa 17 — Analizar riesgos
+## Stage 16 — Discover scenarios and edge cases
 
-### Objetivo
+### Objective
 
-Detectar problemas antes de que se conviertan en costos estructurales.
+Identify situations that usually appear during development, QA, or production.
 
-### Categorías obligatorias
+### Categories to evaluate systematically
 
-* **Valor**: nadie necesita la solución, beneficio no claro, problema poco frecuente.
-* **Usabilidad**: usuario no entiende el modelo, demasiada configuración, vocabulario ajeno.
-* **Viabilidad**: modelo de negocio débil, adquisición costosa, márgenes insuficientes.
-* **Factibilidad**: integración incierta, volumen desconocido, dependencia técnica inmadura.
-* **Seguridad**: acceso indebido, datos sensibles, fraude, suplantación, permisos ambiguos.
-* **Privacidad/Legal**: consentimiento, retención, menores, datos personales, regulaciones.
-* **Operación**: falta de moderación/soporte, imposibilidad de corregir errores, falta de auditoría.
-* **Dependencia**: proveedor externo, API no garantizada, lock-in.
-* **Adopción**: migración difícil, resistencia organizacional, falta de contenido inicial.
+* **Start**: new user, new organization, system with no data,
+  incomplete configuration, pending invitation, failed activation.
+* **Data**: missing, duplicate, invalid, obsolete, very long content,
+  special characters, large files, ambiguous dates, time zones, currencies.
+* **Access**: no permissions, suspended, role changed, account deleted,
+  expired session, resource from another tenant.
+* **Operation**: double submit, concurrent edits, partial operation,
+  dependency down, retry, timeout, mid-process cancellation.
+* **Lifecycle**: deletion, restoration, transfer, expiration,
+  cancellation, renewal, downgrade, owner change.
+* **Scale**: zero results, one result, thousands, pagination,
+  combined filters, exports, bulk imports.
+* **Communication**: duplicate/failed notification, disabled preferences,
+  invalid recipient, wrong language.
+* **Support**: blocked user, dispute, fraud, abuse, account recovery,
+  administrative correction, audit.
 
-### Registro
+### Rule
+
+It is not necessary to **resolve** all edge cases during discovery.
+It is mandatory to: identify them, classify them, decide which affect
+initial scope, and register the rest.
+
+---
+
+## Stage 17 — Analyze risks
+
+### Objective
+
+Detect problems before they become structural costs.
+
+### Mandatory categories
+
+* **Value**: nobody needs the solution, unclear benefit, infrequent problem.
+* **Usability**: user does not understand the model, too much configuration, foreign vocabulary.
+* **Viability**: weak business model, costly acquisition, insufficient margins.
+* **Feasibility**: uncertain integration, unknown volume, immature technical dependency.
+* **Security**: improper access, sensitive data, fraud, impersonation, ambiguous permissions.
+* **Privacy/Legal**: consent, retention, minors, personal data, regulations.
+* **Operations**: lack of moderation/support, inability to correct errors, lack of audit.
+* **Dependency**: external provider, unguaranteed API, lock-in.
+* **Adoption**: difficult migration, organizational resistance, lack of initial content.
+
+### Register
 
 ```markdown
-## Riesgo
-### Categoría / Descripción
-### Probabilidad (Baja | Media | Alta)
-### Impacto (Bajo | Medio | Alto | Crítico)
-### Evidencia / Indicador temprano
-### Mitigación / Plan de validación
-### Responsable / Estado
+## Risk
+### Category / Description
+### Probability (Low | Medium | High)
+### Impact (Low | Medium | High | Critical)
+### Evidence / Early indicator
+### Mitigation / Validation plan
+### Owner / Status
 ```
 
-### Priorización
+### Prioritization
 
-Los riesgos con **alta incertidumbre + alto impacto** deben validarse antes de implementar.
+Risks with **high uncertainty + high impact** must be validated before implementation.
 
 ---
 
-## Etapa 18 — Construir el registro de supuestos
+## Stage 18 — Build the assumptions register
 
-### Objetivo
+### Objective
 
-Hacer explícito todo aquello que el producto necesita que sea cierto.
+Make explicit everything the product needs to be true.
 
-### Categorías
+### Categories
 
-* usuario, problema, comportamiento, propuesta de valor, disposición a pagar;
-* adquisición, retención, operación, soporte;
-* tecnología, integración, seguridad, legal, escala.
+* user, problem, behavior, value proposition, willingness to pay;
+* acquisition, retention, operations, support;
+* technology, integration, security, legal, scale.
 
-### Plantilla
+### Template
 
 ```markdown
-## Supuesto
-### Categoría
-### Declaración: Creemos que...
-### Por qué importa
-### Evidencia actual
-### Nivel de incertidumbre (Bajo | Medio | Alto)
-### Impacto si es falso (Bajo | Medio | Alto | Crítico)
-### Prioridad de validación
-### Experimento / Criterio de éxito / Criterio de fracaso
-### Resultado (Pendiente | Validado | Invalidado | Inconcluso)
+## Assumption
+### Category
+### Statement: We believe that...
+### Why it matters
+### Current evidence
+### Uncertainty level (Low | Medium | High)
+### Impact if false (Low | Medium | High | Critical)
+### Validation priority
+### Experiment / Success criterion / Failure criterion
+### Result (Pending | Validated | Invalidated | Inconclusive)
 ```
 
-### Regla de prioridad
+### Priority rule
 
-Priorizar primero los supuestos que combinen: alto impacto, alta incertidumbre,
-baja reversibilidad y dependencia de otras decisiones.
+Prioritize first the assumptions that combine: high impact, high uncertainty,
+low reversibility, and dependence on other decisions.
 
 ---
 
-## Etapa 19 — Diseñar experimentos de validación
+## Stage 19 — Design validation experiments
 
-### Objetivo
+### Objective
 
-Obtener evidencia antes de comprometer implementación.
+Obtain evidence before committing to implementation.
 
-### Posibles experimentos
+### Possible experiments
 
-* entrevista, observación contextual, revisión de procesos reales, análisis de tickets;
-* prototipo de baja fidelidad, prototipo clickable, concierge test, wizard of oz;
-* landing page, fake door, prueba de pricing, prueba manual;
-* benchmark técnico, prueba de integración, análisis de datos, smoke test comercial.
+* interview, contextual observation, real process review, ticket analysis;
+* low-fidelity prototype, clickable prototype, concierge test, wizard of oz;
+* landing page, fake door, pricing test, manual trial;
+* technical benchmark, integration test, data analysis, commercial smoke test.
 
-### Para cada experimento
+### For each experiment
 
 ```markdown
-## Experimento
-### Supuesto evaluado / Pregunta / Método
-### Participantes / Material / Duración máxima
-### Métrica / Criterio de éxito / Criterio de fracaso
-### Riesgos / Decisión posterior
+## Experiment
+### Assumption evaluated / Question / Method
+### Participants / Material / Maximum duration
+### Metric / Success criterion / Failure criterion
+### Risks / Subsequent decision
 ```
 
-### Regla
+### Rule
 
-No usar vanity metrics como evidencia suficiente. Ejemplos débiles: likes,
-visitas sin intención, comentarios generales, opiniones hipotéticas.
-**Priorizar comportamiento observable.**
-
----
-
-## Etapa 20 — Simplificar el producto
-
-### Objetivo
-
-Reducir alcance y complejidad sin destruir el valor central.
-
-### Para cada capacidad preguntar
-
-* ¿Qué sucede si se elimina?
-* ¿Puede realizarse manualmente? ¿Puede postergarse?
-* ¿Es necesaria para el primer resultado de valor? ¿Para operar de manera segura?
-* ¿Es necesaria por regulación?
-* ¿Es una preferencia o una necesidad?
-* ¿Fue agregada por comparación con competidores?
-* ¿Requiere otra feature para tener valor?
-* ¿Aumenta soporte/permisos/estados/riesgo de datos?
-* ¿Puede limitarse inicialmente?
-
-### Clasificación
-
-* **núcleo**, **habilitador**, **diferenciador**, **operación**;
-* **cumplimiento**, **mejora**, **experimento**, **futuro**, **descartado**.
-
-### Regla
-
-No confundir "versión inicial" con producto defectuoso.
-La primera versión debe ser: pequeña, coherente, segura, operable, medible, valiosa.
+Do not use vanity metrics as sufficient evidence. Weak examples: likes,
+visits without intent, general comments, hypothetical opinions.
+**Prioritize observable behavior.**
 
 ---
 
-## Etapa 21 — Definir alcance candidato
+## Stage 20 — Simplify the product
 
-### Objetivo
+### Objective
 
-Construir una baseline que pueda evaluarse y aprobarse.
+Reduce scope and complexity without destroying core value.
 
-### Documento
+### For each capability ask
+
+* What happens if it is removed?
+* Can it be done manually? Can it be deferred?
+* Is it necessary for the first value outcome? To operate safely?
+* Is it required by regulation?
+* Is it a preference or a need?
+* Was it added by comparison with competitors?
+* Does it require another feature to have value?
+* Does it increase support/permissions/states/data risk?
+* Can it be limited initially?
+
+### Classification
+
+* **core**, **enabler**, **differentiator**, **operations**;
+* **compliance**, **improvement**, **experiment**, **future**, **discarded**.
+
+### Rule
+
+Do not confuse "initial version" with a defective product.
+The first version must be: small, coherent, safe, operable, measurable, valuable.
+
+---
+
+## Stage 21 — Define candidate scope
+
+### Objective
+
+Build a baseline that can be evaluated and approved.
+
+### Document
 
 ```markdown
-# Alcance candidato
-## Resultado principal
-## Actores incluidos
-## Casos de uso incluidos
-## Capacidades incluidas
-## Reglas incluidas / Estados incluidos
-## Operación mínima necesaria
-## Métricas
-## No objetivos
-## Funcionalidades futuras
-## Dependencias
-## Supuestos críticos / Riesgos aceptados
-## Decisiones pendientes
-## Condiciones para modificar el alcance
+# Candidate scope
+## Primary outcome
+## Included actors
+## Included use cases
+## Included capabilities
+## Included rules / Included states
+## Minimum necessary operations
+## Metrics
+## Non-goals
+## Future features
+## Dependencies
+## Critical assumptions / Accepted risks
+## Pending decisions
+## Conditions for changing scope
 ```
 
-### Regla
+### Rule
 
-No escribir una lista plana de features. Cada elemento debe relacionarse con un resultado.
+Do not write a flat feature list. Each element must relate to an outcome.
 
 ---
 
-## Etapa 22 — Revisar consistencia
+## Stage 22 — Review consistency
 
-### Objetivo
+### Objective
 
-Encontrar contradicciones entre documentos antes de la revisión adversarial.
+Find contradictions between documents before the adversarial review.
 
-### Verificaciones obligatorias
+### Mandatory checks
 
-* Cada capacidad resuelve un problema documentado.
-* Cada actor tiene acciones y permisos coherentes.
-* Cada permiso está asociado con ownership.
-* Cada estado tiene transiciones posibles desde y hacia otros estados.
-* Cada resultado tiene indicador definido.
-* Cada funcionalidad está explícitamente dentro o fuera del alcance.
-* Cada supuesto crítico tiene plan de validación.
-* Cada riesgo crítico tiene mitigación o está marcado como bloqueante.
-* El vocabulario se usa consistentemente en todos los documentos.
-* Los no objetivos no contradicen capacidades incluidas.
-* El modelo de monetización no contradice permisos o ownership.
-* El proceso inicial no depende de datos inexistentes.
-* La experiencia puede comenzar desde un sistema vacío.
-* El producto puede operarse y recibir soporte.
-* Las decisiones temporales están marcadas como `Pendiente`.
-* Las inferencias no aparecen como `Comprobado`.
+* Each capability solves a documented problem.
+* Each actor has coherent actions and permissions.
+* Each permission is associated with ownership.
+* Each state has possible transitions from and to other states.
+* Each outcome has a defined indicator.
+* Each feature is explicitly in or out of scope.
+* Each critical assumption has a validation plan.
+* Each critical risk has mitigation or is marked blocking.
+* Vocabulary is used consistently across all documents.
+* Non-goals do not contradict included capabilities.
+* The monetization model does not contradict permissions or ownership.
+* The initial process does not depend on nonexistent data.
+* The experience can start from an empty system.
+* The product can be operated and supported.
+* Temporary decisions are marked as `Pending`.
+* Inferences do not appear as `Verified`.
 
-### Salida
+### Output
 
 ```markdown
-## Contradicción
-### Documentos afectados
-### Descripción / Impacto
-### Alternativas / Recomendación
-### Decisión requerida
+## Contradiction
+### Affected documents
+### Description / Impact
+### Alternatives / Recommendation
+### Required decision
 ```
 
 ---
 
-## Etapa 23 — Realizar una revisión adversarial
+## Stage 23 — Perform an adversarial review
 
-### Objetivo
+### Objective
 
-Criticar el producto desde múltiples perspectivas antes de recomendar avanzar.
+Critique the product from multiple perspectives before recommending advancement.
 
-### Perspectivas a adoptar
+### Perspectives to adopt
 
-* usuario escéptico, comprador, operador, soporte, atacante;
-* competidor, responsable financiero, responsable legal;
-* equipo pequeño, equipo de crecimiento;
-* organización con miles de datos, persona con baja experiencia digital;
-* usuario móvil, persona con discapacidad, usuario que quiere abandonar el producto.
+* skeptical user, buyer, operator, support, attacker;
+* competitor, financial responsible party, legal responsible party;
+* small team, growth team;
+* organization with thousands of data points, person with low digital experience;
+* mobile user, person with a disability, user who wants to leave the product.
 
-### Preguntas adversariales
+### Adversarial questions
 
-* ¿Por qué alguien no usaría esto?
-* ¿Qué parte genera más trabajo del que elimina?
-* ¿Qué parte necesita confianza que todavía no existe?
-* ¿Qué ocurre cuando el sistema se equivoca?
-* ¿Qué incentivos pueden producir abuso?
-* ¿Qué actor queda perjudicado?
-* ¿Qué funcionalidad parece atractiva pero no aporta valor?
-* ¿Qué costo operativo se está ocultando?
-* ¿Qué ocurre cuando el producto escala?
-* ¿Qué ocurre cuando un usuario quiere irse?
-* ¿Qué dato no deberíamos almacenar?
-* ¿Qué promesa no podemos garantizar?
-* ¿Cuál es el punto único de fallo del modelo?
-* ¿Qué descubriría soporte después del lanzamiento?
-* ¿Qué descubriría seguridad demasiado tarde?
-* ¿Qué descubriría facturación demasiado tarde?
+* Why would someone not use this?
+* Which part creates more work than it eliminates?
+* Which part needs trust that does not yet exist?
+* What happens when the system is wrong?
+* Which incentives can produce abuse?
+* Which actor is harmed?
+* Which feature seems attractive but does not deliver value?
+* What operational cost is being hidden?
+* What happens when the product scales?
+* What happens when a user wants to leave?
+* What data should we not store?
+* What promise can we not guarantee?
+* What is the single point of failure of the model?
+* What would support discover after launch?
+* What would security discover too late?
+* What would billing discover too late?
 
 ---
 
-## Etapa 24 — Actualizar el estado del proyecto
+## Stage 24 — Update project status
 
-Actualizar `docs/project-status.md`:
+Update `docs/project-status.md`:
 
 ```markdown
 # Project Status
-## Fase actual
-## Estado del gate (Pass | Conditional Pass | Blocked)
-## Objetivo actual
-## Trabajo completado
-## Documentos vigentes
-## Supuestos críticos / Riesgos críticos
-## Decisiones requeridas / Validaciones pendientes
-## Bloqueantes
-## Próxima acción recomendada
-## Skill recomendada
+## Current phase
+## Gate status (Pass | Conditional Pass | Blocked)
+## Current objective
+## Work completed
+## Current documents
+## Critical assumptions / Critical risks
+## Required decisions / Pending validations
+## Blockers
+## Recommended next action
+## Recommended skill
 ```
 
 ---
 
-## Etapa 25 — Determinar el gate
+## Stage 25 — Determine the gate
 
 ### PASS
 
-Recomendar cuando:
+Recommend when:
 
-* el problema está claramente definido;
-* los actores principales están identificados;
-* existe una propuesta de valor coherente;
-* el proceso actual es comprendido;
-* los principales supuestos están explícitos;
-* los riesgos críticos están identificados;
-* existe un alcance candidato con no objetivos definidos;
-* no hay contradicciones bloqueantes;
-* existe un plan de validación;
-* se puede avanzar sin asumir decisiones irreversibles.
+* the problem is clearly defined;
+* primary actors are identified;
+* a coherent value proposition exists;
+* the current process is understood;
+* main assumptions are explicit;
+* critical risks are identified;
+* a candidate scope with defined non-goals exists;
+* there are no blocking contradictions;
+* a validation plan exists;
+* progress is possible without assuming irreversible decisions.
 
 ### CONDITIONAL PASS
 
-Recomendar cuando:
+Recommend when:
 
-* la baseline es suficiente para avanzar parcialmente;
-* existen incertidumbres relevantes pero reversibles;
-* algunos supuestos necesitan validación paralela;
-* se puede comenzar UX o un prototipo limitado.
+* the baseline is sufficient to advance partially;
+* relevant but reversible uncertainties exist;
+* some assumptions need parallel validation;
+* limited UX or a constrained prototype can begin.
 
-Debe especificar **explícitamente** las condiciones.
+Must specify conditions **explicitly**.
 
 ### BLOCKED
 
-Recomendar cuando:
+Recommend when:
 
-* no está claro qué problema se resuelve;
-* no se conoce el actor principal;
-* existen contradicciones fundamentales;
-* el modelo depende de un supuesto crítico sin evidencia;
-* hay riesgos legales o de seguridad no resueltos;
-* el alcance no puede delimitarse;
-* la propuesta de valor es incoherente;
-* el proyecto exige una decisión humana importante;
-* la implementación produciría desperdicio significativo.
+* it is unclear what problem is solved;
+* the primary actor is unknown;
+* fundamental contradictions exist;
+* the model depends on a critical assumption without evidence;
+* unresolved legal or security risks exist;
+* scope cannot be delimited;
+* the value proposition is incoherent;
+* the project requires an important human decision;
+* implementation would produce significant waste.
 
-### Regla
+### Rule
 
-`BLOCKED` no significa abandonar. Significa que el siguiente paso debe ser
-validación o decisión, no implementación.
-
----
-
-# 12. Diferencias nuevo vs. existente
-
-## 12.1 Proyecto nuevo
-
-Priorizar:
-
-1. problema y evidencia;
-2. actores y proceso actual;
-3. alternativas y propuesta de valor;
-4. experimentos de validación;
-5. alcance pequeño.
-
-No crear arquitectura ni código de producción.
-Se permiten prototipos descartables para validar hipótesis.
-
-## 12.2 Proyecto existente
-
-Además de lo anterior:
-
-* observar el comportamiento implementado;
-* revisar métricas, feedback y tickets disponibles;
-* identificar features sin uso y documentación divergente;
-* mapear deuda de producto;
-* detectar reglas embebidas solo en código;
-* identificar dependencias operativas;
-* distinguir comportamiento intencional de accidental.
-
-**No intentar reescribir toda la documentación de una sola vez.**
-Priorizar: (1) producto actual, (2) área en análisis, (3) contradicciones críticas,
-(4) riesgos, (5) documentación necesaria para el siguiente cambio.
+`BLOCKED` does not mean abandon. It means the next step must be
+validation or decision, not implementation.
 
 ---
 
-# 13. Reglas de documentación
+# 12. New vs. existing differences
 
-## 13.1 No sobrescribir sin comprender
+## 12.1 New project
 
-Antes de modificar un documento existente: leerlo completamente, identificar
-su propósito, conservar decisiones vigentes, marcar información obsoleta,
-evitar eliminar contexto útil, registrar cambios significativos.
+Prioritize:
 
-## 13.2 No duplicar
+1. problem and evidence;
+2. actors and current process;
+3. alternatives and value proposition;
+4. validation experiments;
+5. small scope.
 
-Una información debe tener una **fuente principal**. Otros documentos deben
-enlazarla, no copiarla. Ejemplo: permisos en `roles-and-permissions.md`;
-cada feature referencia ese documento y agrega solo excepciones.
+Do not create architecture or production code.
+Disposable prototypes to validate hypotheses are allowed.
 
-## 13.3 Mantener trazabilidad
+## 12.2 Existing project
 
-Vincular siempre que sea posible:
+In addition to the above:
+
+* observe implemented behavior;
+* review available metrics, feedback, and tickets;
+* identify unused features and divergent documentation;
+* map product debt;
+* detect rules embedded only in code;
+* identify operational dependencies;
+* distinguish intentional from accidental behavior.
+
+**Do not attempt to rewrite all documentation at once.**
+Prioritize: (1) current product, (2) area under analysis, (3) critical contradictions,
+(4) risks, (5) documentation needed for the next change.
+
+---
+
+# 13. Documentation rules
+
+## 13.1 Do not overwrite without understanding
+
+Before modifying an existing document: read it fully, identify
+its purpose, preserve current decisions, mark obsolete information,
+avoid deleting useful context, record significant changes.
+
+## 13.2 Do not duplicate
+
+Information must have a **primary source**. Other documents must
+link to it, not copy it. Example: permissions in `roles-and-permissions.md`;
+each feature references that document and adds only exceptions.
+
+## 13.3 Maintain traceability
+
+Link whenever possible:
 
 ```text
-Problema → Actor → Resultado → Capacidad → Regla → Supuesto → Experimento → Decisión
+Problem → Actor → Outcome → Capability → Rule → Assumption → Experiment → Decision
 ```
 
-## 13.4 Usar lenguaje normativo con precisión
+## 13.4 Use normative language precisely
 
-| Término | Significado |
+| Term | Meaning |
 |---------|-------------|
-| `Debe` | Requisito obligatorio |
-| `No debe` | Prohibición |
-| `Debería` | Recomendación fuerte |
-| `Puede` | Opción permitida |
-| `Pendiente` | No decidido |
-| `Supuesto` | Requiere evidencia |
-| `Fuera de alcance` | No se implementará en el incremento actual |
+| `Must` | Mandatory requirement |
+| `Must not` | Prohibition |
+| `Should` | Strong recommendation |
+| `May` | Permitted option |
+| `Pending` | Not decided |
+| `Assumption` | Requires evidence |
+| `Out of scope` | Will not be implemented in the current increment |
 
-## 13.5 Idioma de la documentación
+## 13.5 Documentation language
 
-* Si el repositorio tiene documentación en inglés, mantener el inglés.
-* Si el repositorio tiene documentación en español, mantener el español.
-* Si no hay documentación previa, usar el idioma en que el usuario se comunica.
-* **No mezclar idiomas** en el mismo artefacto.
-* Los términos técnicos (JTBD, ADR, OKR, KPI) pueden mantenerse en inglés.
+* If the repository has documentation in English, keep English.
+* If the repository has documentation in Spanish, keep Spanish.
+* If there is no prior documentation, use the language the user communicates in.
+* **Do not mix languages** in the same artifact.
+* Technical terms (JTBD, ADR, OKR, KPI) may remain in English.
 
 ---
 
-# 14. Prohibiciones
+# 14. Prohibitions
 
-Durante esta skill, el agente **no debe**:
+During this skill, the agent **must not**:
 
-* implementar features, inicializar frameworks, instalar dependencias;
-* diseñar tablas definitivas, crear endpoints, escribir componentes de producción;
-* seleccionar tecnologías sin justificación derivada de requisitos;
-* inventar entrevistas, métricas, evidencia;
-* declarar validado un supuesto sin prueba;
-* copiar funcionalidades de competidores sin analizar su propósito;
-* crear personas decorativas;
-* crear documentación enorme sin decisiones útiles;
-* resolver silenciosamente contradicciones;
-* aceptar todas las ideas del usuario sin cuestionarlas;
-* ampliar el alcance sin registrarlo;
-* transformar preferencias en requisitos;
-* confundir restricciones técnicas con necesidades de usuario;
-* confundir el roadmap con una lista de features;
-* bloquearse por información menor faltante;
-* realizar operaciones destructivas, modificar producción, acceder a secretos;
-* prometer resultados comerciales no demostrados.
+* implement features, initialize frameworks, install dependencies;
+* design definitive tables, create endpoints, write production components;
+* select technologies without justification derived from requirements;
+* invent interviews, metrics, evidence;
+* declare an assumption validated without proof;
+* copy competitor features without analyzing their purpose;
+* create decorative personas;
+* create huge documentation without useful decisions;
+* silently resolve contradictions;
+* accept all user ideas without challenging them;
+* expand scope without recording it;
+* turn preferences into requirements;
+* confuse technical constraints with user needs;
+* confuse the roadmap with a feature list;
+* block on minor missing information;
+* perform destructive operations, modify production, access secrets;
+* promise undemonstrated commercial outcomes.
 
 ---
 
 # 15. Stop conditions
 
-El agente debe detener la progresión cuando:
+The agent must stop progression when:
 
-* existe una decisión irreversible sin aprobación;
-* se detecta una posible obligación legal crítica;
-* existe riesgo grave de privacidad;
-* no puede identificarse al usuario principal;
-* dos requisitos centrales son incompatibles;
-* no existe una definición coherente del problema;
-* la propuesta depende de acceso a datos no garantizado;
-* el modelo requiere una integración cuya disponibilidad es incierta;
-* el producto podría facilitar abuso grave;
-* el alcance excede claramente las restricciones;
-* la documentación es insuficiente y no puede realizarse inferencia segura.
+* an irreversible decision exists without approval;
+* a possible critical legal obligation is detected;
+* a serious privacy risk exists;
+* the primary user cannot be identified;
+* two central requirements are incompatible;
+* no coherent problem definition exists;
+* the proposal depends on unguaranteed data access;
+* the model requires an integration whose availability is uncertain;
+* the product could facilitate severe abuse;
+* scope clearly exceeds constraints;
+* documentation is insufficient and safe inference is not possible.
 
-**Detener la progresión no significa dejar de trabajar.** Antes de detenerse debe:
+**Stopping progression does not mean stopping work.** Before stopping, must:
 
-1. completar todos los análisis no bloqueados;
-2. documentar hallazgos;
-3. explicar el bloqueo;
-4. presentar alternativas;
-5. recomendar la decisión;
-6. actualizar `project-status.md`.
-
----
-
-# 16. Anti-patrones del agente
-
-## Señales de que el agente está fallando
-
-El agente debe **autoevaluarse activamente** durante la ejecución. Si detecta
-alguno de estos comportamientos, debe corregir inmediatamente:
-
-### Análisis débil
-
-* Está resumiendo la idea sin cuestionarla.
-* Está produciendo una lista genérica de preguntas sin contexto.
-* Está generando una lista extensa de features sin vincularlas a problemas.
-* Está recomendando tecnologías en fase de discovery.
-* Está creando personas ficticias sin evidencia.
-* Está copiando patrones de empresas conocidas sin analizar si aplican.
-
-### Complacencia
-
-* Está diciendo que la idea es buena sin haberla sometido a crítica.
-* Está aceptando todos los requisitos sin desafiar su necesidad.
-* Está evitando señalar contradicciones por no incomodar.
-* Está transformando preferencias del usuario en requisitos obligatorios.
-
-### Dilación
-
-* Está pidiendo al usuario que complete todo el análisis.
-* Está produciendo documentos extensos sin priorización ni decisiones.
-* Está iterando sobre detalles irrelevantes sin avanzar hacia el gate.
-* Está evitando formular una recomendación clara.
-
-### Exceso de confianza
-
-* Está presentando inferencias como `Comprobado`.
-* Está afirmando que algo funcionará sin evidencia.
-* Está descartando riesgos porque "es obvio que se resolverán".
-* Está recomendando PASS cuando hay supuestos críticos sin validar.
+1. complete all unblocked analyses;
+2. document findings;
+3. explain the blocker;
+4. present alternatives;
+5. recommend the decision;
+6. update `project-status.md`.
 
 ---
 
-# 17. Criterios de calidad
+# 16. Agent anti-patterns
 
-La ejecución es de **alta calidad** cuando:
+## Signals that the agent is failing
 
-* distingue hechos de supuestos;
-* cuestiona la solución propuesta;
-* identifica actores omitidos, permisos, ownership, estados, edge cases;
-* detecta costos operativos ocultos;
-* detecta riesgos legales y de seguridad;
-* conecta capacidades con resultados;
-* elimina complejidad innecesaria;
-* produce preguntas concretas y accionables;
-* diseña experimentos verificables;
-* mantiene documentación consistente;
-* no invade arquitectura prematuramente;
-* **termina con una recomendación clara y justificada**.
+The agent must **actively self-assess** during execution. If it detects
+any of these behaviors, it must correct immediately:
 
-La ejecución es **insuficiente** cuando cae en cualquiera de los anti-patrones
-descritos en la sección 16.
+### Weak analysis
 
----
+* Summarizing the idea without challenging it.
+* Producing a generic list of questions without context.
+* Generating an extensive feature list without linking to problems.
+* Recommending technologies in the discovery phase.
+* Creating fictional personas without evidence.
+* Copying patterns from well-known companies without analyzing fit.
 
-# 18. Checklist de autoevaluación
+### Compliance
 
-Antes de finalizar, el agente debe verificar:
+* Saying the idea is good without subjecting it to critique.
+* Accepting all requirements without challenging their necessity.
+* Avoiding pointing out contradictions so as not to discomfort.
+* Turning user preferences into mandatory requirements.
 
-## Problema
+### Dilatory behavior
 
-* [ ] Definido sin mencionar la solución.
-* [ ] Actor afectado identificado.
-* [ ] Frecuencia y severidad consideradas.
-* [ ] Alternativas actuales documentadas.
-* [ ] Consecuencias de no resolverlo conocidas.
+* Asking the user to complete the entire analysis.
+* Producing extensive documents without prioritization or decisions.
+* Iterating on irrelevant details without advancing toward the gate.
+* Avoiding a clear recommendation.
 
-## Actores
+### Overconfidence
 
-* [ ] Usuario y comprador diferenciados.
-* [ ] Administradores, operadores y soporte identificados.
-* [ ] Actores indirectos y sistemas externos considerados.
-
-## Valor
-
-* [ ] Propuesta de valor formulada con diferencia verificable.
-* [ ] Resultado principal definido.
-* [ ] Primera experiencia de valor identificada.
-
-## Alcance
-
-* [ ] Capacidades relacionadas con resultados.
-* [ ] No objetivos definidos y dependencias identificadas.
-* [ ] Complejidad especulativa eliminada.
-
-## Reglas
-
-* [ ] Ownership, tenancy, roles y permisos analizados.
-* [ ] Estados, eliminación, restauración, límites y excepciones analizados.
-
-## Riesgos
-
-* [ ] Valor, usabilidad, viabilidad y factibilidad analizadas.
-* [ ] Seguridad, privacidad, operación y soporte analizados.
-* [ ] Riesgos críticos tienen respuesta (mitigación o bloqueo).
-
-## Evidencia
-
-* [ ] Hechos diferenciados de supuestos.
-* [ ] Supuestos críticos con experimento diseñado.
-* [ ] Criterios de éxito/fracaso definidos.
-* [ ] No se inventó validación.
-
-## Documentación
-
-* [ ] Sin duplicaciones importantes, vocabulario consistente.
-* [ ] Contradicciones registradas.
-* [ ] `project-status.md` actualizado.
-* [ ] Gate con justificación explícita.
+* Presenting inferences as `Verified`.
+* Claiming something will work without evidence.
+* Dismissing risks because "it is obvious they will be resolved".
+* Recommending PASS when critical assumptions are unvalidated.
 
 ---
 
-# 19. Formato del informe final
+# 17. Quality criteria
 
-La respuesta final del agente debe ser **breve** en comparación con la
-documentación producida. Usar esta estructura:
+Execution is **high quality** when it:
+
+* distinguishes facts from assumptions;
+* challenges the proposed solution;
+* identifies omitted actors, permissions, ownership, states, edge cases;
+* detects hidden operational costs;
+* detects legal and security risks;
+* connects capabilities to outcomes;
+* eliminates unnecessary complexity;
+* produces concrete, actionable questions;
+* designs verifiable experiments;
+* keeps documentation consistent;
+* does not invade architecture prematurely;
+* **ends with a clear, justified recommendation**.
+
+Execution is **insufficient** when it falls into any of the anti-patterns
+described in section 16.
+
+---
+
+# 18. Self-assessment checklist
+
+Before finishing, the agent must verify:
+
+## Problem
+
+* [ ] Defined without mentioning the solution.
+* [ ] Affected actor identified.
+* [ ] Frequency and severity considered.
+* [ ] Current alternatives documented.
+* [ ] Consequences of not solving it known.
+
+## Actors
+
+* [ ] User and buyer differentiated.
+* [ ] Administrators, operators, and support identified.
+* [ ] Indirect actors and external systems considered.
+
+## Value
+
+* [ ] Value proposition formulated with a verifiable difference.
+* [ ] Primary outcome defined.
+* [ ] First value experience identified.
+
+## Scope
+
+* [ ] Capabilities related to outcomes.
+* [ ] Non-goals defined and dependencies identified.
+* [ ] Speculative complexity eliminated.
+
+## Rules
+
+* [ ] Ownership, tenancy, roles, and permissions analyzed.
+* [ ] States, deletion, restoration, limits, and exceptions analyzed.
+
+## Risks
+
+* [ ] Value, usability, viability, and feasibility analyzed.
+* [ ] Security, privacy, operations, and support analyzed.
+* [ ] Critical risks have a response (mitigation or blockage).
+
+## Evidence
+
+* [ ] Facts differentiated from assumptions.
+* [ ] Critical assumptions have a designed experiment.
+* [ ] Success/failure criteria defined.
+* [ ] Validation was not invented.
+
+## Documentation
+
+* [ ] No major duplications, consistent vocabulary.
+* [ ] Contradictions recorded.
+* [ ] `project-status.md` updated.
+* [ ] Gate with explicit justification.
+
+---
+
+# 19. Final report format
+
+The agent's final response must be **brief** relative to the
+documentation produced. Use this structure:
 
 ```markdown
-# Discover Product — Resultado
+# Discover Product — Result
 
 ## Gate
 PASS | CONDITIONAL PASS | BLOCKED
 
-## Resumen en una frase
-[Una sola frase que capture la esencia de la situación]
+## One-sentence summary
+[A single sentence capturing the essence of the situation]
 
-## Conclusión
-[Párrafo breve con la situación del producto]
+## Conclusion
+[Brief paragraph on the product situation]
 
-## Decisiones que requieren aprobación
+## Decisions requiring approval
 1. …
 2. …
 
-## Riesgos críticos
+## Critical risks
 1. …
 2. …
 
-## Supuestos prioritarios
+## Priority assumptions
 1. …
 2. …
 
-## Contradicciones encontradas
+## Contradictions found
 1. …
 2. …
 
-## Alcance recomendado
-[Resumen del incremento sugerido]
+## Recommended scope
+[Summary of the suggested increment]
 
-## Fuera de alcance
-[Resumen de lo postergado o descartado]
+## Out of scope
+[Summary of what was deferred or discarded]
 
-## Evidencia faltante
+## Missing evidence
 1. …
 2. …
 
-## Documentos creados o actualizados
-- `ruta`
-- `ruta`
+## Documents created or updated
+- `path`
+- `path`
 
-## Próxima acción
-[Acción concreta]
+## Next action
+[Concrete action]
 
-## Próxima skill recomendada
-`nombre-de-skill`
+## Recommended next skill
+`skill-name`
 ```
 
-**No incluir una narración innecesaria de cada paso ejecutado.**
+**Do not include unnecessary narration of every step executed.**
 
 ---
 
-# 20. Invocación recomendada
+# 20. Recommended invocation
 
-## Forma directa
+## Direct form
 
 ```text
-Ejecuta la skill discover-product sobre este proyecto.
+Execute the discover-product skill on this project.
 
-Lee primero AGENTS.md y toda la documentación relevante.
-Trabaja de manera autónoma.
-No implementes código. No selecciones stack. No comiences preguntándome.
+First read AGENTS.md and all relevant documentation.
+Work autonomously.
+Do not implement code. Do not select a stack. Do not start by asking me.
 
-Inspecciona primero todo el contexto disponible, realiza la revisión
-completa y actualiza la documentación correspondiente.
+First inspect all available context, complete the full review,
+and update the corresponding documentation.
 
-Detente únicamente ante decisiones humanas críticas o irreversibles.
+Stop only for critical or irreversible human decisions.
 ```
 
-## Cuando el agente no soporta skills
+## When the agent does not support skills
 
 ```text
-Lee y sigue estrictamente:
+Read and strictly follow:
 .agents/skills/discover-product/SKILL.md
-Aplícala sobre todo el proyecto.
+Apply it to the entire project.
 ```
 
-## Aplicación sobre una feature
+## Application to a feature
 
 ```text
-Aplica discover-product únicamente sobre la feature de suscripciones.
-No redefinas el resto del producto salvo contradicción directa que deba documentarse.
+Apply discover-product only to the subscriptions feature.
+Do not redefine the rest of the product unless a direct contradiction must be documented.
 ```
 
-## Proyecto existente
+## Existing project
 
 ```text
-Ejecuta discover-product sobre el producto existente.
-Distingue cuidadosamente: comportamiento documentado, implementado, probado y esperado.
-No modifiques código. No asumas que la documentación actual es correcta.
+Execute discover-product on the existing product.
+Carefully distinguish: documented, implemented, tested, and expected behavior.
+Do not modify code. Do not assume current documentation is correct.
 ```
 
 ---
 
-# 21. Handoff hacia la siguiente skill
+# 21. Handoff to the next skill
 
-Según el resultado, recomendar:
+Based on the outcome, recommend:
 
-| Situación | Skill recomendada |
+| Situation | Recommended skill |
 |-----------|-------------------|
-| Falta evidencia sobre supuestos críticos | `validate-assumptions` |
-| Producto demasiado amplio, necesita acotarse | `define-product-scope` |
-| Producto definido, listo para estructura | `design-information-architecture` |
-| Feature específica lista para especificar | `design-feature` |
-| Producto existente con inconsistencias | `audit-existing-project` |
-| Restricciones críticas de calidad sin definir | `define-quality-attributes` |
+| Evidence missing on critical assumptions | `validate-assumptions` |
+| Product too broad, needs bounding | `define-product-scope` |
+| Product defined, ready for structure | `design-information-architecture` |
+| Specific feature ready to specify | `design-feature` |
+| Existing product with inconsistencies | `audit-existing-project` |
+| Critical quality constraints undefined | `define-quality-attributes` |
 
-**No recomendar implementación directa** salvo que:
+**Do not recommend direct implementation** unless:
 
-* el alcance esté aprobado;
-* los comportamientos estén suficientemente definidos;
-* los riesgos críticos estén controlados;
-* las validaciones necesarias estén completas;
-* exista una feature specification preparada.
-
----
-
-# 22. Niveles de profundidad
-
-No todos los proyectos necesitan las 25 etapas completas. El agente debe
-seleccionar el nivel adecuado según el contexto:
-
-## Nivel `quick` — Validación rápida (~etapas 1–7)
-
-**Cuándo**: feature aislada, producto ya definido, validación previa a inversión pequeña.
-
-Ejecutar: contexto, normalizar, problema, actores, jobs, proceso, alternativas.
-Omitir o comprimir: capacidades detalladas, reglas, permisos, estados, edge cases.
-
-## Nivel `medium` — Discovery estándar (~etapas 1–18)
-
-**Cuándo**: producto nuevo de alcance moderado, redefinición parcial.
-
-Ejecutar: todas las etapas hasta supuestos y experimentos.
-Pueden fusionarse etapas consecutivas si la información ya existe.
-
-## Nivel `thorough` — Discovery completo (25 etapas)
-
-**Cuándo**: nuevo producto estratégico, inversión significativa, dominio complejo,
-múltiples actores con permisos sofisticados, requisitos legales.
-
-Ejecutar: todas las etapas sin excepción.
-
-## Regla de selección
-
-Si el agente no está seguro del nivel, **comenzar en `medium`** y escalar a
-`thorough` si descubre complejidad inesperada durante las primeras etapas.
+* scope is approved;
+* behaviors are sufficiently defined;
+* critical risks are controlled;
+* necessary validations are complete;
+* a feature specification is prepared.
 
 ---
 
-## Notas de versión
+# 22. Depth levels
 
-* v2.0: Reestructuración completa. Añadidos: resumen ejecutivo, anti-patrones,
-  niveles de profundidad, manejo de desacuerdo, sesgos cognitivos, idioma de
-  documentación, reglas de backtracking y fusión de etapas.
+Not every project needs all 25 stages complete. The agent must
+select the appropriate level based on context:
+
+## Level `quick` — Rapid validation (~stages 1–7)
+
+**When**: isolated feature, product already defined, validation before a small investment.
+
+Execute: context, normalize, problem, actors, jobs, process, alternatives.
+Omit or compress: detailed capabilities, rules, permissions, states, edge cases.
+
+## Level `medium` — Standard discovery (~stages 1–18)
+
+**When**: new product of moderate scope, partial redefinition.
+
+Execute: all stages through assumptions and experiments.
+Consecutive stages may be merged if information already exists.
+
+## Level `thorough` — Full discovery (25 stages)
+
+**When**: strategic new product, significant investment, complex domain,
+multiple actors with sophisticated permissions, legal requirements.
+
+Execute: all stages without exception.
+
+## Selection rule
+
+If the agent is unsure of the level, **start at `medium`** and escalate to
+`thorough` if unexpected complexity is discovered in the early stages.
+
+---
+
+## Version notes
+
+* v2.0: Full restructure. Added: executive summary, anti-patterns,
+  depth levels, disagreement handling, cognitive biases, documentation
+  language, backtracking rules, and stage merging.

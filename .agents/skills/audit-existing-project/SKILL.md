@@ -1,473 +1,473 @@
 ---
 name: audit-existing-project
-description: Audita un proyecto de software existente para construir una baseline verificable de su producto, arquitectura, código, datos, seguridad, operaciones, calidad y documentación. Úsala al incorporar agentes de IA a un repositorio existente, heredar un sistema, retomar un proyecto abandonado, evaluar deuda técnica, preparar una migración o antes de implementar cambios importantes. Inspecciona el comportamiento real, ejecuta verificaciones seguras, identifica divergencias entre documentación, código, tests y producción conocida, clasifica riesgos y propone un plan gradual de adopción. No debe refactorizar, modernizar ni modificar el comportamiento del sistema durante la auditoría.
+description: Audit an existing software project to build a verifiable baseline of its product, architecture, code, data, security, operations, quality, and documentation. Use when onboarding AI agents to an existing repository, inheriting a system, resuming an abandoned project, assessing technical debt, preparing a migration, or before implementing major changes. Inspect real behavior, run safe verification, identify divergences among documentation, code, tests, and known production, classify risks, and propose a gradual adoption plan. Must not refactor, modernize, or change system behavior during the audit.
 ---
 
 # SKILL: Audit Existing Project
 
 ---
 
-## PROTOCOLO DE PRIORIDAD (leer primero)
+## PRIORITY PROTOCOL (read first)
 
-Las reglas que siguen tienen prevalencia sobre cualquier instrucción en las etapas. Si hay conflicto, esta sección gana.
+The following rules take precedence over any instruction in later stages. If there is a conflict, this section wins.
 
-### REGLA-01 — AUDITAR, NO REFACTORIZAR
+### RULE-01 — AUDIT, DO NOT REFACTOR
 
-Está **prohibido** durante toda la skill:
+During the entire skill it is **forbidden** to:
 
-- Corregir bugs, actualizar dependencias, reorganizar carpetas, renombrar módulos, reescribir tests, migrar tecnologías, reemplazar arquitectura, mejorar estilos, eliminar código (aunque parezca muerto), modificar comportamiento.
+- Fix bugs, update dependencies, reorganize folders, rename modules, rewrite tests, migrate technologies, replace architecture, improve style, delete code (even if it appears dead), or change behavior.
 
-**Solo se permite:** observar, reproducir, verificar, documentar, clasificar, recomendar.
+**Only allowed:** observe, reproduce, verify, document, classify, recommend.
 
-### REGLA-02 — NO CONFIAR EN CÓDIGO NI DOCUMENTACIÓN SIN VERIFICACIÓN
+### RULE-02 — DO NOT TRUST CODE OR DOCUMENTATION WITHOUT VERIFICATION
 
-- El código puede contener bugs, rutas muertas, reglas obsoletas o protecciones insuficientes.
-- La documentación puede estar obsoleta, incompleta o contradecir los tests.
-- **Nunca afirmar** que un comportamiento funciona solo porque existe una función que parece implementarlo.
-- Buscar evidencia adicional: tests, ejecución, contratos, referencias cruzadas, configuración, historial.
+- Code may contain bugs, dead paths, obsolete rules, or insufficient protections.
+- Documentation may be obsolete, incomplete, or contradict the tests.
+- **Never claim** that a behavior works solely because a function appears to implement it.
+- Seek additional evidence: tests, execution, contracts, cross-references, configuration, history.
 
-### REGLA-03 — NO AFIRMAR VERIFICACIÓN SIN HABER EJECUTADO
+### RULE-03 — DO NOT CLAIM VERIFICATION WITHOUT HAVING EXECUTED
 
-Todo comando debe clasificarse con uno de estos estados:
+Every command must be classified with one of these states:
 
-| Estado | Significado |
+| Status | Meaning |
 |---|---|
-| ✅ Verificado exitosamente | Se ejecutó y pasó |
-| ⚠️ Verificado con fallos | Se ejecutó pero falló |
-| 📋 Identificado, no ejecutado | Se encontró pero no se corrió |
-| 🚫 Bloqueado por entorno | Falta dependencia, servicio o permiso |
-| 🗑️ Obsoleto | El comando ya no funciona o no aplica |
-| ❓ Desconocido | No se sabe si existe |
-| 🔒 Riesgoso, requiere aprobación | Podría afectar datos, producción o costos |
+| ✅ Verified successfully | Executed and passed |
+| ⚠️ Verified with failures | Executed but failed |
+| 📋 Identified, not executed | Found but not run |
+| 🚫 Blocked by environment | Missing dependency, service, or permission |
+| 🗑️ Obsolete | Command no longer works or no longer applies |
+| ❓ Unknown | Existence is unknown |
+| 🔒 Risky, requires approval | Could affect data, production, or cost |
 
-### REGLA-04 — NO JUZGAR POR PREFERENCIA
+### RULE-04 — DO NOT JUDGE BY PREFERENCE
 
-No clasificar como deuda solo porque el agente habría usado otra tecnología, patrón o estilo.
+Do not classify something as debt only because the agent would have used a different technology, pattern, or style.
 
-Una decisión es problemática **solo si produce impacto verificable** en: corrección, seguridad, mantenibilidad, rendimiento, escalabilidad, operación, experiencia, costo, velocidad o capacidad de prueba.
+A decision is problematic **only if it produces a verifiable impact** on: correctness, security, maintainability, performance, scalability, operations, experience, cost, velocity, or testability.
 
-### REGLA-05 — PRIORIZAR RIESGO SOBRE ESTÉTICA
+### RULE-05 — PRIORITIZE RISK OVER AESTHETICS
 
-Orden de prioridad inamovible:
+Immutable priority order:
 
-1. Pérdida o exposición de datos
-2. Autenticación y autorización
-3. Aislamiento entre tenants
-4. Operaciones irreversibles
-5. Fallos de despliegue
-6. Integridad de datos
-7. Ausencia de recuperación
-8. Comportamiento incorrecto
-9. Imposibilidad de validar cambios
-10. Mantenibilidad
-11. Consistencia
-12. Estilo
+1. Data loss or exposure
+2. Authentication and authorization
+3. Tenant isolation
+4. Irreversible operations
+5. Deployment failures
+6. Data integrity
+7. Absence of recovery
+8. Incorrect behavior
+9. Inability to validate changes
+10. Maintainability
+11. Consistency
+12. Style
 
-### REGLA-06 — SEGURIDAD EN LA EJECUCIÓN
+### RULE-06 — SAFETY IN EXECUTION
 
-**Nunca ejecutar** comandos que: borren datos, modifiquen producción, publiquen paquetes, desplieguen, roten secretos, migren bases de datos compartidas, eliminen recursos, hagan force push, alteren ramas remotas, generen costos, contacten usuarios reales, envíen correos, ejecuten pagos o procesen webhooks reales.
+**Never execute** commands that: delete data, modify production, publish packages, deploy, rotate secrets, migrate shared databases, delete resources, force-push, alter remote branches, incur cost, contact real users, send email, execute payments, or process real webhooks.
 
-### REGLA-07 — NO MOSTRAR SECRETOS EN EL INFORME
+### RULE-07 — DO NOT SHOW SECRETS IN THE REPORT
 
-Si se detecta una credencial expuesta: registrar tipo, ubicación, severidad y acción requerida. **Redactar el valor.** Ejemplo:
+If an exposed credential is detected: record type, location, severity, and required action. **Redact the value.** Example:
 
-> Se detectó una credencial aparentemente activa en `config/credentials.json`. El valor fue omitido deliberadamente. Acción: revocar, rotar, eliminar del historial.
+> An apparently active credential was detected in `config/credentials.json`. The value was deliberately omitted. Action: revoke, rotate, remove from history.
 
-### REGLA-08 — STOP CONDITIONS (detener ejecución, continuar documentación)
+### RULE-08 — STOP CONDITIONS (halt execution, continue documentation)
 
-Detener acciones ejecutables inmediatamente cuando:
+Stop executable actions immediately when:
 
-- Se detectan credenciales productivas expuestas
-- No se puede asegurar que un comando no afecta producción
-- Se encuentra migración destructiva conectada a datos compartidos
-- El entorno local usa servicios reales sin aislamiento
-- Un script requiere privilegios elevados
-- Una prueba podría enviar pagos, emails o mensajes reales
-- Se detecta posible compromiso de seguridad
-- El repositorio contiene datos personales reales
-- Un comando implica costo significativo
+- Productive credentials are found exposed
+- It cannot be assured that a command will not affect production
+- A destructive migration is found connected to shared data
+- The local environment uses real services without isolation
+- A script requires elevated privileges
+- A test could send real payments, emails, or messages
+- A possible security compromise is detected
+- The repository contains real personal data
+- A command implies significant cost
 
-**Acción:** detener comando → conservar evidencia segura → ocultar datos sensibles → documentar riesgo → recomendar acción → continuar con áreas no afectadas.
+**Action:** stop the command → retain safe evidence → hide sensitive data → document the risk → recommend action → continue with unaffected areas.
 
 ---
 
-## CLASIFICACIÓN DE EVIDENCIA (usar en todo hallazgo)
+## EVIDENCE CLASSIFICATION (use for every finding)
 
-| Nivel | Nombre | Significado |
+| Level | Name | Meaning |
 |---|---|---|
-| E0 | Desconocido | No existe información suficiente |
-| E1 | Inferido | Se deduce de nombres, estructura o patrones, no confirmado |
-| E2 | Documentado | Existe documentación explícita, no verificada contra el sistema |
-| E3 | Implementado | Existe código que aparentemente implementa el comportamiento |
-| E4 | Probado | Existe un test que valida el comportamiento |
-| E5 | Reproducido | El comportamiento fue ejecutado y observado en entorno controlado |
-| E6 | Observado | Existe evidencia operacional confiable (métricas, logs, incidentes) |
+| E0 | Unknown | Insufficient information exists |
+| E1 | Inferred | Deduced from names, structure, or patterns; not confirmed |
+| E2 | Documented | Explicit documentation exists; not verified against the system |
+| E3 | Implemented | Code exists that appears to implement the behavior |
+| E4 | Tested | A test exists that validates the behavior |
+| E5 | Reproduced | The behavior was executed and observed in a controlled environment |
+| E6 | Observed | Reliable operational evidence exists (metrics, logs, incidents) |
 
-**Regla:** Una afirmación de alta criticidad no se considera confirmada con evidencia E1 o E2.
+**Rule:** A high-criticality claim is not considered confirmed with E1 or E2 evidence alone.
 
 ---
 
-## SEVERIDAD DE HALLAZGOS
+## FINDING SEVERITY
 
-| Nivel | Significado | Acción |
+| Level | Meaning | Action |
 |---|---|---|
-| **P0** — Emergencia | Secreto expuesto, datos públicos, pérdida activa, bypass de auth, tenants rotos, compromiso en curso | Detener trabajo normal inmediatamente |
-| **P1** — Bloqueante | Autorización insuficiente, migración destructiva, sin backup, setup en producción, CI roto | Resolver antes de siguiente entrega |
-| **P2** — Importante | Deuda estructural con impacto, observabilidad incompleta, tests parciales, docs obsoletas | Planificar en roadmap |
-| **P3** — Mejora | Consistencia, automatización menor, docs secundarias, simplificaciones locales | Oportunístico |
-| **P4** — Informativo | Contexto o recomendación sin riesgo inmediato | Registrar, no accionar |
+| **P0** — Emergency | Exposed secret, public data, active loss, auth bypass, broken tenants, compromise in progress | Stop normal work immediately |
+| **P1** — Blocking | Insufficient authorization, destructive migration, no backup, setup against production, broken CI | Resolve before next delivery |
+| **P2** — Important | Structural debt with impact, incomplete observability, partial tests, obsolete docs | Plan in the roadmap |
+| **P3** — Improvement | Consistency, minor automation, secondary docs, local simplifications | Opportunistic |
+| **P4** — Informational | Context or recommendation with no immediate risk | Record, do not act |
 
 ---
 
-## ÁRBOL DE DECISIÓN: QUÉ PROFUNDIDAD ELEGIR
+## DECISION TREE: WHICH DEPTH TO CHOOSE
 
 ```
-¿Es primera vez que un agente toca este repo?
-  ├── SÍ → ¿El proyecto es grande (monorepo, >5 servicios, >500 archivos fuente)?
-  │         ├── SÍ → AUDITORÍA ESTÁNDAR con plan de profundización por capas
-  │         └── NO → AUDITORÍA ESTÁNDAR completa
-  └── NO → ¿Ya existe baseline parcial?
-            ├── SÍ → AUDITORÍA FOCALIZADA sobre áreas no cubiertas
-            └── NO → ¿Se necesita urgentemente?
-                      ├── SÍ → AUDITORÍA RÁPIDA (setup + comandos + auth + riesgos P0/P1)
-                      └── NO → AUDITORÍA PROFUNDA
+Is this the first time an agent touches this repo?
+  ├── YES → Is the project large (monorepo, >5 services, >500 source files)?
+  │         ├── YES → STANDARD AUDIT with a layered deepening plan
+  │         └── NO  → Full STANDARD AUDIT
+  └── NO  → Does a partial baseline already exist?
+            ├── YES → FOCUSED AUDIT on uncovered areas
+            └── NO  → Is it urgently needed?
+                      ├── YES → QUICK AUDIT (setup + commands + auth + P0/P1 risks)
+                      └── NO  → DEEP AUDIT
 ```
 
 ---
 
-## PLAN DE EJECUCIÓN SEGÚN PROFUNDIDAD
+## EXECUTION PLAN BY DEPTH
 
-### Auditoría Rápida (quick)
+### Quick audit
 
-Ejecutar **FASE 0 → FASE A → FASE B → FASE H** (ver matriz abajo). Tiempo objetivo: completar en una sesión.
+Execute **PHASE 0 → PHASE A → PHASE B → PHASE H** (see matrix below). Target time: complete in one session.
 
-**Entregable mínimo:** `docs/audit/audit-report.md` con: resumen ejecutivo, comandos verificados, baseline de auth/permisos, riesgos P0/P1, unknowns bloqueantes, plan de adopción inmediato.
+**Minimum deliverable:** `docs/audit/audit-report.md` with: executive summary, verified commands, auth/permissions baseline, P0/P1 risks, blocking unknowns, immediate adoption plan.
 
-### Auditoría Estándar (standard)
+### Standard audit
 
-Ejecutar **FASE 0 → FASES A-G → FASE H**. Cubre todas las fases con profundidad proporcionada al tamaño del proyecto.
+Execute **PHASE 0 → PHASES A–G → PHASE H**. Covers all phases at a depth proportional to project size.
 
-**Entregable:** estructura de archivos en `docs/audit/` según el tamaño del proyecto.
+**Deliverable:** file structure under `docs/audit/` according to project size.
 
-### Auditoría Profunda (deep)
+### Deep audit
 
-Ejecutar **todas las fases** con profundidad máxima. Incluye: mapa de módulos detallado, revisión de contratos, migraciones históricas, Git hotspots, registros completos de deuda y riesgo.
+Execute **all phases** at maximum depth. Includes: detailed module map, contract review, historical migrations, Git hotspots, complete debt and risk registers.
 
-### Auditoría Focalizada (focused)
+### Focused audit
 
-Ejecutar **FASE 0 + solo las fases indicadas por el usuario** para el área específica.
+Execute **PHASE 0 + only the phases indicated by the user** for the specific area.
 
 ---
 
-## FASES DE AUDITORÍA
+## AUDIT PHASES
 
-### FASE 0 — PREPARACIÓN Y CONTEXTO
+### PHASE 0 — PREPARATION AND CONTEXT
 
-**Objetivo:** Establecer el alcance y las restricciones sin modificar nada.
+**Objective:** Establish scope and constraints without modifying anything.
 
-**Acciones obligatorias:**
+**Mandatory actions:**
 
-1. Leer `AGENTS.md`, `README.md`, `docs/` disponibles.
-2. Identificar rama actual. Confirmar que no es una rama protegida.
-3. Revisar `git status`. Si hay cambios sin commit: **registrarlos, no modificarlos, aislarlos de la baseline.**
-4. Clasificar el tipo de repositorio: aplicación única, monorepo, biblioteca, backend, frontend, sistema distribuido, infraestructura, mobile, plugin, datos/ML, embedded, multi-repo.
-5. Seleccionar profundidad usando el árbol de decisión.
-6. Registrar: rama, commit, alcance, limitaciones de entorno, fecha.
+1. Read available `AGENTS.md`, `README.md`, and `docs/`.
+2. Identify the current branch. Confirm it is not a protected branch.
+3. Review `git status`. If there are uncommitted changes: **record them, do not modify them, isolate them from the baseline.**
+4. Classify repository type: single application, monorepo, library, backend, frontend, distributed system, infrastructure, mobile, plugin, data/ML, embedded, multi-repo.
+5. Select depth using the decision tree.
+6. Record: branch, commit, scope, environment limitations, date.
 
-**Manejo de edge cases:**
+**Edge-case handling:**
 
-| Escenario | Acción |
+| Scenario | Action |
 |---|---|
-| Sin Git (repo nuevo, ZIP) | Documentar ausencia. Usar hash de contenidos como referencia. |
-| CI/CD en repo separado | Registrar el repo externo como dependencia, documentar lo que sea visible. |
-| Sin package manager (scripts sueltos) | Inventariar scripts manualmente, documentar ausencia de gestor. |
-| Múltiples repositorios forman el producto | Auditar repo actual. Documentar dependencias cross-repo como integraciones externas. |
+| No Git (new repo, ZIP) | Document absence. Use a content hash as reference. |
+| CI/CD in a separate repo | Register the external repo as a dependency; document what is visible. |
+| No package manager (loose scripts) | Inventory scripts manually; document absence of a package manager. |
+| Multiple repositories form the product | Audit the current repo. Document cross-repo dependencies as external integrations. |
 
-**Salida:** sección `Audit Scope` en el informe.
+**Output:** `Audit Scope` section in the report.
 
 ---
 
-### FASE A — REPOSITORIO Y REPRODUCIBILIDAD
+### PHASE A — REPOSITORY AND REPRODUCIBILITY
 
-Agrupa: inventario del repositorio, comandos, entorno, dependencias, configuración y secretos.
+Groups: repository inventory, commands, environment, dependencies, configuration, and secrets.
 
-#### A.1 Inventario estructural
-- Archivos raíz, gestores de paquetes, workspaces, aplicaciones, paquetes, servicios, librerías, scripts, infraestructura, documentación, tests, fixtures, migraciones, schemas, artefactos generados, assets, configuraciones, workflows, tools.
-- **No marcar como obsoleto sin evidencia.** No asumir que `legacy/` está fuera de uso.
-- Identificar: lenguajes, frameworks, runtimes, package managers, build systems, format/lint/test frameworks, CI, contenedores, proveedores, bases de datos.
-- Para sistemas sin package manager, inventariar scripts de build manuales.
+#### A.1 Structural inventory
+- Root files, package managers, workspaces, applications, packages, services, libraries, scripts, infrastructure, documentation, tests, fixtures, migrations, schemas, generated artifacts, assets, configurations, workflows, tools.
+- **Do not mark as obsolete without evidence.** Do not assume that `legacy/` is unused.
+- Identify: languages, frameworks, runtimes, package managers, build systems, format/lint/test frameworks, CI, containers, providers, databases.
+- For systems without a package manager, inventory manual build scripts.
 
-#### A.2 Comandos verificables
-- Buscar comandos en: `package.json`, `Makefile`, `Taskfile`, `justfile`, scripts, Docker Compose, docs, CI, configuración de IDE.
-- Clasificar por tipo: install, dev, build, lint, format, typecheck, test (unit/integration/e2e), generate, migration, seed, deploy, smoke test, security.
-- Ejecutar de forma segura (ver REGLA-06): install con lockfile, lint/format (modo check), typecheck, tests, build.
-- **No ejecutar automáticamente:** seeds destructivos, migraciones contra DB compartida, deploy, publish, scripts con nombres `reset`, `clean`, `destroy`, `prod` sin inspección previa.
+#### A.2 Verifiable commands
+- Search for commands in: `package.json`, `Makefile`, `Taskfile`, `justfile`, scripts, Docker Compose, docs, CI, IDE configuration.
+- Classify by type: install, dev, build, lint, format, typecheck, test (unit/integration/e2e), generate, migration, seed, deploy, smoke test, security.
+- Execute safely (see RULE-06): install with lockfile, lint/format (check mode), typecheck, tests, build.
+- **Do not run automatically:** destructive seeds, migrations against a shared DB, deploy, publish, scripts named `reset`, `clean`, `destroy`, `prod` without prior inspection.
 
-**Para cada comando, documentar:**
+**For each command, document:**
 
-| Comando | Propósito | Estado | Resultado | Duración | Dependencias | Riesgo |
+| Command | Purpose | Status | Result | Duration | Dependencies | Risk |
 |---|---|---|---|---|---|---|
 
-**Regla crítica para `AGENTS.md`:** no escribir comandos como válidos sin haberlos ejecutado o sin marcar explícitamente que no fueron verificados.
+**Critical rule for `AGENTS.md`:** do not write commands as valid without having executed them or without explicitly marking that they were not verified.
 
-#### A.3 Reproducibilidad del entorno
-Evaluar: versiones de runtime fijadas, lockfiles versionados, variables de entorno necesarias, servicios requeridos (DB, cache, queue, storage, emuladores), configuración local vs CI, diferencias por SO, herramientas del sistema, puertos, volúmenes, seeds, datos mínimos.
+#### A.3 Environment reproducibility
+Evaluate: pinned runtime versions, versioned lockfiles, required environment variables, required services (DB, cache, queue, storage, emulators), local vs CI configuration, OS differences, system tools, ports, volumes, seeds, minimum data.
 
-**Preguntas clave:**
-- ¿La instalación es determinista?
-- ¿Existen dependencias globales no documentadas?
-- ¿Puede ejecutarse sin secretos productivos?
-- ¿La base local es aislada?
-- ¿Existe procedimiento de reset seguro?
-- ¿Se puede crear un usuario de prueba?
+**Key questions:**
+- Is installation deterministic?
+- Are there undocumented global dependencies?
+- Can it run without production secrets?
+- Is the local database isolated?
+- Is there a safe reset procedure?
+- Can a test user be created?
 
-**Salida:** guía de setup verificada.
+**Output:** verified setup guide.
 
-#### A.4 Dependencias
-Clasificar: runtime, desarrollo, build, testing, infraestructura, proveedor externo, interna, transitiva crítica.
+#### A.4 Dependencies
+Classify: runtime, development, build, testing, infrastructure, external provider, internal, critical transitive.
 
-Evaluar: versión, uso real, mantenimiento, licencia, vulnerabilidades conocidas, duplicación, APIs deprecated, riesgo de actualización, lockfile, código que replica una dependencia, dependencia sin abstracción.
+Evaluate: version, actual usage, maintenance, license, known vulnerabilities, duplication, deprecated APIs, upgrade risk, lockfile, code that reimplements a dependency, dependency without abstraction.
 
-**Cuidado:** un paquete listado pero no importado no es prueba de que no se usa (puede ser CLI, plugin, carga dinámica, peer dependency, build tool).
+**Caution:** a package listed but not imported is not proof it is unused (it may be a CLI, plugin, dynamic load, peer dependency, or build tool).
 
-#### A.5 Configuración y secretos
-Revisar: `.env.example`, `.env` rastreados, configuración por ambiente, CI secrets, Docker, infraestructura, credenciales, tokens, certificados, hardcodeos, URLs, CORS, cookies, headers, storage.
+#### A.5 Configuration and secrets
+Review: `.env.example`, tracked `.env` files, per-environment configuration, CI secrets, Docker, infrastructure, credentials, tokens, certificates, hardcoding, URLs, CORS, cookies, headers, storage.
 
-**Verificaciones:** secretos versionados, valores productivos en código, variables sin documentar, defaults inseguros, configuración inconsistente entre entornos, secretos expuestos al cliente, logging de secretos, datos reales en fixtures.
+**Checks:** versioned secrets, production values in code, undocumented variables, insecure defaults, inconsistent configuration across environments, secrets exposed to the client, logging of secrets, real data in fixtures.
 
-**Aplicar REGLA-07:** redactar cualquier valor sensible detectado.
+**Apply RULE-07:** redact any sensitive value detected.
 
 ---
 
-### FASE B — PRODUCTO Y UX
+### PHASE B — PRODUCT AND UX
 
-**Objetivo:** Documentar qué producto existe realmente, contrastando documentación, código y comportamiento observable.
+**Objective:** Document what product actually exists, contrasting documentation, code, and observable behavior.
 
-**Fuentes:** docs, rutas, pantallas, endpoints, modelos, tests, seeds, feature flags, navegación, permisos, integraciones, copy, analytics, facturación, onboarding.
+**Sources:** docs, routes, screens, endpoints, models, tests, seeds, feature flags, navigation, permissions, integrations, copy, analytics, billing, onboarding.
 
-**Distinguir explícitamente:**
+**Distinguish explicitly:**
 
-| Tipo | Definición |
+| Type | Definition |
 |---|---|
-| Comportamiento esperado | Lo que el negocio cree que hace |
-| Comportamiento documentado | Lo que la documentación dice que hace |
-| Comportamiento implementado | Lo que el código parece hacer |
-| Comportamiento probado | Lo que los tests validan |
-| Comportamiento reproducido | Lo que se observó al ejecutar |
-| Divergencias | Diferencias entre los anteriores |
+| Expected behavior | What the business believes it does |
+| Documented behavior | What the documentation says it does |
+| Implemented behavior | What the code appears to do |
+| Tested behavior | What the tests validate |
+| Reproduced behavior | What was observed when executing |
+| Divergences | Differences among the above |
 
-**Identificar:** actores, roles, capacidades, flujos principales, entidades, reglas, estados, límites, monetización, funcionalidades incompletas/ocultas/abandonadas, flags, operaciones administrativas.
+**Identify:** actors, roles, capabilities, main flows, entities, rules, states, limits, monetization, incomplete/hidden/abandoned features, flags, administrative operations.
 
-**Señales de divergencia:** pantalla sin endpoint, endpoint sin consumidor, modelo sin uso, tests para comportamiento no documentado, feature flag permanente, copy que promete algo no implementado, docs con módulos inexistentes, migraciones de funcionalidades eliminadas, múltiples implementaciones del mismo flujo.
+**Divergence signals:** screen without endpoint, endpoint without consumer, model without use, tests for undocumented behavior, permanent feature flag, copy that promises something not implemented, docs with nonexistent modules, migrations for removed features, multiple implementations of the same flow.
 
-**No reconstruir el producto exclusivamente desde nombres de archivos.**
+**Do not reconstruct the product solely from file names.**
 
 ---
 
-### FASE C — ARQUITECTURA
+### PHASE C — ARCHITECTURE
 
-**Objetivo:** Representar la arquitectura tal como existe.
+**Objective:** Represent the architecture as it exists.
 
-**Documentar:** contexto, aplicaciones, servicios, paquetes, módulos, boundaries, dependencias, flujos de datos, procesos síncronos/asíncronos, almacenamiento, integraciones, infraestructura, puntos de entrada.
+**Document:** context, applications, services, packages, modules, boundaries, dependencies, data flows, synchronous/asynchronous processes, storage, integrations, infrastructure, entry points.
 
-**Para cada componente crítico:**
+**For each critical component:**
 
-- Responsabilidad
-- Interfaces públicas
-- Dependencias
-- Datos que posee
-- Sistemas externos
+- Responsibility
+- Public interfaces
+- Dependencies
+- Data it owns
+- External systems
 - Runtime
-- Impacto de fallo
+- Failure impact
 - Tests
-- Observabilidad
-- Evidencia (nivel E0-E6)
+- Observability
+- Evidence (level E0–E6)
 - Unknowns
 
-**Detectar:** dependencias circulares, módulos con demasiadas responsabilidades, reglas de negocio en UI, reglas duplicadas, acoplamiento a infraestructura, acceso transversal a base de datos, contratos implícitos, utilidades globales sin ownership, componentes críticos sin tests, fronteras que solo existen en carpetas.
+**Detect:** circular dependencies, modules with too many responsibilities, business rules in the UI, duplicated rules, infrastructure coupling, cross-cutting database access, implicit contracts, global utilities without ownership, critical components without tests, boundaries that exist only as folders.
 
-**No recomendar microservicios** solo porque un módulo es grande. Evaluar primero: cohesión, acoplamiento, frecuencia de cambio, ownership, escalabilidad independiente, aislamiento de fallos, complejidad operacional.
-
----
-
-### FASE D — DATOS, MIGRACIONES Y PERSISTENCIA
-
-#### D.1 Modelo de datos
-Revisar: schemas, modelos, migraciones, constraints, índices, relaciones, enums, triggers, views, políticas, seeds, repositorios, consultas, transacciones, archivos, caches, búsquedas, datos derivados, almacenamiento externo.
-
-**Documentar:** data stores, entidades principales, ownership, relaciones, constraints, ciclo de vida, retención, campos sensibles, datos derivados, búsqueda/indexado, backups, procedimiento de restore, riesgos conocidos.
-
-**Evaluar:** PKs, FKs, unique constraints, nullability, defaults, estados, timestamps, soft/hard delete, cascades, tenant keys, auditoría, consistencia, idempotencia, concurrencia, transacciones, integridad referencial, zonas horarias, moneda, precisión decimal, datos personales, archivos huérfanos.
-
-**Preguntas críticas:** ¿Qué datos pertenecen a cada tenant? ¿Cómo se evita acceso cruzado? ¿Existe ownership explícito? ¿Qué ocurre al eliminar una cuenta? ¿Se puede restaurar? ¿Los backups se prueban?
-
-#### D.2 Migraciones
-Evaluar: orden, consistencia, migraciones faltantes, migraciones editadas post-aplicación, diferencias schema vs migraciones, operaciones destructivas, renames, backfills, defaults, locks, tiempos, rollback, compatibilidad, seeds dependientes.
-
-**Clasificar cada migración riesgosa:** aditiva, compatible, potencialmente bloqueante, destructiva, irreversible, dependiente de datos, dependiente de código, desconocida.
-
-**Buscar:** `DROP`, cambios de tipo, eliminación de constraints, `NOT NULL` sin backfill, índices grandes, reescrituras de tabla, migraciones que mezclan schema y negocio, scripts manuales no versionados.
-
-**No aplicar migraciones durante la auditoría** salvo en base efímera creada específicamente para validación y con aprobación explícita.
+**Do not recommend microservices** only because a module is large. First evaluate: cohesion, coupling, change frequency, ownership, independent scalability, failure isolation, operational complexity.
 
 ---
 
-### FASE E — SEGURIDAD, IDENTIDAD Y AISLAMIENTO
+### PHASE D — DATA, MIGRATIONS, AND PERSISTENCE
 
-#### E.1 Autenticación
-Revisar: registro, login, logout, sesiones, refresh, cookies, tokens, proveedores externos (OAuth, SAML, SSO), recuperación, verificación, MFA, cambio de email/contraseña, revocación, expiración, suplantación, cuentas de servicio.
+#### D.1 Data model
+Review: schemas, models, migrations, constraints, indexes, relationships, enums, triggers, views, policies, seeds, repositories, queries, transactions, files, caches, search, derived data, external storage.
 
-**Evaluar:** sesiones demasiado largas, tokens en almacenamiento inseguro, cookies sin flags (`HttpOnly`, `Secure`, `SameSite`), recuperación débil, falta de revocación, enumeración de usuarios, login CSRF, open redirects, credenciales compartidas, bypasses de desarrollo, entornos que comparten identidad.
+**Document:** data stores, main entities, ownership, relationships, constraints, lifecycle, retention, sensitive fields, derived data, search/indexing, backups, restore procedure, known risks.
 
-#### E.2 Autorización
-Revisar autorización en: UI, middleware, rutas, controladores, servicios, repositorios, base de datos, storage, jobs, webhooks, administración, exportaciones, archivos.
+**Evaluate:** PKs, FKs, unique constraints, nullability, defaults, states, timestamps, soft/hard delete, cascades, tenant keys, audit, consistency, idempotency, concurrency, transactions, referential integrity, time zones, currency, decimal precision, personal data, orphan files.
 
-**Preguntas clave:**
-- ¿La UI oculta o realmente impide?
-- ¿La autorización se verifica siempre del lado servidor?
-- ¿Los recursos se cargan con scope de tenant?
-- ¿Se valida ownership en cada operación?
-- ¿Los IDs son adivinables?
-- ¿Los jobs revalidan permisos?
-- ¿Los webhooks pueden modificar cualquier cuenta?
-- ¿La revocación es inmediata?
-- ¿Existen permisos implícitos por nombre de rol?
+**Critical questions:** Which data belongs to each tenant? How is cross-access prevented? Is ownership explicit? What happens when an account is deleted? Can it be restored? Are backups tested?
 
-**Producir matriz:** Recurso × Acción × Actor × Control UI × Control servidor × Control datos × Test.
+#### D.2 Migrations
+Evaluate: order, consistency, missing migrations, migrations edited after application, schema vs migration differences, destructive operations, renames, backfills, defaults, locks, duration, rollback, compatibility, dependent seeds.
 
-**Hallazgo crítico:** ocultar un botón no equivale a autorización.
+**Classify each risky migration:** additive, compatible, potentially blocking, destructive, irreversible, data-dependent, code-dependent, unknown.
+
+**Look for:** `DROP`, type changes, constraint removal, `NOT NULL` without backfill, large indexes, table rewrites, migrations that mix schema and business logic, unversioned manual scripts.
+
+**Do not apply migrations during the audit** except against an ephemeral database created specifically for validation and with explicit approval.
+
+---
+
+### PHASE E — SECURITY, IDENTITY, AND ISOLATION
+
+#### E.1 Authentication
+Review: registration, login, logout, sessions, refresh, cookies, tokens, external providers (OAuth, SAML, SSO), recovery, verification, MFA, email/password change, revocation, expiration, impersonation, service accounts.
+
+**Evaluate:** overly long sessions, tokens in insecure storage, cookies without flags (`HttpOnly`, `Secure`, `SameSite`), weak recovery, lack of revocation, user enumeration, login CSRF, open redirects, shared credentials, development bypasses, environments that share identity.
+
+#### E.2 Authorization
+Review authorization in: UI, middleware, routes, controllers, services, repositories, database, storage, jobs, webhooks, administration, exports, files.
+
+**Key questions:**
+- Does the UI hide or actually prevent?
+- Is authorization always verified server-side?
+- Are resources loaded with tenant scope?
+- Is ownership validated on every operation?
+- Are IDs guessable?
+- Do jobs revalidate permissions?
+- Can webhooks modify any account?
+- Is revocation immediate?
+- Are there implicit permissions by role name?
+
+**Produce matrix:** Resource × Action × Actor × UI control × Server control × Data control × Test.
+
+**Critical finding:** hiding a button is not authorization.
 
 #### E.3 Multitenancy
-Identificar modelo: base separada, schema separado, tablas compartidas con tenant key, row-level security, aislamiento por servicio, combinación.
+Identify model: separate database, separate schema, shared tables with tenant key, row-level security, service isolation, combination.
 
-**Revisar:** resolución de tenant, cambio de contexto, consultas, caches, storage, jobs, colas, búsquedas, exports, logs, analytics, webhooks, administración, invitaciones, transferencias, eliminación, backups.
+**Review:** tenant resolution, context switching, queries, caches, storage, jobs, queues, search, exports, logs, analytics, webhooks, administration, invitations, transfers, deletion, backups.
 
-**Clasificar aislamiento:** verificado, parcial, implícito, no verificado, riesgo crítico.
+**Classify isolation:** verified, partial, implicit, not verified, critical risk.
 
-#### E.4 Seguridad general (revisión de baseline)
-Superficies: autenticación, autorización, sesiones, datos, APIs, uploads, webhooks, dependencias, configuración, secretos, frontend, SSR, administración, infraestructura, CI, logs, jobs.
+#### E.4 General security (baseline review)
+Surfaces: authentication, authorization, sessions, data, APIs, uploads, webhooks, dependencies, configuration, secrets, frontend, SSR, administration, infrastructure, CI, logs, jobs.
 
-**Revisar:** validación de input, output encoding, inyección (SQL, NoSQL, command), XSS, CSRF, SSRF, path traversal, file uploads, deserialización, open redirects, rate limiting, brute force, enumeración, replay, IDOR, escalación de privilegios, tenant isolation, exposición de errores, secretos, permisos cloud, supply chain.
+**Review:** input validation, output encoding, injection (SQL, NoSQL, command), XSS, CSRF, SSRF, path traversal, file uploads, deserialization, open redirects, rate limiting, brute force, enumeration, replay, IDOR, privilege escalation, tenant isolation, error exposure, secrets, cloud permissions, supply chain.
 
-**No ejecutar exploits destructivos.** Las pruebas deben ser seguras y limitadas al entorno autorizado.
-
----
-
-### FASE F — APIS, INTEGRACIONES Y PROCESOS ASÍNCRONOS
-
-#### F.1 APIs y contratos
-Incluir: REST, GraphQL, RPC, server actions, webhooks, eventos, colas, archivos, SDK, contratos entre paquetes, APIs internas, interfaces frontend.
-
-**Para cada contrato:** consumer, provider, auth, input/output, errores, versionado, idempotencia, rate limiting, compatibilidad, tests, evidencia.
-
-**Detectar:** contratos implícitos, respuestas inconsistentes, errores que filtran detalles internos, endpoints sin autorización, endpoints no utilizados, consumidores desconocidos, payloads excesivos, duplicación de validación.
-
-#### F.2 Integraciones externas
-Identificar: pagos, emails, SMS, auth providers, storage, mapas, analytics, búsqueda, IA, CRM, ERP, webhooks entrantes/salientes, APIs públicas, servicios internos, proveedores cloud.
-
-**Para cada integración:** propósito, proveedor, dirección (inbound/outbound/bidirectional), credenciales, datos intercambiados, datos sensibles, asunciones de disponibilidad, timeout, retry, idempotencia, rate limits, comportamiento ante fallo, conciliación, sandbox, monitoreo, ownership, estrategia de salida.
-
-**Preguntas clave:** ¿Qué pasa si el proveedor está caído? ¿Se reintenta idempotentemente? ¿Hay conciliación? ¿Se verifican firmas? ¿Existe replay protection? ¿Se registran payloads sensibles? ¿Los tests llaman servicios reales? ¿Existe lock-in?
-
-#### F.3 Procesos asíncronos
-Revisar: cron, workers, queues, retries, dead letters, schedulers, eventos de dominio, eventos de integración, webhooks, procesamiento de archivos, notificaciones.
-
-**Evaluar:** idempotencia, reintentos con backoff, duplicados, ordering, locks, concurrencia, timeouts, poison messages, observabilidad, recuperación, cancelación, despliegues, versionado de payloads.
-
-**Hallazgos frecuentes:** job sin límite de reintentos, efectos no idempotentes, cron ejecutado por múltiples instancias, eventos sin versionado, errores silenciosos, cola sin dead-letter, payloads con datos sensibles.
+**Do not run destructive exploits.** Tests must be safe and limited to the authorized environment.
 
 ---
 
-### FASE G — CALIDAD, CI/CD Y OPERACIONES
+### PHASE F — APIS, INTEGRATIONS, AND ASYNCHRONOUS PROCESSES
+
+#### F.1 APIs and contracts
+Include: REST, GraphQL, RPC, server actions, webhooks, events, queues, files, SDK, inter-package contracts, internal APIs, frontend interfaces.
+
+**For each contract:** consumer, provider, auth, input/output, errors, versioning, idempotency, rate limiting, compatibility, tests, evidence.
+
+**Detect:** implicit contracts, inconsistent responses, errors that leak internal details, endpoints without authorization, unused endpoints, unknown consumers, excessive payloads, validation duplication.
+
+#### F.2 External integrations
+Identify: payments, email, SMS, auth providers, storage, maps, analytics, search, AI, CRM, ERP, inbound/outbound webhooks, public APIs, internal services, cloud providers.
+
+**For each integration:** purpose, provider, direction (inbound/outbound/bidirectional), credentials, data exchanged, sensitive data, availability assumptions, timeout, retry, idempotency, rate limits, failure behavior, reconciliation, sandbox, monitoring, ownership, exit strategy.
+
+**Key questions:** What happens if the provider is down? Is retry idempotent? Is there reconciliation? Are signatures verified? Is there replay protection? Are sensitive payloads logged? Do tests call real services? Is there lock-in?
+
+#### F.3 Asynchronous processes
+Review: cron, workers, queues, retries, dead letters, schedulers, domain events, integration events, webhooks, file processing, notifications.
+
+**Evaluate:** idempotency, retries with backoff, duplicates, ordering, locks, concurrency, timeouts, poison messages, observability, recovery, cancellation, deployments, payload versioning.
+
+**Common findings:** job without retry limit, non-idempotent effects, cron run by multiple instances, unversioned events, silent errors, queue without dead-letter, payloads with sensitive data.
+
+---
+
+### PHASE G — QUALITY, CI/CD, AND OPERATIONS
 
 #### G.1 Testing
-Inventariar: unitarios, integración, contrato, e2e, visuales, accesibilidad, rendimiento, seguridad, migraciones, smoke, snapshots, tests manuales documentados.
+Inventory: unit, integration, contract, e2e, visual, accessibility, performance, security, migrations, smoke, snapshots, documented manual tests.
 
-**Evaluar:** qué comportamientos cubren, qué criticidades no cubren, estabilidad, aislamiento, fixtures, mocks, velocidad, flakiness, dependencias externas, calidad de assertions, falsos positivos, tests deshabilitados, cobertura significativa (no solo % de líneas).
+**Evaluate:** which behaviors they cover, which criticalities they do not cover, stability, isolation, fixtures, mocks, speed, flakiness, external dependencies, assertion quality, false positives, disabled tests, meaningful coverage (not only line %).
 
-**Preguntas:** ¿Los tests pueden fallar por la razón correcta? ¿Prueban comportamiento o implementación? ¿Se prueban permisos y acceso cruzado? ¿Se prueban migraciones? ¿Se prueban errores y reintentos? ¿El e2e puede ejecutarse localmente?
+**Questions:** Can tests fail for the right reason? Do they test behavior or implementation? Are permissions and cross-access tested? Are migrations tested? Are errors and retries tested? Can e2e run locally?
 
-**Clasificar áreas:** bien protegida, parcialmente protegida, cobertura superficial, no protegida, desconocida.
+**Classify areas:** well protected, partially protected, superficial coverage, unprotected, unknown.
 
-#### G.2 Build y CI
-Revisar build: compilación, bundling, generación de clientes/tipos, codegen, contenedores, artefactos, assets, cachés, build limpio, determinismo.
+#### G.2 Build and CI
+Review build: compilation, bundling, client/type generation, codegen, containers, artifacts, assets, caches, clean build, determinism.
 
-Revisar CI: triggers, permisos, jobs, matrices, caching, secrets, artifacts, conditions, branches, environments, approvals, timeouts, concurrency, required checks.
+Review CI: triggers, permissions, jobs, matrices, caching, secrets, artifacts, conditions, branches, environments, approvals, timeouts, concurrency, required checks.
 
-**Riesgos frecuentes:** CI verde sin ejecutar tests relevantes, jobs opcionales, checks no requeridos, permisos excesivos, secretos disponibles en PRs de forks, deploy automático sin gate, `continue-on-error` ocultando fallos.
+**Common risks:** green CI without running relevant tests, optional jobs, non-required checks, excessive permissions, secrets available on fork PRs, automatic deploy without a gate, `continue-on-error` hiding failures.
 
-#### G.3 Despliegue y release
-Documentar: entornos, proveedor, artefactos, pipeline, responsables, aprobaciones, migraciones, feature flags, smoke tests, rollback, rollforward, versionado, changelog, monitoreo post-deploy.
+#### G.3 Deployment and release
+Document: environments, provider, artifacts, pipeline, owners, approvals, migrations, feature flags, smoke tests, rollback, rollforward, versioning, changelog, post-deploy monitoring.
 
-**Clasificar:** automatizado y verificado, automatizado parcialmente, manual documentado, manual no documentado, desconocido, riesgoso.
+**Classify:** automated and verified, partially automated, documented manual, undocumented manual, unknown, risky.
 
-#### G.4 Observabilidad
-Evaluar: logs, métricas, traces, error tracking, health checks, dashboards, alertas, auditoría, correlation IDs, structured logging, retención, redacción de datos sensibles, ownership, runbooks.
+#### G.4 Observability
+Evaluate: logs, metrics, traces, error tracking, health checks, dashboards, alerts, audit, correlation IDs, structured logging, retention, redaction of sensitive data, ownership, runbooks.
 
-**Hallazgos críticos:** secretos en logs, datos personales sin redactar, errores silenciosos, ausencia total de monitoreo, alertas sin responsable, logs imposibles de correlacionar, falta de auditoría en acciones administrativas.
+**Critical findings:** secrets in logs, unredacted personal data, silent errors, total absence of monitoring, alerts without an owner, logs impossible to correlate, missing audit on administrative actions.
 
-#### G.5 Operación y soporte
-Revisar: panel administrativo, herramientas internas, runbooks, soporte, recuperación de cuentas, corrección de datos, moderación, conciliación, exportación, eliminación, disputas, fraude, incidentes, mantenimiento.
+#### G.5 Operations and support
+Review: admin panel, internal tools, runbooks, support, account recovery, data correction, moderation, reconciliation, export, deletion, disputes, fraud, incidents, maintenance.
 
-**Identificar:** operaciones peligrosas en scripts informales, conocimiento que reside en una sola persona, tareas manuales sin documentar.
+**Identify:** dangerous operations in informal scripts, knowledge residing in a single person, undocumented manual tasks.
 
 ---
 
-### FASE H — CONSOLIDACIÓN Y PLAN
+### PHASE H — CONSOLIDATION AND PLAN
 
-#### H.1 Deuda técnica
-Registrar deuda con **impacto concreto**, no con etiquetas vagas ("código feo", "arquitectura mala").
+#### H.1 Technical debt
+Record debt with **concrete impact**, not vague labels ("ugly code", "bad architecture").
 
-Para cada item: categoría, evidencia, impacto actual, impacto futuro, probabilidad, severidad, esfuerzo estimado (XS-XL), remediación, dependencias, riesgo de remediación, timing sugerido.
+For each item: category, evidence, current impact, future impact, probability, severity, estimated effort (XS–XL), remediation, dependencies, remediation risk, suggested timing.
 
-#### H.2 Deuda de producto
-Detectar: flujo incompleto, copy incorrecto, permisos incoherentes, funcionalidad sin usuario claro, proceso administrativo ausente, estado no representado, feature sin métricas, onboarding bloqueado, promesa no implementada, acciones sin recuperación.
+#### H.2 Product debt
+Detect: incomplete flow, incorrect copy, incoherent permissions, functionality without a clear user, missing administrative process, unrepresented state, feature without metrics, blocked onboarding, unimplemented promise, actions without recovery.
 
-#### H.3 Registro de riesgos
-Categorías: producto, seguridad, privacidad, datos, arquitectura, operación, disponibilidad, integraciones, dependencia, rendimiento, escalabilidad, testing, despliegue, cumplimiento, conocimiento.
+#### H.3 Risk register
+Categories: product, security, privacy, data, architecture, operations, availability, integrations, dependency, performance, scalability, testing, deployment, compliance, knowledge.
 
-**Para cada riesgo:** descripción, evidencia, probabilidad, impacto, detectabilidad, controles actuales, controles faltantes, mitigación, contingencia.
+**For each risk:** description, evidence, probability, impact, detectability, current controls, missing controls, mitigation, contingency.
 
 #### H.4 Unknowns
-Registrar explícitamente lo que no se sabe. Categorizar como: producto, usuarios, datos, producción, seguridad, costos, volumen, integraciones, infraestructura, operación, cumplimiento, ownership.
+Explicitly record what is not known. Categorize as: product, users, data, production, security, costs, volume, integrations, infrastructure, operations, compliance, ownership.
 
-**"Desconocido" es un resultado válido.** No reemplazar desconocimiento con confianza falsa.
+**"Unknown" is a valid result.** Do not replace ignorance with false confidence.
 
-#### H.5 Preparación para agentes (Nivel 0-5)
+#### H.5 Agent readiness (Level 0–5)
 
-| Nivel | Descripción | Requisitos mínimos |
+| Level | Description | Minimum requirements |
 |---|---|---|
-| 0 — No preparado | Sin comandos, tests ni aislamiento | — |
-| 1 — Exploración | Solo lectura y documentación | Acceso al repo |
-| 2 — Cambios supervisados | Tareas pequeñas con revisión | Setup reproducible, checks básicos |
-| 3 — Autonomía en ramas | Implementación con PR | Tests, CI, instrucciones, worktrees |
-| 4 — Autonomía operativa | Previews, smoke tests, rollback | Observabilidad, staging, gates humanos |
-| 5 — Alta automatización | Procesos maduros | Validaciones, releases progresivos, respuesta a incidentes |
+| 0 — Not prepared | No commands, tests, or isolation | — |
+| 1 — Exploration | Read-only and documentation | Repo access |
+| 2 — Supervised changes | Small tasks with review | Reproducible setup, basic checks |
+| 3 — Branch autonomy | Implementation with PR | Tests, CI, instructions, worktrees |
+| 4 — Operational autonomy | Previews, smoke tests, rollback | Observability, staging, human gates |
+| 5 — High automation | Mature processes | Validations, progressive releases, incident response |
 
-#### H.6 Plan gradual de adopción (Fases A-F)
+#### H.6 Gradual adoption plan (Phases A–F)
 
-- **Fase A — Seguridad básica:** eliminar secretos expuestos, proteger ramas, documentar comandos, evitar acceso productivo.
-- **Fase B — Reproducibilidad:** fijar runtimes, aislar entorno, `.env.example`, datos de prueba.
-- **Fase C — Verificación:** lint, typecheck, build, estabilizar tests, CI, smoke tests.
-- **Fase D — Fuente de verdad:** `AGENTS.md`, `project-status.md`, arquitectura baseline, ADRs.
-- **Fase E — Trabajo con agentes:** ramas, tareas pequeñas, vertical slices, PR, revisión independiente.
-- **Fase F — Madurez operativa:** observabilidad, staging, rollback, migraciones seguras, feature flags, runbooks.
+- **Phase A — Basic security:** remove exposed secrets, protect branches, document commands, avoid production access.
+- **Phase B — Reproducibility:** pin runtimes, isolate environment, `.env.example`, test data.
+- **Phase C — Verification:** lint, typecheck, build, stabilize tests, CI, smoke tests.
+- **Phase D — Source of truth:** `AGENTS.md`, `project-status.md`, architecture baseline, ADRs.
+- **Phase E — Agent work:** branches, small tasks, vertical slices, PR, independent review.
+- **Phase F — Operational maturity:** observability, staging, rollback, safe migrations, feature flags, runbooks.
 
-#### H.7 Resultado de auditoría
+#### H.7 Audit outcome
 
-| Resultado | Cuándo usarlo |
+| Outcome | When to use it |
 |---|---|
-| **BASELINE ESTABLISHED** | Setup funciona (o limitaciones claras), comandos identificados, arquitectura mapeada, riesgos críticos identificados, unknowns registrados, plan de adopción existe. |
-| **PARTIAL BASELINE** | Áreas verificadas parcialmente, limitaciones de acceso, faltan entornos, unknowns importantes, se puede avanzar en áreas limitadas. Especificar qué áreas son seguras. |
-| **BLOCKED** | No se puede inspeccionar, setup imposible sin información, secretos expuestos requieren acción inmediata, riesgo de afectar producción, datos podrían perderse, evidencia de compromiso. |
+| **BASELINE ESTABLISHED** | Setup works (or limitations are clear), commands identified, architecture mapped, critical risks identified, unknowns recorded, adoption plan exists. |
+| **PARTIAL BASELINE** | Areas partially verified, access limitations, missing environments, important unknowns; progress possible in limited areas. Specify which areas are safe. |
+| **BLOCKED** | Inspection impossible, setup impossible without information, exposed secrets require immediate action, risk of affecting production, data could be lost, evidence of compromise. |
 
-Antes de marcar `BLOCKED`, completar toda inspección segura posible.
+Before marking `BLOCKED`, complete all safe inspection possible.
 
-#### H.8 Documentación final
+#### H.8 Final documentation
 
-**`AGENTS.md`** — Incluir solo: propósito breve, fuentes de verdad, estructura relevante, comandos comprobados, workflow, restricciones, aprobaciones requeridas, definición de terminado, reglas de seguridad. **No incluir:** teorías, comandos no verificados, secretos, preferencias sin impacto.
+**`AGENTS.md`** — Include only: brief purpose, sources of truth, relevant structure, proven commands, workflow, restrictions, required approvals, definition of done, security rules. **Do not include:** theories, unverified commands, secrets, preferences without impact.
 
-**`docs/project-status.md`** — Formato:
+**`docs/project-status.md`** — Format:
 
 ```markdown
 # Project Status
@@ -482,44 +482,44 @@ Antes de marcar `BLOCKED`, completar toda inspección segura posible.
 ## Recommended skill
 ```
 
-**Estructura de archivos de auditoría:**
+**Audit file structure:**
 
 ```
-Proyecto pequeño → docs/audit/audit-report.md
-Proyecto mediano → docs/audit/{executive-summary, product-baseline, architecture-baseline, 
+Small project  → docs/audit/audit-report.md
+Medium project → docs/audit/{executive-summary, product-baseline, architecture-baseline,
                    data-baseline, security-baseline, testing-baseline, risk-register, adoption-plan}.md
-Monorepo/grande  → docs/audit/index.md + sub-auditorías por componente/aplicación
+Monorepo/large → docs/audit/index.md + sub-audits per component/application
 ```
 
 ---
 
-## FORMATO DE HALLAZGOS (usar consistemente)
+## FINDING FORMAT (use consistently)
 
 ```markdown
-## [P1] Título del hallazgo
+## [P1] Finding title
 
-### Área
+### Area
 Security | Data | Architecture | Testing | Operations | Product
 
-### Descripción
-Qué ocurre.
+### Description
+What is happening.
 
-### Evidencia
-- Componente/archivo:
-- Referencia:
-- Comando ejecutado (si aplica):
-- Resultado:
-- Nivel de evidencia: E0-E6
-- Confianza: Alta | Media | Baja
+### Evidence
+- Component/file:
+- Reference:
+- Command executed (if applicable):
+- Result:
+- Evidence level: E0-E6
+- Confidence: High | Medium | Low
 
-### Impacto
-Qué podría ocurrir y a quién afecta.
+### Impact
+What could happen and who is affected.
 
-### Escenario
-Cómo se manifiesta.
+### Scenario
+How it manifests.
 
-### Recomendación
-Qué debería hacerse.
+### Recommendation
+What should be done.
 
 ### Timing
 Immediate | Before next change | Planned | Opportunistic
@@ -527,107 +527,107 @@ Immediate | Before next change | Planned | Opportunistic
 
 ---
 
-## FORMATO DEL RESUMEN EJECUTIVO (informe al usuario)
+## EXECUTIVE SUMMARY FORMAT (report to the user)
 
 ```markdown
-# Audit Existing Project — Resultado
+# Audit Existing Project — Result
 
-## Estado
+## Status
 BASELINE ESTABLISHED | PARTIAL BASELINE | BLOCKED
 
-## Resumen
-Conclusión principal en 2-3 frases.
+## Summary
+Main conclusion in 2–3 sentences.
 
-## Nivel de preparación para agentes
-Nivel X — descripción breve.
+## Agent readiness level
+Level X — brief description.
 
-## Hallazgos críticos (P0/P1)
+## Critical findings (P0/P1)
 1. [P0] ...
 2. [P1] ...
 
-## Verificaciones ejecutadas
-- ✅ comando: resultado
-- ⚠️ comando: resultado con fallos
-- 📋 comando: identificado, no ejecutado (razón)
+## Verifications executed
+- ✅ command: result
+- ⚠️ command: result with failures
+- 📋 command: identified, not executed (reason)
 
-## Áreas no verificadas
-1. Área — razón
-2. Área — razón
+## Areas not verified
+1. Area — reason
+2. Area — reason
 
-## Documentos creados o actualizados
-- `ruta`
-- `ruta`
+## Documents created or updated
+- `path`
+- `path`
 
-## Acciones inmediatas
+## Immediate actions
 1. ...
 2. ...
 
-## Siguiente etapa recomendada
-Descripción y skill recomendada (`nombre-de-skill`).
+## Recommended next stage
+Description and recommended skill (`skill-name`).
 ```
 
-**No incluir:** secretos, tokens, datos personales, payloads sensibles.
+**Do not include:** secrets, tokens, personal data, sensitive payloads.
 
 ---
 
-## CÓMO INVOCAR ESTA SKILL
+## HOW TO INVOKE THIS SKILL
 
-### Auditoría estándar (recomendada para primer contacto)
+### Standard audit (recommended for first contact)
 
 ```text
-Ejecuta la skill audit-existing-project sobre este repositorio en modo estándar.
+Run the audit-existing-project skill on this repository in standard mode.
 
-Lee primero AGENTS.md, README.md, docs/ y configuración del proyecto.
+First read AGENTS.md, README.md, docs/, and project configuration.
 
-No refactorices, no actualices dependencias, no modifiques comportamiento,
-no apliques migraciones, no accedas a producción.
+Do not refactor, do not update dependencies, do not change behavior,
+do not apply migrations, do not access production.
 
-Ejecuta verificaciones locales seguras y actualiza documentación.
+Run safe local verifications and update documentation.
 
-Distingue explícitamente: documentado, implementado, probado, reproducido,
-inferido y desconocido.
+Explicitly distinguish: documented, implemented, tested, reproduced,
+inferred, and unknown.
 
-Al finalizar, actualiza docs/project-status.md y entrega un plan gradual.
+When finished, update docs/project-status.md and deliver a gradual plan.
 ```
 
-### Auditoría rápida
+### Quick audit
 
 ```text
-Ejecuta audit-existing-project en modo rápido.
+Run audit-existing-project in quick mode.
 
-Prioriza: setup, comandos, arquitectura, datos, auth/permisos, tests,
-riesgos P0/P1, preparación para agentes.
+Prioritize: setup, commands, architecture, data, auth/permissions, tests,
+P0/P1 risks, agent readiness.
 
-No modifiques código.
+Do not modify code.
 ```
 
-### Auditoría profunda
+### Deep audit
 
 ```text
-Ejecuta audit-existing-project en modo profundo.
+Run audit-existing-project in deep mode.
 
-Incluye: mapa de módulos, contratos, migraciones, multitenancy,
-integraciones, procesos asíncronos, CI/CD, observabilidad, seguridad,
-privacidad, operación, Git hotspots, registros completos de riesgos y deuda.
+Include: module map, contracts, migrations, multitenancy,
+integrations, asynchronous processes, CI/CD, observability, security,
+privacy, operations, Git hotspots, complete risk and debt registers.
 
-No realices remediaciones.
+Do not perform remediations.
 ```
 
-### Auditoría focalizada
+### Focused audit
 
 ```text
-Ejecuta audit-existing-project únicamente sobre [área o módulo].
+Run audit-existing-project only on [area or module].
 
-Evalúa dependencias y efectos transversales, pero no amplíes al resto
-del repositorio salvo riesgo directo.
+Evaluate dependencies and cross-cutting effects, but do not expand to the rest
+of the repository unless there is direct risk.
 ```
 
 ---
 
-## REGLA FINAL
+## FINAL RULE
 
-La auditoría debe dejar el proyecto **más comprensible y más seguro para modificar**, sin convertir la fase de descubrimiento en una refactorización encubierta.
+The audit must leave the project **more understandable and safer to change**, without turning discovery into a covert refactor.
 
-El resultado correcto **no es:** "El proyecto debería reescribirse."
+The correct result **is not:** "The project should be rewritten."
 
-El resultado correcto **es:** "Este es el sistema que existe, esta es la evidencia disponible, estos son sus riesgos, estas áreas pueden modificarse de forma segura y este es el camino incremental para mejorar lo demás."
+The correct result **is:** "This is the system that exists, this is the available evidence, these are its risks, these areas can be changed safely, and this is the incremental path to improve the rest."

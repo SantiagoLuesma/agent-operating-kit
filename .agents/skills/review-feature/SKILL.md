@@ -1,77 +1,77 @@
 ---
 name: review-feature
 description: >
-  Revisa adversarialmente una feature ya diseñada antes de planificar o
-  implementar. Busca contradicciones, ambigüedades, scope creep, permisos
-  incorrectos, flujos incompletos, criterios no verificables y riesgos no
-  tratados. No implementa ni rediseña en silencio. Úsala tras design-feature o
-  antes de create-exec-plan. Produce docs/features/<feature>/review.md y un
-  gate (APPROVED FOR PLANNING, APPROVED WITH CONDITIONS, CHANGES REQUIRED,
-  MORE EVIDENCE REQUIRED, SECURITY REVIEW REQUIRED, ARCHITECTURE REVIEW
-  REQUIRED, BLOCKED, REJECTED).
+  Adversarially reviews a feature that has already been designed before planning
+  or implementation. Looks for contradictions, ambiguities, scope creep,
+  incorrect permissions, incomplete flows, non-verifiable criteria, and
+  unaddressed risks. Does not implement or silently redesign. Use after
+  design-feature or before create-exec-plan. Produces
+  docs/features/<feature>/review.md and a gate (APPROVED FOR PLANNING,
+  APPROVED WITH CONDITIONS, CHANGES REQUIRED, MORE EVIDENCE REQUIRED,
+  SECURITY REVIEW REQUIRED, ARCHITECTURE REVIEW REQUIRED, BLOCKED, REJECTED).
 ---
 
 # review-feature
 
-## Propósito
+## Purpose
 
-Revisar adversarialmente una feature ya diseñada antes de planificar o implementar.
+Adversarially review a feature that has already been designed before planning or implementing.
 
-Esta skill evalúa si la especificación es coherente, valiosa, completa, segura, verificable y suficientemente delimitada. Su objetivo no es confirmar el trabajo previo, sino intentar encontrar:
+This skill evaluates whether the specification is coherent, valuable, complete, secure, verifiable, and sufficiently bounded. Its goal is not to confirm prior work, but to try to find:
 
-* contradicciones;
-* ambigüedades;
-* supuestos ocultos;
-* riesgos no tratados;
-* permisos incorrectos;
-* flujos incompletos;
+* contradictions;
+* ambiguities;
+* hidden assumptions;
+* unaddressed risks;
+* incorrect permissions;
+* incomplete flows;
 * scope creep;
-* criterios imposibles de verificar;
-* decisiones faltantes;
-* dificultades para implementar la feature como vertical slices.
+* criteria that cannot be verified;
+* missing decisions;
+* difficulties implementing the feature as vertical slices.
 
-La revisión debe producir evidencia y decisiones explícitas, no una opinión general.
-
----
-
-## Compatibilidad
-
-Esta skill es agnóstica al modelo, proveedor, lenguaje y stack tecnológico.
-
-Puede utilizarse con Codex, OpenCode, Claude Code, Grok, Kimi, DeepSeek o cualquier agente capaz de inspeccionar documentación y repositorios.
-
-La fuente de verdad es el repositorio. El historial del chat puede aportar contexto, pero no debe reemplazar la documentación estable.
-
-Idealmente, la revisión debe realizarla un agente o una sesión distinta de quien diseñó la feature.
+The review must produce evidence and explicit decisions, not a general opinion.
 
 ---
 
-## Cuándo utilizarla
+## Compatibility
 
-Utilizar esta skill cuando:
+This skill is agnostic to model, provider, language, and technology stack.
 
-* exista una especificación creada mediante `design-feature`;
-* una feature vaya a pasar a planificación;
-* cambie su alcance, comportamiento, permisos o modelo de datos;
-* existan múltiples interpretaciones posibles;
-* afecte autenticación, billing, datos sensibles, ownership o integraciones;
-* una feature existente deba ampliarse;
-* se necesite una revisión independiente antes de aprobarla.
+It can be used with Codex, OpenCode, Claude Code, Grok, Kimi, DeepSeek, or any agent capable of inspecting documentation and repositories.
 
-No utilizarla para:
+The source of truth is the repository. Chat history may provide context, but must not replace stable documentation.
 
-* implementar;
-* corregir código;
-* seleccionar tecnologías;
-* sustituir descubrimiento o validación;
-* rediseñar silenciosamente la feature;
-* aprobar automáticamente el diseño anterior.
+Ideally, the review should be performed by an agent or session different from the one that designed the feature.
 
 ---
 
-## Entradas esperadas
+## When to use it
 
-Revisar, cuando existan:
+Use this skill when:
+
+* a specification created via `design-feature` exists;
+* a feature is about to move into planning;
+* its scope, behavior, permissions, or data model changes;
+* multiple interpretations are possible;
+* it affects authentication, billing, sensitive data, ownership, or integrations;
+* an existing feature must be extended;
+* an independent review is needed before approving it.
+
+Do not use it to:
+
+* implement;
+* fix code;
+* select technologies;
+* replace discovery or validation;
+* silently redesign the feature;
+* automatically approve the previous design.
+
+---
+
+## Expected inputs
+
+Review, when they exist:
 
 * `AGENTS.md`;
 * `docs/project-status.md`;
@@ -79,370 +79,370 @@ Revisar, cuando existan:
 * `docs/features/<feature-name>/spec.md`;
 * `docs/features/<feature-name>/test-plan.md`;
 * `docs/features/<feature-name>/open-questions.md`;
-* validaciones de supuestos;
-* arquitectura de información;
-* atributos de calidad;
-* decisiones registradas;
-* features relacionadas;
-* contratos existentes;
-* comportamiento actual del sistema;
-* requisitos legales, comerciales y operativos.
+* assumption validations;
+* information architecture;
+* quality attributes;
+* recorded decisions;
+* related features;
+* existing contracts;
+* current system behavior;
+* legal, commercial, and operational requirements.
 
-Si falta una entrada relevante, registrarlo como limitación de la revisión.
+If a relevant input is missing, record it as a limitation of the review.
 
 ---
 
-## Entregables
+## Deliverables
 
-Crear:
+Create:
 
 ```text
 docs/features/<feature-name>/review.md
 ```
 
-El archivo debe contener:
+The file must contain:
 
-1. alcance de la revisión;
-2. fuentes examinadas;
-3. resumen ejecutivo;
-4. hallazgos;
-5. contradicciones;
-6. ambigüedades;
-7. riesgos;
-8. decisiones faltantes;
-9. condiciones de aprobación;
-10. gate final.
+1. review scope;
+2. sources examined;
+3. executive summary;
+4. findings;
+5. contradictions;
+6. ambiguities;
+7. risks;
+8. missing decisions;
+9. approval conditions;
+10. final gate.
 
-No modificar silenciosamente `spec.md`.
+Do not silently modify `spec.md`.
 
-Las correcciones propuestas deben registrarse como recomendaciones. La especificación solamente debe cambiarse cuando exista autorización para hacerlo.
+Proposed corrections must be recorded as recommendations. The specification should only be changed when authorization exists to do so.
 
-Actualizar `docs/project-status.md` si cambia el gate, aparecen bloqueantes o se modifica la próxima acción recomendada.
+Update `docs/project-status.md` if the gate changes, blockers appear, or the recommended next action is modified.
 
 ---
 
-## Clasificación de hallazgos
+## Finding classification
 
-Asignar a cada hallazgo:
+Assign to each finding:
 
-### Severidad
+### Severity
 
-* `CRITICAL`: puede producir daño grave, violación de seguridad, pérdida de datos, incumplimiento o comportamiento fundamentalmente incorrecto.
-* `HIGH`: impide planificar o implementar de forma confiable.
-* `MEDIUM`: genera ambigüedad, deuda o riesgo relevante, pero puede resolverse durante planificación bajo una condición explícita.
-* `LOW`: mejora recomendada sin impacto inmediato significativo.
-* `NOTE`: observación informativa.
+* `CRITICAL`: may cause serious harm, security violation, data loss, non-compliance, or fundamentally incorrect behavior.
+* `HIGH`: prevents planning or implementing reliably.
+* `MEDIUM`: creates ambiguity, debt, or material risk, but can be resolved during planning under an explicit condition.
+* `LOW`: recommended improvement without significant immediate impact.
+* `NOTE`: informational observation.
 
-### Tipo
+### Type
 
-* contradicción;
-* omisión;
-* ambigüedad;
+* contradiction;
+* omission;
+* ambiguity;
 * scope creep;
-* riesgo;
-* decisión faltante;
-* evidencia insuficiente;
-* criterio no verificable;
-* dependencia;
-* inconsistencia documental.
+* risk;
+* missing decision;
+* insufficient evidence;
+* non-verifiable criterion;
+* dependency;
+* documentation inconsistency.
 
-### Estado
+### Status
 
-* abierto;
-* aceptado como riesgo;
-* resuelto;
-* diferido;
-* no aplicable.
+* open;
+* accepted as risk;
+* resolved;
+* deferred;
+* not applicable.
 
-Cada hallazgo debe incluir:
+Each finding must include:
 
-* identificador;
-* ubicación;
-* descripción;
-* evidencia;
-* impacto;
-* recomendación;
+* identifier;
+* location;
+* description;
+* evidence;
+* impact;
+* recommendation;
 * owner;
-* condición de cierre.
+* closure condition.
 
 ---
 
-## Procedimiento
+## Procedure
 
-## 1. Verificar trazabilidad
+## 1. Verify traceability
 
-Confirmar que la feature puede vincularse con:
+Confirm that the feature can be linked to:
 
-* un problema identificado;
-* un usuario o actor concreto;
-* un resultado esperado;
-* una capacidad incluida en el alcance;
-* evidencia, decisión o supuesto explícito;
-* un incremento del producto.
+* an identified problem;
+* a concrete user or actor;
+* an expected outcome;
+* a capability included in scope;
+* evidence, decision, or explicit assumption;
+* a product increment.
 
-Preguntar:
+Ask:
 
-* ¿La feature resuelve el problema declarado?
-* ¿El resultado depende realmente de esta feature?
-* ¿Se está implementando una solución solicitada sin comprender la necesidad?
-* ¿Existe una solución más simple?
-* ¿La feature contradice el alcance vigente?
+* Does the feature solve the stated problem?
+* Does the outcome truly depend on this feature?
+* Is a requested solution being implemented without understanding the need?
+* Is there a simpler solution?
+* Does the feature contradict the current scope?
 
-Bloquear cuando la feature no tenga una razón verificable para existir.
-
----
-
-## 2. Revisar valor
-
-Evaluar:
-
-* valor para el usuario primario;
-* valor para actores secundarios;
-* impacto esperado para el producto o negocio;
-* frecuencia y contexto de uso;
-* coste operativo introducido;
-* comportamiento alternativo actual;
-* evidencia disponible;
-* proporcionalidad entre complejidad y valor.
-
-Distinguir:
-
-* valor demostrado;
-* valor inferido;
-* valor hipotético;
-* conveniencia interna;
-* preferencia de stakeholder.
-
-Una feature no debe aprobarse solo porque sea técnicamente posible.
+Block when the feature has no verifiable reason to exist.
 
 ---
 
-## 3. Revisar alcance
+## 2. Review value
 
-Comprobar que existan:
+Evaluate:
 
-* comportamientos dentro del alcance;
-* no objetivos;
-* actores cubiertos;
-* actores excluidos;
-* casos futuros no comprometidos;
-* comportamiento existente que debe preservarse.
+* value for the primary user;
+* value for secondary actors;
+* expected impact for the product or business;
+* frequency and context of use;
+* operational cost introduced;
+* current alternative behavior;
+* available evidence;
+* proportionality between complexity and value.
 
-Buscar scope creep como:
+Distinguish:
 
-* soporte para segmentos no priorizados;
-* automatización innecesaria;
-* integraciones “por si acaso”;
-* configuración excesiva;
-* capacidades administrativas no justificadas;
-* optimizaciones prematuras;
-* generalizaciones sin evidencia.
+* demonstrated value;
+* inferred value;
+* hypothetical value;
+* internal convenience;
+* stakeholder preference.
 
-Preguntar si cada elemento incluido contribuye al resultado esperado.
-
-No rediseñar el alcance. Registrar cualquier reducción, ampliación o división recomendada para aprobación.
+A feature must not be approved only because it is technically possible.
 
 ---
 
-## 4. Revisar flujos
+## 3. Review scope
 
-Examinar:
+Check that the following exist:
 
-* flujo principal;
-* flujos alternativos;
-* cancelación;
-* abandono;
-* recuperación;
-* operaciones parciales;
-* soporte;
-* moderación;
-* administración;
-* dependencia externa;
-* comportamiento asíncrono.
+* in-scope behaviors;
+* non-goals;
+* covered actors;
+* excluded actors;
+* future cases not committed;
+* existing behavior that must be preserved.
 
-Para cada flujo verificar:
+Look for scope creep such as:
 
-* precondiciones;
+* support for non-prioritized segments;
+* unnecessary automation;
+* “just in case” integrations;
+* excessive configuration;
+* unjustified administrative capabilities;
+* premature optimizations;
+* generalizations without evidence.
+
+Ask whether each included element contributes to the expected outcome.
+
+Do not redesign the scope. Record any recommended reduction, expansion, or split for approval.
+
+---
+
+## 4. Review flows
+
+Examine:
+
+* primary flow;
+* alternative flows;
+* cancellation;
+* abandonment;
+* recovery;
+* partial operations;
+* support;
+* moderation;
+* administration;
+* external dependency;
+* asynchronous behavior.
+
+For each flow verify:
+
+* preconditions;
 * actor;
-* acción;
-* respuesta;
-* transición;
+* action;
+* response;
+* transition;
 * feedback;
-* postcondición;
-* recuperación.
+* postcondition;
+* recovery.
 
-Buscar pasos donde el implementador todavía tendría que inventar comportamiento.
-
----
-
-## 5. Revisar actores, ownership y permisos
-
-Confirmar:
-
-* quién inicia cada acción;
-* quién posee cada recurso;
-* quién puede verlo o modificarlo;
-* a qué organización, tenant o cuenta pertenece;
-* qué ocurre al cambiar ownership;
-* qué sucede cuando se revoca acceso;
-* cómo se aplican permisos heredados;
-* qué acciones requieren privilegios especiales.
-
-Revisar operaciones de:
-
-* creación;
-* lectura;
-* listado;
-* edición;
-* eliminación;
-* publicación;
-* aprobación;
-* transferencia;
-* exportación;
-* restauración;
-* administración masiva.
-
-Buscar:
-
-* acceso entre tenants;
-* escalada de privilegios;
-* permisos implícitos;
-* controles solo visuales;
-* owners ambiguos;
-* administradores excesivamente poderosos;
-* recursos huérfanos.
+Look for steps where the implementer would still have to invent behavior.
 
 ---
 
-## 6. Revisar reglas, estados y transiciones
+## 5. Review actors, ownership, and permissions
 
-Para cada regla de negocio comprobar:
+Confirm:
 
-* claridad;
-* razón;
-* autoridad;
-* excepciones;
-* momento de evaluación;
-* relación con criterios de aceptación;
-* consistencia con otras reglas.
+* who initiates each action;
+* who owns each resource;
+* who can view or modify it;
+* which organization, tenant, or account it belongs to;
+* what happens when ownership changes;
+* what happens when access is revoked;
+* how inherited permissions are applied;
+* which actions require special privileges.
 
-Para cada ciclo de vida verificar:
+Review operations for:
 
-* estado inicial;
-* estados terminales;
-* transiciones válidas;
-* transiciones inválidas;
-* actor autorizado;
-* efectos secundarios;
-* reversibilidad;
-* concurrencia;
-* expiración;
-* automatizaciones.
+* create;
+* read;
+* list;
+* edit;
+* delete;
+* publish;
+* approve;
+* transfer;
+* export;
+* restore;
+* bulk administration.
 
-Buscar:
+Look for:
 
-* estados imposibles;
-* dimensiones mezcladas;
-* transiciones sin owner;
-* acciones repetibles indebidamente;
-* reglas contradictorias;
-* dependencias circulares.
+* cross-tenant access;
+* privilege escalation;
+* implicit permissions;
+* visual-only controls;
+* ambiguous owners;
+* overly powerful administrators;
+* orphaned resources.
 
 ---
 
-## 7. Revisar validaciones, errores y edge cases
+## 6. Review rules, states, and transitions
 
-Comprobar validaciones de:
+For each business rule check:
 
-* formato;
-* negocio;
-* permisos;
-* contexto;
-* seguridad;
-* concurrencia;
-* límites.
+* clarity;
+* rationale;
+* authority;
+* exceptions;
+* evaluation timing;
+* relationship to acceptance criteria;
+* consistency with other rules.
 
-Revisar errores por:
+For each lifecycle verify:
 
-* entrada inválida;
-* recurso inexistente;
-* acceso denegado;
-* conflicto;
-* dependencia caída;
+* initial state;
+* terminal states;
+* valid transitions;
+* invalid transitions;
+* authorized actor;
+* side effects;
+* reversibility;
+* concurrency;
+* expiration;
+* automations.
+
+Look for:
+
+* impossible states;
+* mixed dimensions;
+* transitions without an owner;
+* actions that are improperly repeatable;
+* contradictory rules;
+* circular dependencies.
+
+---
+
+## 7. Review validations, errors, and edge cases
+
+Check validations for:
+
+* format;
+* business;
+* permissions;
+* context;
+* security;
+* concurrency;
+* limits.
+
+Review errors for:
+
+* invalid input;
+* missing resource;
+* access denied;
+* conflict;
+* dependency down;
 * timeout;
-* duplicado;
-* estado incompatible;
-* operación parcial;
-* límite superado.
+* duplicate;
+* incompatible state;
+* partial operation;
+* limit exceeded.
 
-Verificar que cada error defina:
+Verify that each error defines:
 
-* mensaje;
-* recuperación;
-* reintento;
-* preservación de datos;
+* message;
+* recovery;
+* retry;
+* data preservation;
 * logging;
-* impacto sobre el estado.
+* impact on state.
 
-Evaluar edge cases relevantes:
+Evaluate relevant edge cases:
 
-* doble envío;
-* múltiples pestañas;
-* conexión interrumpida;
-* sesión expirada;
-* cambios simultáneos;
-* datos históricos;
-* zonas horarias;
-* archivos grandes;
-* recursos eliminados;
-* reintentos;
-* fallos parciales;
-* contenido extremo;
-* permisos revocados.
+* double submit;
+* multiple tabs;
+* interrupted connection;
+* expired session;
+* concurrent changes;
+* historical data;
+* time zones;
+* large files;
+* deleted resources;
+* retries;
+* partial failures;
+* extreme content;
+* revoked permissions.
 
-No exigir soporte para todos, pero sí decisiones explícitas sobre los críticos.
+Do not require support for all of them, but do require explicit decisions on the critical ones.
 
 ---
 
-## 8. Revisar seguridad, privacidad y abuso
+## 8. Review security, privacy, and abuse
 
-Evaluar:
+Evaluate:
 
-* autenticación;
-* autorización;
-* aislamiento;
-* exposición de datos;
-* datos sensibles;
-* retención;
-* eliminación;
-* consentimiento;
-* auditoría;
-* impersonación;
-* exportaciones;
-* contenido generado por usuarios;
-* fraude;
+* authentication;
+* authorization;
+* isolation;
+* data exposure;
+* sensitive data;
+* retention;
+* deletion;
+* consent;
+* audit;
+* impersonation;
+* exports;
+* user-generated content;
+* fraud;
 * spam;
-* automatización abusiva;
-* enumeración de recursos;
-* manipulación de entradas.
+* abusive automation;
+* resource enumeration;
+* input manipulation.
 
-Preguntar:
+Ask:
 
-* ¿Puede un usuario acceder a datos ajenos?
-* ¿Puede inferir que un recurso privado existe?
-* ¿Puede repetir una acción para obtener beneficio?
-* ¿Puede evadir límites?
-* ¿Se recolectan datos innecesarios?
-* ¿Los logs o analytics exponen información sensible?
-* ¿Existe una ruta de moderación o respuesta?
+* Can a user access someone else’s data?
+* Can they infer that a private resource exists?
+* Can they repeat an action to gain benefit?
+* Can they evade limits?
+* Is unnecessary data being collected?
+* Do logs or analytics expose sensitive information?
+* Is there a moderation or response path?
 
-Los riesgos críticos requieren revisión especializada mediante `review-security`.
+Critical risks require specialized review via `review-security`.
 
 ---
 
-## 9. Revisar UX, accesibilidad y responsive
+## 9. Review UX, accessibility, and responsive design
 
-Comprobar que estén definidos:
+Check that the following are defined:
 
 * loading;
 * empty;
@@ -452,264 +452,264 @@ Comprobar que estén definidos:
 * partial success;
 * disabled;
 * processing;
-* offline, cuando aplique.
+* offline, when applicable.
 
-Distinguir correctamente:
+Correctly distinguish:
 
-* no autenticado;
-* sin permiso;
-* sin contenido;
-* sin resultados;
+* unauthenticated;
+* no permission;
+* no content;
+* no results;
 * error;
-* plan insuficiente.
+* insufficient plan.
 
-Revisar accesibilidad:
+Review accessibility:
 
-* teclado;
-* foco;
-* semántica;
-* mensajes;
-* contraste;
-* tecnologías asistivas;
-* reducción de movimiento;
-* preservación de datos;
-* objetivos táctiles.
+* keyboard;
+* focus;
+* semantics;
+* messages;
+* contrast;
+* assistive technologies;
+* reduced motion;
+* data preservation;
+* touch targets.
 
-Revisar responsive:
+Review responsive design:
 
-* prioridades de contenido;
-* acciones disponibles;
-* reorganización;
+* content priorities;
+* available actions;
+* reorganization;
 * zoom;
-* interacción táctil;
-* pantallas pequeñas;
-* contenido largo;
-* conectividad limitada.
+* touch interaction;
+* small screens;
+* long content;
+* limited connectivity.
 
-Marcar requisitos vagos como “responsive” o “accesible” cuando no sean verificables.
+Flag vague requirements such as “responsive” or “accessible” when they are not verifiable.
 
 ---
 
-## 10. Revisar datos y contratos
+## 10. Review data and contracts
 
-Evaluar conceptos de datos:
+Evaluate data concepts:
 
 * owner;
-* fuente de verdad;
-* atributos mínimos;
-* sensibilidad;
-* relaciones;
-* ciclo de vida;
-* historial;
-* retención;
-* eliminación;
-* integridad;
-* sincronización.
+* source of truth;
+* minimum attributes;
+* sensitivity;
+* relationships;
+* lifecycle;
+* history;
+* retention;
+* deletion;
+* integrity;
+* synchronization.
 
-Revisar contratos preliminares:
+Review preliminary contracts:
 
-* entradas;
-* salidas;
-* errores;
-* permisos;
-* idempotencia;
-* consistencia;
-* versionado;
-* compatibilidad;
-* límites;
-* privacidad.
+* inputs;
+* outputs;
+* errors;
+* permissions;
+* idempotency;
+* consistency;
+* versioning;
+* compatibility;
+* limits;
+* privacy.
 
-Buscar:
+Look for:
 
-* duplicación sin autoridad clara;
-* datos sin owner;
-* contratos ambiguos;
-* incompatibilidad con consumidores existentes;
-* operaciones no idempotentes;
-* sincronización indefinida;
-* eliminación imposible;
-* efectos secundarios ocultos.
+* duplication without clear authority;
+* data without an owner;
+* ambiguous contracts;
+* incompatibility with existing consumers;
+* non-idempotent operations;
+* undefined synchronization;
+* impossible deletion;
+* hidden side effects.
 
-No definir tablas, APIs o tecnologías definitivas durante esta revisión.
+Do not define definitive tables, APIs, or technologies during this review.
 
 ---
 
-## 11. Revisar integraciones y dependencias
+## 11. Review integrations and dependencies
 
-Para cada dependencia comprobar:
+For each dependency check:
 
-* necesidad;
+* necessity;
 * owner;
-* estado;
-* criticidad;
-* disponibilidad;
-* límites;
-* fallos;
-* alternativa;
-* desacoplamiento;
-* impacto operativo;
-* riesgo contractual.
+* status;
+* criticality;
+* availability;
+* limits;
+* failures;
+* alternative;
+* decoupling;
+* operational impact;
+* contractual risk.
 
-Evaluar qué ocurre cuando:
+Evaluate what happens when:
 
-* la integración está caída;
-* responde tarde;
-* devuelve datos inconsistentes;
-* procesa dos veces;
-* procesa parcialmente;
-* cambia su contrato;
-* revoca acceso.
+* the integration is down;
+* it responds late;
+* it returns inconsistent data;
+* it processes twice;
+* it processes partially;
+* it changes its contract;
+* it revokes access.
 
-Las dependencias no confirmadas deben registrarse como riesgo o bloqueo.
+Unconfirmed dependencies must be recorded as risk or blocker.
 
 ---
 
-## 12. Revisar métricas, operación y soporte
+## 12. Review metrics, operations, and support
 
-Comprobar que las métricas permitan responder:
+Check that metrics can answer:
 
-* adopción;
-* inicio;
-* finalización;
-* abandono;
-* errores;
-* repetición;
-* resultado;
-* efectos adversos.
+* adoption;
+* start;
+* completion;
+* abandonment;
+* errors;
+* repetition;
+* outcome;
+* adverse effects.
 
-Verificar:
+Verify:
 
-* métrica principal;
+* primary metric;
 * guardrails;
 * baseline;
-* segmentos;
-* criterio de éxito;
-* criterio de alerta;
-* privacidad.
+* segments;
+* success criterion;
+* alert criterion;
+* privacy.
 
-Evaluar operación:
+Evaluate operations:
 
-* observabilidad;
-* auditoría;
-* soporte;
-* moderación;
-* correcciones manuales;
-* documentación;
-* capacitación;
-* escalamiento de incidentes.
+* observability;
+* audit;
+* support;
+* moderation;
+* manual corrections;
+* documentation;
+* training;
+* incident escalation.
 
-Preguntar quién detectará y resolverá problemas después del lanzamiento.
-
----
-
-## 13. Revisar rollout y rollback
-
-Comprobar que el rollout defina:
-
-* usuarios iniciales;
-* orden de activación;
-* controles;
-* señales de avance;
-* señales de pausa;
-* comunicación;
-* soporte;
-* verificación posterior.
-
-Comprobar que el rollback indique:
-
-* disparadores;
-* autoridad;
-* tiempo objetivo;
-* desactivación;
-* compatibilidad;
-* tratamiento de datos creados;
-* efectos irreversibles;
-* verificación posterior.
-
-No aceptar “revertir el deploy” como estrategia suficiente cuando existan datos, contratos o efectos externos.
+Ask who will detect and resolve problems after launch.
 
 ---
 
-## 14. Revisar aceptación y testing
+## 13. Review rollout and rollback
 
-Cada criterio de aceptación debe ser:
+Check that rollout defines:
+
+* initial users;
+* activation order;
+* controls;
+* go signals;
+* pause signals;
+* communication;
+* support;
+* post-verification.
+
+Check that rollback indicates:
+
+* triggers;
+* authority;
+* target time;
+* deactivation;
+* compatibility;
+* handling of created data;
+* irreversible effects;
+* post-verification.
+
+Do not accept “revert the deploy” as a sufficient strategy when data, contracts, or external effects exist.
+
+---
+
+## 14. Review acceptance and testing
+
+Each acceptance criterion must be:
 
 * observable;
-* inequívoco;
-* trazable;
-* verificable;
-* consistente con reglas y flujos.
+* unambiguous;
+* traceable;
+* verifiable;
+* consistent with rules and flows.
 
-Confirmar cobertura de:
+Confirm coverage of:
 
 * happy path;
-* alternativas;
-* permisos;
-* estados;
-* errores;
-* edge cases críticos;
-* accesibilidad;
-* responsive;
+* alternatives;
+* permissions;
+* states;
+* errors;
+* critical edge cases;
+* accessibility;
+* responsive design;
 * analytics;
-* recuperación;
-* compatibilidad.
+* recovery;
+* compatibility.
 
-La estrategia de testing debe derivarse de riesgos y criterios.
+The testing strategy must derive from risks and criteria.
 
-Buscar:
+Look for:
 
-* criterios subjetivos;
-* tests por implementación interna;
-* ausencia de pruebas negativas;
-* permisos sin cobertura;
-* contratos sin integración;
-* journeys críticos sin end-to-end;
-* riesgos sin prueba o verificación alternativa.
+* subjective criteria;
+* tests tied to internal implementation;
+* absence of negative tests;
+* permissions without coverage;
+* contracts without integration;
+* critical journeys without end-to-end coverage;
+* risks without a test or alternative verification.
 
 ---
 
-## 15. Revisar vertical slices
+## 15. Review vertical slices
 
-Evaluar si la feature puede dividirse en incrementos que:
+Evaluate whether the feature can be split into increments that:
 
-* produzcan valor;
-* atraviesen las capas necesarias;
-* incluyan permisos, datos y tests;
-* sean integrables;
-* reduzcan riesgo;
-* sean revisables;
-* no dependan de una entrega final masiva.
+* produce value;
+* cross the necessary layers;
+* include permissions, data, and tests;
+* are integrable;
+* reduce risk;
+* are reviewable;
+* do not depend on one large final delivery.
 
-Rechazar descomposiciones basadas únicamente en:
+Reject decompositions based solely on:
 
 * frontend;
 * backend;
-* base de datos;
-* integración;
+* database;
+* integration;
 * tests.
 
-Detectar si la feature contiene varias capacidades independientes que deberían separarse antes de planificar.
+Detect whether the feature contains several independent capabilities that should be separated before planning.
 
 ---
 
-## Revisión de contradicciones
+## Contradiction review
 
-Comparar explícitamente:
+Explicitly compare:
 
-* problema frente a solución;
-* alcance frente a flujos;
-* reglas frente a criterios;
-* ownership frente a permisos;
-* estados frente a acciones;
-* errores frente a recuperación;
-* datos frente a privacidad;
-* contratos frente a integraciones;
-* métricas frente a resultado;
-* rollout frente a rollback;
-* aceptación frente a testing;
-* feature frente al alcance del producto.
+* problem versus solution;
+* scope versus flows;
+* rules versus criteria;
+* ownership versus permissions;
+* states versus actions;
+* errors versus recovery;
+* data versus privacy;
+* contracts versus integrations;
+* metrics versus outcome;
+* rollout versus rollback;
+* acceptance versus testing;
+* feature versus product scope.
 
-Toda contradicción debe citar ambos elementos incompatibles.
+Every contradiction must cite both incompatible elements.
 
 ---
 
@@ -717,92 +717,92 @@ Toda contradicción debe citar ambos elementos incompatibles.
 
 ### APPROVED FOR PLANNING
 
-No existen hallazgos críticos ni altos abiertos.
+There are no open critical or high findings.
 
-La feature es coherente, verificable, delimitada y puede continuar a `create-exec-plan`.
+The feature is coherent, verifiable, bounded, and may proceed to `create-exec-plan`.
 
 ### APPROVED WITH CONDITIONS
 
-Puede planificarse bajo condiciones explícitas.
+It may be planned under explicit conditions.
 
-Cada condición debe tener:
+Each condition must have:
 
 * owner;
-* fecha o evento límite;
-* criterio de resolución;
-* impacto si no se cumple.
+* deadline date or event;
+* resolution criterion;
+* impact if not met.
 
-No utilizar este gate para ocultar problemas fundamentales.
+Do not use this gate to hide fundamental problems.
 
 ### CHANGES REQUIRED
 
-Existen hallazgos altos, contradicciones o ambigüedades que deben corregirse antes de planificar.
+There are high findings, contradictions, or ambiguities that must be corrected before planning.
 
-La feature debe volver a `design-feature`.
+The feature must return to `design-feature`.
 
 ### MORE EVIDENCE REQUIRED
 
-El valor, comportamiento o alcance depende de supuestos todavía insuficientemente validados.
+Value, behavior, or scope depends on assumptions that are still insufficiently validated.
 
-Debe volver a `validate-assumptions` o realizar un experimento.
+It must return to `validate-assumptions` or run an experiment.
 
 ### SECURITY REVIEW REQUIRED
 
-Existen riesgos de seguridad, privacidad, fraude o abuso que necesitan revisión especializada.
+There are security, privacy, fraud, or abuse risks that need specialized review.
 
 ### ARCHITECTURE REVIEW REQUIRED
 
-La feature plantea impactos sistémicos o dependencias que necesitan `define-quality-attributes` o `review-architecture`.
+The feature poses systemic impacts or dependencies that need `define-quality-attributes` or `review-architecture`.
 
 ### BLOCKED
 
-Existen decisiones, dependencias, autoridades o riesgos críticos sin resolución viable.
+There are decisions, dependencies, authorities, or critical risks without a viable resolution.
 
 ### REJECTED
 
-La feature no es coherente con el problema, el producto o el valor esperado y no debería continuar en su forma actual.
+The feature is not coherent with the problem, the product, or the expected value and should not continue in its current form.
 
 ---
 
-## Aprobaciones humanas
+## Human approvals
 
-Requerir aprobación humana para:
+Require human approval for:
 
-* cambios de alcance;
-* riesgo residual crítico;
-* billing o precios;
-* autenticación o autorización;
-* datos sensibles;
-* eliminación irreversible;
-* transferencias de ownership;
-* cumplimiento legal;
-* exposición pública;
-* integraciones contractuales;
-* decisiones difíciles de revertir;
-* aceptación de una feature rechazada o bloqueada.
-
----
-
-## Prohibiciones
-
-Esta skill no debe:
-
-* escribir código;
-* implementar correcciones;
-* modificar producción;
-* elegir tecnologías;
-* rediseñar silenciosamente;
-* ampliar o reducir alcance sin aprobación;
-* inventar evidencia;
-* aprobar por ausencia de tiempo;
-* tratar preferencias como requisitos;
-* omitir riesgos incómodos;
-* sustituir una revisión de seguridad especializada;
-* aprobar su propio diseño sin revisión independiente cuando el proceso la exija.
+* scope changes;
+* residual critical risk;
+* billing or pricing;
+* authentication or authorization;
+* sensitive data;
+* irreversible deletion;
+* ownership transfers;
+* legal compliance;
+* public exposure;
+* contractual integrations;
+* decisions that are hard to reverse;
+* acceptance of a rejected or blocked feature.
 
 ---
 
-## Formato recomendado de `review.md`
+## Prohibitions
+
+This skill must not:
+
+* write code;
+* implement fixes;
+* modify production;
+* choose technologies;
+* silently redesign;
+* expand or reduce scope without approval;
+* invent evidence;
+* approve due to lack of time;
+* treat preferences as requirements;
+* omit uncomfortable risks;
+* replace a specialized security review;
+* approve its own design without independent review when the process requires it.
+
+---
+
+## Recommended `review.md` format
 
 ```markdown
 # Feature Review — <Feature Name>
@@ -840,26 +840,26 @@ Esta skill no debe:
 
 ---
 
-## Informe final
+## Final report
 
-Al finalizar, informar:
+On completion, report:
 
-* feature revisada;
-* gate obtenido;
-* cantidad de hallazgos por severidad;
-* contradicciones principales;
-* riesgos críticos;
-* decisiones faltantes;
-* condiciones de aprobación;
-* aprobaciones humanas requeridas;
-* documentos afectados;
-* siguiente skill recomendada.
+* feature reviewed;
+* gate obtained;
+* finding count by severity;
+* main contradictions;
+* critical risks;
+* missing decisions;
+* approval conditions;
+* required human approvals;
+* affected documents;
+* recommended next skill.
 
-La siguiente skill normalmente será:
+The next skill will normally be:
 
-* `create-exec-plan`, si fue aprobada;
-* `design-feature`, si requiere cambios;
-* `validate-assumptions`, si falta evidencia;
-* `review-security`, si existen riesgos especializados;
-* `review-architecture`, si existe impacto sistémico;
-* ninguna implementación, si el gate es `BLOCKED` o `REJECTED`.
+* `create-exec-plan`, if approved;
+* `design-feature`, if changes are required;
+* `validate-assumptions`, if evidence is missing;
+* `review-security`, if specialized risks exist;
+* `review-architecture`, if there is systemic impact;
+* no implementation, if the gate is `BLOCKED` or `REJECTED`.

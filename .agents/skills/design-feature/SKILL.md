@@ -1,44 +1,44 @@
 ---
 name: design-feature
 description: >
-  Diseña una feature de forma completa, explícita y verificable antes de
-  planificar su implementación. Convierte una capacidad del alcance en
-  comportamiento concreto: actores, flujos, reglas, permisos, estados,
-  errores, criterios de aceptación, testing y slices candidatos. No implementa
-  código ni elige stack. Úsala cuando la feature esté en alcance aprobado y
-  necesite una especificación usable por varios agentes. Produce
-  docs/features/<feature>/spec.md, test-plan.md y open-questions.md, con gate
-  (READY FOR PLANNING, CONDITIONALLY READY, DESIGN REVIEW REQUIRED, REFINEMENT
-  REQUIRED, MORE EVIDENCE REQUIRED, ARCHITECTURE INPUT REQUIRED, BLOCKED).
+  Designs a feature completely, explicitly, and verifiably before planning
+  its implementation. Turns a scoped capability into concrete behavior: actors,
+  flows, rules, permissions, states, errors, acceptance criteria, testing, and
+  candidate slices. Does not implement code or choose a stack. Use when the
+  feature is in approved scope and needs a specification usable by multiple
+  agents. Produces docs/features/<feature>/spec.md, test-plan.md, and
+  open-questions.md, with gate (READY FOR PLANNING, CONDITIONALLY READY, DESIGN
+  REVIEW REQUIRED, REFINEMENT REQUIRED, MORE EVIDENCE REQUIRED, ARCHITECTURE
+  INPUT REQUIRED, BLOCKED).
 ---
 
 # design-feature
 
-## Propósito
+## Purpose
 
-Diseñar una feature de forma completa, explícita y verificable antes de planificar su implementación.
+Design a feature completely, explicitly, and verifiably before planning its implementation.
 
-Esta skill transforma una capacidad incluida en el alcance del producto en una especificación funcional suficientemente precisa para que distintos agentes puedan:
+This skill turns a capability included in product scope into a functional specification precise enough for different agents to:
 
-* comprender el problema;
-* evaluar el comportamiento esperado;
-* detectar ambigüedades;
-* revisar riesgos;
-* definir criterios de aceptación;
-* preparar posteriormente un plan de ejecución;
-* dividir el trabajo en vertical slices.
+* understand the problem;
+* evaluate expected behavior;
+* detect ambiguities;
+* review risks;
+* define acceptance criteria;
+* later prepare an execution plan;
+* split the work into vertical slices.
 
-La especificación debe describir qué debe ocurrir, para quién, bajo qué reglas y cómo se comprobará.
+The specification must describe what should happen, for whom, under which rules, and how it will be verified.
 
-No debe convertir prematuramente decisiones de producto en decisiones técnicas irreversibles.
+It must not prematurely turn product decisions into irreversible technical decisions.
 
 ---
 
-## Compatibilidad
+## Compatibility
 
-Esta skill es agnóstica al modelo, proveedor y herramienta.
+This skill is agnostic to model, provider, and tool.
 
-Puede ser utilizada por:
+It can be used by:
 
 * Codex;
 * OpenCode;
@@ -46,72 +46,72 @@ Puede ser utilizada por:
 * Grok;
 * Kimi;
 * DeepSeek;
-* agentes personalizados;
-* cualquier agente capaz de leer y escribir documentación del repositorio.
+* custom agents;
+* any agent capable of reading and writing repository documentation.
 
-La fuente de verdad es el repositorio, no el historial del chat ni la memoria del modelo.
-
----
-
-## Cuándo utilizarla
-
-Utilizar esta skill cuando:
-
-* la feature forme parte de un alcance aprobado o condicionalmente aprobado;
-* exista un problema y resultado esperado suficientemente definidos;
-* sea necesario convertir una capacidad general en comportamiento concreto;
-* múltiples personas o agentes puedan interpretar la feature de manera diferente;
-* la feature afecte permisos, datos, estados, integraciones o flujos relevantes;
-* se necesiten criterios de aceptación antes de crear un `ExecPlan`;
-* una feature existente deba ser rediseñada o ampliada.
-
-No utilizarla para:
-
-* descubrir el producto completo;
-* validar demanda de mercado;
-* seleccionar arquitectura general;
-* crear tareas técnicas detalladas;
-* implementar código;
-* aprobar automáticamente una feature todavía ambigua.
+The source of truth is the repository, not chat history or model memory.
 
 ---
 
-## Entradas esperadas
+## When to use it
 
-Revisar, cuando existan:
+Use this skill when:
+
+* the feature is part of approved or conditionally approved scope;
+* a problem and expected outcome are defined well enough;
+* a general capability must be turned into concrete behavior;
+* multiple people or agents could interpret the feature differently;
+* the feature affects permissions, data, states, integrations, or relevant flows;
+* acceptance criteria are needed before creating an `ExecPlan`;
+* an existing feature must be redesigned or extended.
+
+Do not use it to:
+
+* discover the full product;
+* validate market demand;
+* select overall architecture;
+* create detailed technical tasks;
+* implement code;
+* automatically approve a feature that is still ambiguous.
+
+---
+
+## Expected inputs
+
+Review, when they exist:
 
 * `AGENTS.md`;
 * `docs/project-status.md`;
 * `docs/product/scope.md`;
-* documentación de descubrimiento;
-* resultados de validación;
-* arquitectura de información;
-* atributos de calidad;
-* documentación de features relacionadas;
-* decisiones registradas;
-* auditoría del proyecto existente;
-* evidencia de usuarios;
-* requisitos legales, operativos o comerciales;
-* comportamiento actual del sistema.
+* discovery documentation;
+* validation results;
+* information architecture;
+* quality attributes;
+* related feature documentation;
+* recorded decisions;
+* existing project audit;
+* user evidence;
+* legal, operational, or commercial requirements;
+* current system behavior.
 
-Si la feature modifica comportamiento existente, inspeccionar también:
+If the feature changes existing behavior, also inspect:
 
-* flujos actuales;
-* contratos públicos;
-* permisos;
-* estados;
-* métricas;
-* tests existentes;
-* incidencias conocidas;
-* dependencias activas.
+* current flows;
+* public contracts;
+* permissions;
+* states;
+* metrics;
+* existing tests;
+* known incidents;
+* active dependencies.
 
-No asumir que una solicitud aislada representa automáticamente el comportamiento correcto.
+Do not assume that an isolated request automatically represents correct behavior.
 
 ---
 
-## Entregables
+## Deliverables
 
-Crear o actualizar:
+Create or update:
 
 ```text
 docs/features/<feature-name>/
@@ -120,101 +120,101 @@ docs/features/<feature-name>/
 └── open-questions.md
 ```
 
-`spec.md` debe contener la definición estable de producto y comportamiento.
+`spec.md` must contain the stable product and behavior definition.
 
-`test-plan.md` debe contener la estrategia de verificación derivada de la especificación.
+`test-plan.md` must contain the verification strategy derived from the specification.
 
-`open-questions.md` debe contener únicamente dudas, decisiones pendientes, supuestos y riesgos no resueltos.
+`open-questions.md` must contain only doubts, pending decisions, assumptions, and unresolved risks.
 
-Si el proyecto utiliza otra estructura documental, respetarla sin duplicar fuentes de verdad.
+If the project uses another documentation structure, respect it without duplicating sources of truth.
 
-Actualizar `docs/project-status.md` cuando la feature cambie de gate, introduzca bloqueantes o determine la siguiente skill recomendada.
+Update `docs/project-status.md` when the feature changes gate, introduces blockers, or determines the next recommended skill.
 
 ---
 
-## Principios
+## Principles
 
-### Diseñar comportamiento, no pantallas aisladas
+### Design behavior, not isolated screens
 
-Una feature no es solamente una interfaz, endpoint, tabla o componente.
+A feature is not only a UI, endpoint, table, or component.
 
-Debe diseñarse como un comportamiento completo que incluya, cuando aplique:
+It must be designed as complete behavior that includes, when applicable:
 
-* intención del usuario;
-* interacción;
-* reglas;
-* datos;
-* permisos;
-* estados;
-* errores;
+* user intent;
+* interaction;
+* rules;
+* data;
+* permissions;
+* states;
+* errors;
 * feedback;
-* operaciones;
-* medición;
-* verificación.
+* operations;
+* measurement;
+* verification.
 
-### Separar hechos, decisiones y supuestos
+### Separate facts, decisions, and assumptions
 
-Clasificar explícitamente cada afirmación relevante como:
+Explicitly classify each relevant statement as:
 
-* evidencia;
-* requisito confirmado;
-* decisión;
-* supuesto;
-* restricción;
-* preferencia;
-* pregunta abierta.
+* evidence;
+* confirmed requirement;
+* decision;
+* assumption;
+* constraint;
+* preference;
+* open question.
 
-No ocultar incertidumbre mediante lenguaje definitivo.
+Do not hide uncertainty with definitive language.
 
-### Mantener neutralidad tecnológica
+### Maintain technological neutrality
 
-La especificación puede describir:
+The specification may describe:
 
-* responsabilidades;
-* contratos conceptuales;
-* eventos de negocio;
-* datos requeridos;
-* consistencia esperada;
-* tiempos de respuesta necesarios;
-* comportamiento ante fallos.
+* responsibilities;
+* conceptual contracts;
+* business events;
+* required data;
+* expected consistency;
+* necessary response times;
+* behavior under failure.
 
-No debe seleccionar prematuramente:
+It must not prematurely select:
 
 * frameworks;
-* librerías;
-* bases de datos;
-* proveedores;
-* patrones arquitectónicos;
-* servicios externos;
-* formatos internos definitivos.
+* libraries;
+* databases;
+* providers;
+* architectural patterns;
+* external services;
+* definitive internal formats.
 
-Las restricciones tecnológicas ya aprobadas pueden documentarse como contexto, pero no rediseñarse dentro de esta skill.
+Already approved technological constraints may be documented as context, but must not be redesigned within this skill.
 
-### Diseñar el mínimo comportamiento completo
+### Design the minimum complete behavior
 
-Evitar tanto:
+Avoid both:
 
-* especificaciones vagas que obliguen al implementador a inventar el producto;
-* especificaciones sobredimensionadas que anticipen necesidades no confirmadas.
+* vague specifications that force the implementer to invent the product;
+* oversized specifications that anticipate unconfirmed needs.
 
 ---
 
-## Procedimiento
+## Procedure
 
-## 1. Identificar la feature
+## 1. Identify the feature
 
-Definir:
+Define:
 
-* nombre;
-* estado;
-* responsable de producto;
-* documento de alcance que la autoriza;
-* incremento al que pertenece;
-* fecha o condición de revisión;
-* features relacionadas;
-* sistemas o procesos afectados.
+* name;
+* status;
+* product owner;
+* scope document that authorizes it;
+* increment it belongs to;
+* review date or condition;
+* related features;
+* affected systems or processes.
 
-Asignar un estado inicial:
+Assign an initial status:
 
 * `Draft`;
 * `In Design`;
@@ -226,294 +226,294 @@ Asignar un estado inicial:
 
 ---
 
-## 2. Definir el problema
+## 2. Define the problem
 
-Explicar:
+Explain:
 
-* qué problema existe;
-* quién lo experimenta;
-* en qué contexto;
-* cómo se resuelve actualmente;
-* qué limitación tiene la situación actual;
-* qué evidencia respalda su relevancia;
-* qué ocurre si no se resuelve.
+* what problem exists;
+* who experiences it;
+* in what context;
+* how it is currently solved;
+* what limitation the current situation has;
+* what evidence supports its relevance;
+* what happens if it is not solved.
 
-Evitar formular el problema como una solución.
+Avoid framing the problem as a solution.
 
-Incorrecto:
+Incorrect:
 
-> El usuario necesita un botón para exportar.
+> The user needs a button to export.
 
-Preferible:
+Preferable:
 
-> El operador necesita compartir periódicamente información fuera del sistema sin copiar cada registro manualmente.
-
----
-
-## 3. Definir el resultado esperado
-
-Describir el cambio observable que la feature debe producir.
-
-Debe indicar:
-
-* actor beneficiado;
-* capacidad obtenida;
-* resultado funcional;
-* señal de éxito;
-* límites del resultado.
-
-Distinguir entre:
-
-* output: lo que el sistema entrega;
-* outcome: lo que el usuario logra;
-* impacto: cambio posterior esperado en el producto o negocio.
-
-No prometer impacto que no pueda atribuirse o medirse razonablemente.
+> The operator needs to periodically share information outside the system without manually copying each record.
 
 ---
 
-## 4. Identificar usuarios y actores
+## 3. Define the expected outcome
 
-Documentar todos los actores relevantes:
+Describe the observable change the feature must produce.
 
-* usuario primario;
-* usuarios secundarios;
-* administradores;
-* operadores;
-* soporte;
-* moderadores;
-* sistemas externos;
-* procesos automatizados;
-* actores no autenticados;
-* terceros afectados.
+It must indicate:
 
-Para cada actor indicar:
+* benefited actor;
+* capability obtained;
+* functional result;
+* success signal;
+* outcome limits.
 
-* objetivo;
-* contexto;
-* nivel de conocimiento;
-* frecuencia de uso;
-* permisos esperados;
-* riesgos;
-* necesidades de accesibilidad;
-* relación con los datos.
+Distinguish between:
 
-No tratar a “el usuario” como una entidad única cuando existen roles diferentes.
+* output: what the system delivers;
+* outcome: what the user achieves;
+* impact: later expected change in the product or business.
+
+Do not promise impact that cannot reasonably be attributed or measured.
 
 ---
 
-## 5. Definir alcance
+## 4. Identify users and actors
 
-Separar claramente:
+Document all relevant actors:
 
-### Dentro del alcance
+* primary user;
+* secondary users;
+* administrators;
+* operators;
+* support;
+* moderators;
+* external systems;
+* automated processes;
+* unauthenticated actors;
+* affected third parties.
 
-Comportamientos que esta feature debe soportar.
+For each actor indicate:
 
-### Fuera del alcance
+* goal;
+* context;
+* knowledge level;
+* usage frequency;
+* expected permissions;
+* risks;
+* accessibility needs;
+* relationship to the data.
 
-Comportamientos relacionados que no forman parte de esta entrega.
-
-### No objetivos
-
-Resultados que deliberadamente no se intentan conseguir.
-
-### Trabajo futuro posible
-
-Ideas plausibles que no constituyen compromisos.
-
-### Comportamiento existente que no debe cambiar
-
-Contratos o flujos que deben preservarse.
-
-Todo elemento incluido debe contribuir al resultado esperado o a una restricción necesaria.
-
----
-
-## 6. Definir precondiciones y postcondiciones
-
-Para cada flujo relevante indicar:
-
-### Precondiciones
-
-* autenticación;
-* permisos;
-* datos previos;
-* estado requerido;
-* configuración;
-* dependencias disponibles;
-* consentimiento;
-* conectividad;
-* requisitos legales u operativos.
-
-### Postcondiciones exitosas
-
-* estado final;
-* datos creados o modificados;
-* efectos visibles;
-* efectos secundarios;
-* notificaciones;
-* trazabilidad;
-* métricas registradas.
-
-### Postcondiciones ante fallo
-
-* qué permanece sin cambios;
-* qué puede quedar parcialmente procesado;
-* qué debe revertirse;
-* qué puede reintentarse;
-* qué se informa al usuario;
-* qué debe registrarse para soporte.
+Do not treat “the user” as a single entity when different roles exist.
 
 ---
 
-## 7. Diseñar los flujos
+## 5. Define scope
 
-Describir el flujo principal de punta a punta.
+Clearly separate:
 
-Cada paso debe indicar:
+### In scope
+
+Behaviors this feature must support.
+
+### Out of scope
+
+Related behaviors that are not part of this delivery.
+
+### Non-goals
+
+Outcomes that are deliberately not pursued.
+
+### Possible future work
+
+Plausible ideas that are not commitments.
+
+### Existing behavior that must not change
+
+Contracts or flows that must be preserved.
+
+Every included item must contribute to the expected outcome or to a necessary constraint.
+
+---
+
+## 6. Define preconditions and postconditions
+
+For each relevant flow indicate:
+
+### Preconditions
+
+* authentication;
+* permissions;
+* prior data;
+* required state;
+* configuration;
+* available dependencies;
+* consent;
+* connectivity;
+* legal or operational requirements.
+
+### Successful postconditions
+
+* final state;
+* data created or modified;
+* visible effects;
+* side effects;
+* notifications;
+* traceability;
+* recorded metrics.
+
+### Failure postconditions
+
+* what remains unchanged;
+* what may be partially processed;
+* what must be reverted;
+* what can be retried;
+* what is reported to the user;
+* what must be recorded for support.
+
+---
+
+## 7. Design the flows
+
+Describe the main end-to-end flow.
+
+Each step must indicate:
 
 * actor;
-* intención;
-* acción;
-* respuesta del sistema;
-* datos utilizados;
-* decisión;
-* transición de estado;
+* intent;
+* action;
+* system response;
+* data used;
+* decision;
+* state transition;
 * feedback;
-* posible interrupción.
+* possible interruption.
 
-Diseñar también:
+Also design:
 
-### Flujos alternativos
+### Alternative flows
 
-Variantes válidas del comportamiento principal.
+Valid variants of the main behavior.
 
-### Flujos de excepción
+### Exception flows
 
-Casos en los que una regla, permiso, dependencia o validación impide continuar.
+Cases where a rule, permission, dependency, or validation prevents continuation.
 
-### Flujos de recuperación
+### Recovery flows
 
-Cómo puede el usuario o sistema recuperarse de errores, interrupciones o estados parciales.
+How the user or system can recover from errors, interruptions, or partial states.
 
-### Flujos operativos
+### Operational flows
 
-Cómo soporte, administración o moderación observan, corrigen o intervienen.
+How support, administration, or moderation observe, correct, or intervene.
 
-### Flujos de cancelación
+### Cancellation flows
 
-Qué ocurre si el usuario abandona, cancela o retrocede.
+What happens if the user abandons, cancels, or goes back.
 
-No limitar la especificación al happy path.
+Do not limit the specification to the happy path.
 
 ---
 
-## 8. Definir reglas de negocio
+## 8. Define business rules
 
-Registrar cada regla con un identificador estable.
+Record each rule with a stable identifier.
 
-Ejemplo:
+Example:
 
 ```text
 BR-001
 ```
 
-Para cada regla indicar:
+For each rule indicate:
 
-* descripción;
-* razón;
-* actores afectados;
-* datos necesarios;
-* momento de evaluación;
-* excepciones;
-* comportamiento ante incumplimiento;
-* autoridad que puede modificarla;
-* evidencia o decisión que la respalda.
+* description;
+* reason;
+* affected actors;
+* required data;
+* evaluation moment;
+* exceptions;
+* behavior on violation;
+* authority that can modify it;
+* evidence or decision that supports it.
 
-Distinguir entre:
+Distinguish between:
 
-* reglas de producto;
-* políticas operativas;
-* restricciones legales;
-* validaciones de formato;
-* decisiones temporales;
-* limitaciones técnicas existentes.
+* product rules;
+* operational policies;
+* legal constraints;
+* format validations;
+* temporary decisions;
+* existing technical limitations.
 
-No convertir una limitación accidental del sistema actual en regla de negocio sin justificación.
+Do not turn an accidental limitation of the current system into a business rule without justification.
 
 ---
 
-## 9. Definir roles, permisos y ownership
+## 9. Define roles, permissions, and ownership
 
-Construir una matriz que relacione:
+Build a matrix that relates:
 
 * actor;
-* recurso;
-* acción;
-* condición;
-* resultado permitido;
-* resultado denegado;
-* trazabilidad requerida.
+* resource;
+* action;
+* condition;
+* permitted result;
+* denied result;
+* required traceability.
 
-Cubrir, cuando aplique:
+Cover, when applicable:
 
-* crear;
-* leer;
-* listar;
-* buscar;
-* editar;
-* eliminar;
-* restaurar;
-* aprobar;
-* rechazar;
-* publicar;
-* archivar;
-* transferir;
-* exportar;
-* compartir;
-* administrar;
-* impersonar;
-* ejecutar acciones masivas.
+* create;
+* read;
+* list;
+* search;
+* edit;
+* delete;
+* restore;
+* approve;
+* reject;
+* publish;
+* archive;
+* transfer;
+* export;
+* share;
+* administer;
+* impersonate;
+* perform bulk actions.
 
-Definir ownership:
+Define ownership:
 
-* quién posee el recurso;
-* quién puede administrarlo;
-* si pertenece a una persona, organización, tenant, comercio, proyecto u otra entidad;
-* qué ocurre cuando cambia el propietario;
-* qué ocurre cuando un usuario pierde acceso;
-* qué permisos se heredan;
-* qué permisos requieren asignación explícita.
+* who owns the resource;
+* who can administer it;
+* whether it belongs to a person, organization, tenant, store, project, or other entity;
+* what happens when the owner changes;
+* what happens when a user loses access;
+* which permissions are inherited;
+* which permissions require explicit assignment.
 
-Aplicar principio de mínimo privilegio.
+Apply the principle of least privilege.
 
-Una interfaz oculta no constituye control de acceso.
+A hidden interface does not constitute access control.
 
 ---
 
-## 10. Modelar estados y transiciones
+## 10. Model states and transitions
 
-Identificar todas las entidades o procesos con ciclo de vida.
+Identify all entities or processes with a lifecycle.
 
-Para cada uno definir:
+For each one define:
 
-* estados posibles;
-* estado inicial;
-* estados terminales;
-* transiciones permitidas;
-* actor autorizado;
-* condición;
-* efectos;
-* reversibilidad;
-* expiración;
-* transición automática;
-* transición inválida;
-* comportamiento ante concurrencia.
+* possible states;
+* initial state;
+* terminal states;
+* allowed transitions;
+* authorized actor;
+* condition;
+* effects;
+* reversibility;
+* expiration;
+* automatic transition;
+* invalid transition;
+* concurrency behavior.
 
-Representar el ciclo de vida mediante tabla o diagrama textual.
+Represent the lifecycle with a table or textual diagram.
 
-Ejemplo conceptual:
+Conceptual example:
 
 ```text
 Draft
@@ -523,555 +523,555 @@ Draft
   → Archived
 ```
 
-No utilizar un único campo genérico cuando existan dimensiones independientes, por ejemplo:
+Do not use a single generic field when independent dimensions exist, for example:
 
-* estado editorial;
-* estado de pago;
-* estado de moderación;
-* disponibilidad;
-* visibilidad.
+* editorial status;
+* payment status;
+* moderation status;
+* availability;
+* visibility.
 
-Identificar estados imposibles o contradictorios.
-
----
-
-## 11. Definir validaciones
-
-Separar:
-
-### Validaciones de entrada
-
-Formato, longitud, tipo, obligatoriedad y estructura.
-
-### Validaciones de negocio
-
-Condiciones derivadas de reglas, permisos, estados o límites.
-
-### Validaciones contextuales
-
-Dependencias con otros recursos, fechas, ubicación, disponibilidad o configuración.
-
-### Validaciones de seguridad
-
-Acceso, integridad, ownership, contenido no permitido y exposición de datos.
-
-### Validaciones de concurrencia
-
-Cambios simultáneos, duplicados, repetición de acciones y datos desactualizados.
-
-Para cada validación indicar:
-
-* momento;
-* autoridad;
-* mensaje esperado;
-* posibilidad de corrección;
-* persistencia parcial;
-* código o categoría conceptual del error;
-* comportamiento para integraciones.
-
-No depender únicamente de validación en interfaz.
+Identify impossible or contradictory states.
 
 ---
 
-## 12. Diseñar errores y recuperación
+## 11. Define validations
 
-Clasificar errores:
+Separate:
 
-* entrada inválida;
-* permiso insuficiente;
-* recurso inexistente;
-* conflicto;
-* estado incompatible;
-* dependencia no disponible;
+### Input validations
+
+Format, length, type, required fields, and structure.
+
+### Business validations
+
+Conditions derived from rules, permissions, states, or limits.
+
+### Contextual validations
+
+Dependencies on other resources, dates, location, availability, or configuration.
+
+### Security validations
+
+Access, integrity, ownership, disallowed content, and data exposure.
+
+### Concurrency validations
+
+Simultaneous changes, duplicates, repeated actions, and stale data.
+
+For each validation indicate:
+
+* moment;
+* authority;
+* expected message;
+* possibility of correction;
+* partial persistence;
+* conceptual error code or category;
+* behavior for integrations.
+
+Do not rely only on UI validation.
+
+---
+
+## 12. Design errors and recovery
+
+Classify errors:
+
+* invalid input;
+* insufficient permission;
+* nonexistent resource;
+* conflict;
+* incompatible state;
+* dependency unavailable;
 * timeout;
-* límite superado;
-* duplicado;
-* operación parcial;
-* error inesperado;
-* restricción legal o comercial.
+* limit exceeded;
+* duplicate;
+* partial operation;
+* unexpected error;
+* legal or commercial restriction.
 
-Para cada categoría definir:
+For each category define:
 
-* mensaje para el usuario;
-* acción posible;
-* posibilidad de reintento;
-* preservación de datos;
+* user message;
+* possible action;
+* retry possibility;
+* data preservation;
 * logging;
-* correlación para soporte;
-* severidad;
-* necesidad de alerta;
-* impacto sobre métricas.
+* support correlation;
+* severity;
+* need for alerting;
+* impact on metrics.
 
-Los mensajes deben:
+Messages must:
 
-* explicar qué ocurrió;
-* evitar culpar al usuario;
-* indicar cómo continuar;
-* no revelar información sensible;
-* ser consistentes entre canales.
+* explain what happened;
+* avoid blaming the user;
+* indicate how to continue;
+* not reveal sensitive information;
+* be consistent across channels.
 
 ---
 
-## 13. Diseñar estados de interfaz y feedback
+## 13. Design interface states and feedback
 
-Para cada superficie afectada especificar:
+For each affected surface specify:
 
 ### Loading
 
-* qué se está esperando;
-* si bloquea toda la interfaz o una sección;
-* si existe progreso conocido;
-* si la acción puede cancelarse;
-* prevención de acciones duplicadas;
-* tiempo tras el cual debe mostrarse información adicional.
+* what is being waited for;
+* whether it blocks the whole interface or a section;
+* whether known progress exists;
+* whether the action can be cancelled;
+* prevention of duplicate actions;
+* time after which additional information should be shown.
 
 ### Empty
 
-Distinguir entre:
+Distinguish between:
 
-* usuario nuevo;
-* búsqueda sin resultados;
-* filtros sin coincidencias;
-* contenido eliminado;
-* contenido todavía no disponible;
-* falta de permisos;
-* error interpretado erróneamente como vacío.
+* new user;
+* search with no results;
+* filters with no matches;
+* deleted content;
+* content not yet available;
+* lack of permissions;
+* error misinterpreted as empty.
 
-Cada estado vacío debe ofrecer una acción relevante cuando exista.
+Each empty state must offer a relevant action when one exists.
 
 ### Error
 
-Indicar:
+Indicate:
 
-* qué información se conserva;
-* si puede reintentarse;
-* cómo volver a un estado seguro;
-* cuándo contactar soporte.
+* what information is retained;
+* whether it can be retried;
+* how to return to a safe state;
+* when to contact support.
 
 ### Unauthorized
 
-Distinguir entre:
+Distinguish between:
 
-* no autenticado;
-* autenticado sin permiso;
-* acceso expirado;
-* recurso de otro owner;
-* plan insuficiente;
-* cuenta suspendida;
-* restricción geográfica o legal.
+* not authenticated;
+* authenticated without permission;
+* expired access;
+* resource owned by another party;
+* insufficient plan;
+* suspended account;
+* geographic or legal restriction.
 
-No revelar la existencia de recursos cuando ello genere riesgo de seguridad.
+Do not reveal the existence of resources when that creates a security risk.
 
 ### Success
 
-Indicar:
+Indicate:
 
-* confirmación;
-* estado resultante;
-* siguiente acción;
-* persistencia del feedback;
-* comportamiento si la operación continúa en segundo plano.
+* confirmation;
+* resulting state;
+* next action;
+* feedback persistence;
+* behavior if the operation continues in the background.
 
 ### Partial success
 
-Diseñar explícitamente operaciones donde solo una parte puede completarse.
+Explicitly design operations where only part can complete.
 
 ---
 
-## 14. Identificar edge cases
+## 14. Identify edge cases
 
-Evaluar, cuando sean relevantes:
+Evaluate, when relevant:
 
-* datos inexistentes;
-* datos incompletos;
-* valores mínimos y máximos;
-* fechas límite;
-* zonas horarias;
-* cambios de horario;
-* localización;
-* idiomas;
-* caracteres especiales;
-* contenido muy largo;
-* archivos grandes;
-* conexiones lentas;
-* pérdida de conexión;
-* doble envío;
-* reintentos;
+* nonexistent data;
+* incomplete data;
+* minimum and maximum values;
+* deadline dates;
+* time zones;
+* daylight saving changes;
+* localization;
+* languages;
+* special characters;
+* very long content;
+* large files;
+* slow connections;
+* connection loss;
+* double submit;
+* retries;
 * refresh;
-* navegación hacia atrás;
-* múltiples pestañas;
-* concurrencia;
-* cambios simultáneos;
-* recursos eliminados durante el flujo;
-* permisos revocados;
-* sesiones expiradas;
-* cuentas suspendidas;
-* dependencias degradadas;
-* importaciones parciales;
-* duplicados;
-* datos históricos;
-* relaciones huérfanas;
-* recuperación después de fallo;
-* abuso;
-* fraude;
+* back navigation;
+* multiple tabs;
+* concurrency;
+* simultaneous changes;
+* resources deleted during the flow;
+* revoked permissions;
+* expired sessions;
+* suspended accounts;
+* degraded dependencies;
+* partial imports;
+* duplicates;
+* historical data;
+* orphan relationships;
+* recovery after failure;
+* abuse;
+* fraud;
 * spam;
-* automatizaciones;
-* uso masivo;
-* usuarios sin experiencia;
-* usuarios que utilizan tecnologías asistivas.
+* automations;
+* high-volume use;
+* inexperienced users;
+* users of assistive technologies.
 
-No es necesario soportar todos los casos, pero cada exclusión importante debe ser explícita.
-
----
-
-## 15. Accesibilidad
-
-Definir requisitos funcionales de accesibilidad sin atarlos a una librería.
-
-Cubrir, cuando aplique:
-
-* navegación por teclado;
-* orden de foco;
-* foco visible;
-* retorno de foco;
-* etiquetas accesibles;
-* nombres y roles;
-* mensajes de error asociados;
-* anuncios de cambios dinámicos;
-* contraste;
-* ampliación de texto;
-* reducción de movimiento;
-* contenido no dependiente solo del color;
-* objetivos táctiles adecuados;
-* subtítulos o alternativas;
-* lenguaje claro;
-* tiempo suficiente;
-* prevención de pérdida de datos;
-* compatibilidad con tecnologías asistivas.
-
-Identificar criterios de accesibilidad que formen parte de la aceptación y testing.
-
-No tratar accesibilidad como mejora opcional posterior.
+It is not necessary to support every case, but each important exclusion must be explicit.
 
 ---
 
-## 16. Responsive y contextos de uso
+## 15. Accessibility
 
-Definir cómo debe adaptarse la feature a:
+Define functional accessibility requirements without tying them to a library.
 
-* viewport pequeño;
-* viewport mediano;
-* viewport grande;
-* orientación vertical y horizontal;
-* interacción táctil;
-* teclado y mouse;
-* baja conectividad;
-* dispositivos de menor capacidad;
-* contenido variable;
+Cover, when applicable:
+
+* keyboard navigation;
+* focus order;
+* visible focus;
+* focus return;
+* accessible labels;
+* names and roles;
+* associated error messages;
+* announcements of dynamic changes;
+* contrast;
+* text magnification;
+* reduced motion;
+* content not dependent on color alone;
+* adequate touch targets;
+* captions or alternatives;
+* clear language;
+* sufficient time;
+* prevention of data loss;
+* compatibility with assistive technologies.
+
+Identify accessibility criteria that are part of acceptance and testing.
+
+Do not treat accessibility as an optional later improvement.
+
+---
+
+## 16. Responsive and usage contexts
+
+Define how the feature must adapt to:
+
+* small viewport;
+* medium viewport;
+* large viewport;
+* portrait and landscape orientation;
+* touch interaction;
+* keyboard and mouse;
+* low connectivity;
+* lower-capability devices;
+* variable content;
 * zoom;
-* densidad alta de datos.
+* high data density.
 
-Describir prioridades de contenido y comportamiento, no dimensiones técnicas prematuras.
+Describe content and behavior priorities, not premature technical dimensions.
 
-Indicar:
+Indicate:
 
-* qué contenido se conserva;
-* qué se reorganiza;
-* qué puede colapsarse;
-* qué nunca debe ocultarse;
-* qué acciones deben permanecer accesibles;
-* cómo se evita pérdida de contexto.
+* what content is preserved;
+* what is reorganized;
+* what may collapse;
+* what must never be hidden;
+* which actions must remain accessible;
+* how context loss is avoided.
 
 ---
 
-## 17. Métricas y analytics
+## 17. Metrics and analytics
 
-Definir qué preguntas deben responderse después del lanzamiento.
+Define which questions must be answered after launch.
 
-Ejemplos:
+Examples:
 
-* ¿Los usuarios encuentran la feature?
-* ¿Inician el flujo?
-* ¿Lo completan?
-* ¿Dónde abandonan?
-* ¿Qué errores encuentran?
-* ¿Repiten el comportamiento?
-* ¿El resultado esperado ocurre?
-* ¿La feature genera efectos adversos?
+* Do users find the feature?
+* Do they start the flow?
+* Do they complete it?
+* Where do they abandon?
+* What errors do they encounter?
+* Do they repeat the behavior?
+* Does the expected outcome occur?
+* Does the feature create adverse effects?
 
-Definir:
+Define:
 
-* métrica principal;
-* métricas secundarias;
+* primary metric;
+* secondary metrics;
 * guardrails;
-* segmentos;
-* embudo;
-* periodo de observación;
+* segments;
+* funnel;
+* observation period;
 * baseline;
-* criterio de éxito;
-* criterio de alerta.
+* success criterion;
+* alert criterion.
 
-Para cada evento conceptual de analytics indicar:
+For each conceptual analytics event indicate:
 
-* nombre semántico;
-* momento;
+* semantic name;
+* moment;
 * actor;
-* propiedades mínimas;
-* datos prohibidos;
-* finalidad;
-* política de deduplicación;
-* relación con consentimiento y privacidad.
+* minimum properties;
+* prohibited data;
+* purpose;
+* deduplication policy;
+* relationship to consent and privacy.
 
-No capturar datos sensibles por conveniencia.
+Do not capture sensitive data for convenience.
 
-Distinguir analytics de producto, observabilidad técnica y auditoría.
+Distinguish product analytics, technical observability, and audit.
 
 ---
 
-## 18. Datos preliminares
+## 18. Preliminary data
 
-Definir los conceptos de datos necesarios sin diseñar todavía un esquema definitivo.
+Define the necessary data concepts without yet designing a definitive schema.
 
-Para cada entidad conceptual indicar:
+For each conceptual entity indicate:
 
-* propósito;
+* purpose;
 * owner;
-* atributos mínimos;
-* relaciones;
-* ciclo de vida;
-* origen;
-* autoridad;
-* sensibilidad;
-* retención;
-* mutabilidad;
-* auditabilidad;
-* reglas de integridad;
-* posibilidad de eliminación;
-* necesidad de historial.
+* minimum attributes;
+* relationships;
+* lifecycle;
+* origin;
+* authority;
+* sensitivity;
+* retention;
+* mutability;
+* auditability;
+* integrity rules;
+* possibility of deletion;
+* need for history.
 
-Clasificar datos, cuando aplique:
+Classify data, when applicable:
 
-* públicos;
-* internos;
-* confidenciales;
-* personales;
-* sensibles;
-* derivados;
-* operativos;
-* efímeros;
-* auditables.
+* public;
+* internal;
+* confidential;
+* personal;
+* sensitive;
+* derived;
+* operational;
+* ephemeral;
+* auditable.
 
-Identificar:
+Identify:
 
-* fuente de verdad;
-* datos calculados;
-* datos duplicados;
-* datos importados;
-* sincronización;
-* resolución de conflictos;
-* consistencia esperada.
+* source of truth;
+* calculated data;
+* duplicated data;
+* imported data;
+* synchronization;
+* conflict resolution;
+* expected consistency.
 
-No definir tablas, índices ni tipos específicos salvo que ya sean una restricción aprobada.
-
----
-
-## 19. Contratos preliminares
-
-Describir contratos de comportamiento entre:
-
-* usuario y sistema;
-* frontend y backend;
-* módulos;
-* servicios;
-* integraciones externas;
-* procesos asíncronos;
-* operadores y sistema.
-
-Cada contrato conceptual debe incluir:
-
-* intención;
-* entrada;
-* salida;
-* precondiciones;
-* errores;
-* permisos;
-* idempotencia;
-* orden;
-* consistencia;
-* versionado esperado;
-* límites;
-* privacidad.
-
-No seleccionar necesariamente:
-
-* protocolo;
-* formato de serialización;
-* transporte;
-* proveedor;
-* librería.
-
-Si ya existe un contrato público, documentar compatibilidad y estrategia de evolución.
+Do not define tables, indexes, or specific types unless they are already an approved constraint.
 
 ---
 
-## 20. Dependencias
+## 19. Preliminary contracts
 
-Identificar dependencias:
+Describe behavioral contracts between:
 
-* de producto;
-* de UX;
-* de datos;
-* de permisos;
-* de arquitectura;
-* de infraestructura;
-* de terceros;
-* legales;
-* comerciales;
-* operativas;
-* de contenido;
-* de soporte;
-* de otras features;
-* de migraciones.
+* user and system;
+* frontend and backend;
+* modules;
+* services;
+* external integrations;
+* asynchronous processes;
+* operators and system.
 
-Para cada dependencia indicar:
+Each conceptual contract must include:
+
+* intent;
+* input;
+* output;
+* preconditions;
+* errors;
+* permissions;
+* idempotency;
+* ordering;
+* consistency;
+* expected versioning;
+* limits;
+* privacy.
+
+Do not necessarily select:
+
+* protocol;
+* serialization format;
+* transport;
+* provider;
+* library.
+
+If a public contract already exists, document compatibility and evolution strategy.
+
+---
+
+## 20. Dependencies
+
+Identify dependencies:
+
+* product;
+* UX;
+* data;
+* permissions;
+* architecture;
+* infrastructure;
+* third parties;
+* legal;
+* commercial;
+* operational;
+* content;
+* support;
+* other features;
+* migrations.
+
+For each dependency indicate:
 
 * owner;
-* estado;
-* criticidad;
-* alternativa;
-* impacto si falla;
-* posibilidad de desacoplamiento;
-* decisión pendiente;
-* evidencia disponible.
+* status;
+* criticality;
+* alternative;
+* impact if it fails;
+* possibility of decoupling;
+* pending decision;
+* available evidence.
 
-Distinguir entre dependencia obligatoria y conveniencia.
+Distinguish between mandatory dependency and convenience.
 
 ---
 
-## 21. Riesgos
+## 21. Risks
 
-Crear un registro de riesgos específico de la feature.
+Create a risk register specific to the feature.
 
-Categorías posibles:
+Possible categories:
 
-* valor;
-* usabilidad;
-* accesibilidad;
-* seguridad;
-* privacidad;
-* fraude;
-* abuso;
-* integridad de datos;
-* concurrencia;
-* cumplimiento;
-* operación;
-* soporte;
-* dependencia externa;
-* rendimiento;
-* escalabilidad;
-* adopción;
-* compatibilidad;
-* migración;
+* value;
+* usability;
+* accessibility;
+* security;
+* privacy;
+* fraud;
+* abuse;
+* data integrity;
+* concurrency;
+* compliance;
+* operations;
+* support;
+* external dependency;
+* performance;
+* scalability;
+* adoption;
+* compatibility;
+* migration;
 * rollout;
-* reversibilidad.
+* reversibility.
 
-Para cada riesgo indicar:
+For each risk indicate:
 
-* descripción;
-* probabilidad;
-* impacto;
-* señal temprana;
-* mitigación;
-* contingencia;
+* description;
+* probability;
+* impact;
+* early signal;
+* mitigation;
+* contingency;
 * owner;
-* riesgo residual;
-* necesidad de aprobación humana.
+* residual risk;
+* need for human approval.
 
-Los riesgos críticos no resueltos deben afectar el gate final.
+Unresolved critical risks must affect the final gate.
 
 ---
 
 ## 22. Rollout
 
-Diseñar cómo introducir la feature de forma controlada.
+Design how to introduce the feature in a controlled way.
 
-Evaluar:
+Evaluate:
 
-* lanzamiento interno;
-* entorno de preview;
-* usuarios piloto;
-* segmentos;
+* internal launch;
+* preview environment;
+* pilot users;
+* segments;
 * allowlist;
-* activación gradual;
-* convivencia con comportamiento anterior;
-* migración progresiva;
-* comunicación;
-* soporte;
-* documentación;
-* capacitación;
-* medición;
-* criterios de expansión;
-* criterios de pausa.
+* gradual activation;
+* coexistence with previous behavior;
+* progressive migration;
+* communication;
+* support;
+* documentation;
+* training;
+* measurement;
+* expansion criteria;
+* pause criteria.
 
-Definir:
+Define:
 
-* quién puede activarla;
-* para quién;
-* en qué orden;
-* qué evidencia habilita avanzar;
-* qué señales obligan a detenerse;
-* qué dependencia debe estar operativa;
-* cómo verificar el estado después del despliegue.
+* who can enable it;
+* for whom;
+* in what order;
+* what evidence enables progress;
+* what signals require stopping;
+* which dependency must be operational;
+* how to verify state after deployment.
 
-No asumir que toda feature debe lanzarse globalmente en una única operación.
-
----
-
-## 23. Rollback y reversibilidad
-
-Definir qué significa revertir la feature.
-
-Distinguir entre:
-
-* desactivar exposición;
-* volver al comportamiento anterior;
-* detener procesamiento;
-* revertir datos;
-* compensar efectos;
-* restaurar compatibilidad;
-* comunicar incidentes.
-
-Documentar:
-
-* disparadores;
-* autoridad;
-* tiempo objetivo;
-* datos que pueden perderse;
-* datos que no deben revertirse;
-* operaciones irreversibles;
-* compatibilidad hacia atrás;
-* estrategia para recursos creados durante el rollout;
-* verificación posterior.
-
-Si el rollback completo no es posible, declararlo explícitamente y diseñar contingencias.
+Do not assume every feature must launch globally in a single operation.
 
 ---
 
-## 24. Criterios de aceptación
+## 23. Rollback and reversibility
 
-Crear criterios observables, verificables y no ambiguos.
+Define what it means to reverse the feature.
 
-Cada criterio debe:
+Distinguish between:
 
-* tener identificador;
-* referenciar actor o sistema;
-* indicar precondición;
-* describir acción;
-* definir resultado;
-* incluir restricciones;
-* poder comprobarse.
+* disabling exposure;
+* returning to previous behavior;
+* stopping processing;
+* reverting data;
+* compensating effects;
+* restoring compatibility;
+* communicating incidents.
 
-Formato recomendado:
+Document:
+
+* triggers;
+* authority;
+* target time;
+* data that may be lost;
+* data that must not be reverted;
+* irreversible operations;
+* backward compatibility;
+* strategy for resources created during rollout;
+* post-verification.
+
+If full rollback is not possible, declare it explicitly and design contingencies.
+
+---
+
+## 24. Acceptance criteria
+
+Create observable, verifiable, and unambiguous criteria.
+
+Each criterion must:
+
+* have an identifier;
+* reference an actor or system;
+* indicate a precondition;
+* describe an action;
+* define a result;
+* include constraints;
+* be checkable.
+
+Recommended format:
 
 ```text
 AC-001
@@ -1082,369 +1082,369 @@ Then:
 And:
 ```
 
-Cubrir:
+Cover:
 
-* flujo principal;
-* flujos alternativos;
-* permisos;
+* main flow;
+* alternative flows;
+* permissions;
 * ownership;
-* estados;
-* validaciones;
-* errores;
+* states;
+* validations;
+* errors;
 * loading;
 * empty;
 * unauthorized;
-* accesibilidad;
+* accessibility;
 * responsive;
 * analytics;
-* concurrencia;
-* recuperación;
+* concurrency;
+* recovery;
 * rollout;
-* compatibilidad.
+* compatibility.
 
-Evitar criterios como:
+Avoid criteria such as:
 
-* “funciona correctamente”;
-* “es intuitivo”;
-* “es responsive”;
-* “maneja errores”;
-* “tiene buena performance”.
+* “works correctly”;
+* “is intuitive”;
+* “is responsive”;
+* “handles errors”;
+* “has good performance”.
 
-Convertirlos en comportamientos comprobables.
-
----
-
-## 25. Estrategia de testing
-
-Derivar el plan de testing directamente de riesgos, reglas y criterios de aceptación.
-
-Definir:
-
-### Tests de comportamiento
-
-Verifican resultados observables del usuario o sistema.
-
-### Tests de reglas
-
-Cubren reglas de negocio, límites y excepciones.
-
-### Tests de permisos
-
-Cubren acciones permitidas, denegadas y aislamiento entre owners o tenants.
-
-### Tests de estados
-
-Cubren transiciones válidas, inválidas, automáticas y concurrentes.
-
-### Tests de validación
-
-Cubren valores válidos, inválidos y límites.
-
-### Tests de integración
-
-Cubren contratos entre componentes o sistemas.
-
-### Tests end-to-end
-
-Cubren los journeys críticos de punta a punta.
-
-### Tests de accesibilidad
-
-Cubren navegación, foco, semántica, errores y tecnologías asistivas.
-
-### Tests responsive
-
-Cubren prioridades de contenido e interacción en contextos relevantes.
-
-### Tests de resiliencia
-
-Cubren fallos, timeouts, reintentos, operaciones parciales y recuperación.
-
-### Tests de seguridad
-
-Cubren autorización, exposición de datos, abuso y manipulación de entradas.
-
-### Tests de migración o compatibilidad
-
-Cubren datos existentes y comportamiento anterior.
-
-### Tests de observabilidad y analytics
-
-Verifican eventos, ausencia de datos prohibidos y señales operativas.
-
-Para cada área indicar:
-
-* riesgo cubierto;
-* nivel recomendado;
-* datos necesarios;
-* ambiente;
-* criterio de éxito;
-* evidencia esperada.
-
-No exigir una pirámide de testing universal. Elegir niveles según el comportamiento y riesgo.
+Convert them into checkable behaviors.
 
 ---
 
-## 26. Preparar descomposición en vertical slices
+## 25. Testing strategy
 
-No crear todavía el `ExecPlan`, pero proponer una descomposición candidata.
+Derive the testing plan directly from risks, rules, and acceptance criteria.
 
-Cada vertical slice debe:
+Define:
 
-* entregar comportamiento verificable;
-* atravesar las capas necesarias;
-* incluir permisos;
-* incluir datos mínimos;
-* incluir manejo de errores;
-* incluir tests;
-* poder integrarse;
-* reducir riesgo o incertidumbre;
-* evitar depender de una entrega masiva final.
+### Behavior tests
 
-Para cada slice candidato indicar:
+Verify observable user or system results.
 
-* resultado;
+### Rule tests
+
+Cover business rules, limits, and exceptions.
+
+### Permission tests
+
+Cover allowed actions, denied actions, and isolation between owners or tenants.
+
+### State tests
+
+Cover valid, invalid, automatic, and concurrent transitions.
+
+### Validation tests
+
+Cover valid values, invalid values, and boundaries.
+
+### Integration tests
+
+Cover contracts between components or systems.
+
+### End-to-end tests
+
+Cover critical end-to-end journeys.
+
+### Accessibility tests
+
+Cover navigation, focus, semantics, errors, and assistive technologies.
+
+### Responsive tests
+
+Cover content and interaction priorities in relevant contexts.
+
+### Resilience tests
+
+Cover failures, timeouts, retries, partial operations, and recovery.
+
+### Security tests
+
+Cover authorization, data exposure, abuse, and input manipulation.
+
+### Migration or compatibility tests
+
+Cover existing data and previous behavior.
+
+### Observability and analytics tests
+
+Verify events, absence of prohibited data, and operational signals.
+
+For each area indicate:
+
+* risk covered;
+* recommended level;
+* required data;
+* environment;
+* success criterion;
+* expected evidence.
+
+Do not require a universal testing pyramid. Choose levels according to behavior and risk.
+
+---
+
+## 26. Prepare vertical slice decomposition
+
+Do not create the `ExecPlan` yet, but propose a candidate decomposition.
+
+Each vertical slice must:
+
+* deliver verifiable behavior;
+* cross the necessary layers;
+* include permissions;
+* include minimum data;
+* include error handling;
+* include tests;
+* be integrable;
+* reduce risk or uncertainty;
+* avoid depending on a massive final delivery.
+
+For each candidate slice indicate:
+
+* outcome;
 * actor;
-* flujo cubierto;
-* reglas incluidas;
-* datos mínimos;
-* dependencias;
-* criterios de aceptación;
-* tests necesarios;
-* riesgos;
-* qué queda explícitamente fuera.
+* flow covered;
+* rules included;
+* minimum data;
+* dependencies;
+* acceptance criteria;
+* required tests;
+* risks;
+* what is explicitly out.
 
-Ordenar los slices considerando:
+Order the slices considering:
 
-1. incertidumbre;
-2. valor;
-3. riesgo;
-4. dependencias;
-5. capacidad de integración;
-6. reversibilidad.
+1. uncertainty;
+2. value;
+3. risk;
+4. dependencies;
+5. integration capacity;
+6. reversibility.
 
-No dividir exclusivamente por capas técnicas como:
+Do not split exclusively by technical layers such as:
 
 * frontend;
 * backend;
-* base de datos;
+* database;
 * tests.
 
 ---
 
-## 27. Revisar consistencia
+## 27. Review consistency
 
-Antes del gate final comprobar:
+Before the final gate check:
 
-* ¿El problema coincide con el alcance?
-* ¿El resultado puede alcanzarse con lo incluido?
-* ¿Los no objetivos evitan interpretaciones amplias?
-* ¿Los flujos cubren happy path y excepciones?
-* ¿Cada regla aparece reflejada en criterios de aceptación?
-* ¿Los permisos coinciden con el ownership?
-* ¿Los estados permiten todos los flujos válidos?
-* ¿Las validaciones son coherentes entre canales?
-* ¿Los errores permiten recuperación?
-* ¿Loading, empty, error y unauthorized están diferenciados?
-* ¿Los edge cases críticos tienen decisión?
-* ¿Accesibilidad y responsive son verificables?
-* ¿Las métricas responden preguntas reales?
-* ¿Los datos tienen owner y ciclo de vida?
-* ¿Los contratos pueden evolucionar?
-* ¿Las dependencias bloqueantes están identificadas?
-* ¿Los riesgos tienen tratamiento?
-* ¿El rollout tiene señales de avance y pausa?
-* ¿El rollback es realista?
-* ¿Los criterios pueden convertirse en tests?
-* ¿La feature puede dividirse en vertical slices?
+* Does the problem match the scope?
+* Can the outcome be achieved with what is included?
+* Do non-goals prevent broad interpretations?
+* Do flows cover happy path and exceptions?
+* Is every rule reflected in acceptance criteria?
+* Do permissions match ownership?
+* Do states allow all valid flows?
+* Are validations coherent across channels?
+* Do errors allow recovery?
+* Are loading, empty, error, and unauthorized differentiated?
+* Do critical edge cases have a decision?
+* Are accessibility and responsive verifiable?
+* Do metrics answer real questions?
+* Do data have an owner and lifecycle?
+* Can contracts evolve?
+* Are blocking dependencies identified?
+* Do risks have treatment?
+* Does rollout have progress and pause signals?
+* Is rollback realistic?
+* Can criteria become tests?
+* Can the feature be split into vertical slices?
 
 ---
 
-## 28. Revisión adversarial
+## 28. Adversarial review
 
-Intentar refutar el diseño.
+Try to refute the design.
 
-Preguntar:
+Ask:
 
-* ¿La feature resuelve el problema o solo implementa una solicitud?
-* ¿Existe una solución más simple?
-* ¿Se introducen capacidades sin evidencia?
-* ¿Se está diseñando para usuarios inexistentes?
-* ¿Se mezclaron varias features bajo un único nombre?
-* ¿El flujo depende de trabajo manual no documentado?
-* ¿Un actor puede obtener o modificar datos que no le pertenecen?
-* ¿Existe un estado imposible?
-* ¿Una operación repetida produce duplicados?
-* ¿Qué ocurre si la dependencia externa falla después de un efecto parcial?
-* ¿El usuario puede perder trabajo?
-* ¿La feature puede abusarse?
-* ¿El analytics viola privacidad?
-* ¿El sistema puede soportarla operativamente?
-* ¿Puede lanzarse de forma gradual?
-* ¿Puede detenerse sin dañar datos?
-* ¿Los criterios de aceptación permiten interpretaciones distintas?
-* ¿El implementador deberá inventar comportamiento no especificado?
+* Does the feature solve the problem or only implement a request?
+* Is there a simpler solution?
+* Are capabilities introduced without evidence?
+* Is it being designed for nonexistent users?
+* Were several features mixed under a single name?
+* Does the flow depend on undocumented manual work?
+* Can an actor obtain or modify data that does not belong to them?
+* Is there an impossible state?
+* Does a repeated operation produce duplicates?
+* What happens if the external dependency fails after a partial effect?
+* Can the user lose work?
+* Can the feature be abused?
+* Does analytics violate privacy?
+* Can the system support it operationally?
+* Can it be launched gradually?
+* Can it be stopped without damaging data?
+* Do acceptance criteria allow different interpretations?
+* Will the implementer have to invent unspecified behavior?
 
-Registrar hallazgos y resolverlos o convertirlos en preguntas abiertas.
+Record findings and resolve them or convert them into open questions.
 
 ---
 
 ## Gates
 
-Asignar uno de los siguientes resultados.
+Assign one of the following results.
 
 ### READY FOR PLANNING
 
-La feature tiene:
+The feature has:
 
-* problema y resultado claros;
-* alcance y no objetivos explícitos;
-* flujos completos;
-* reglas coherentes;
-* permisos y ownership definidos;
-* estados y transiciones válidos;
-* errores y edge cases críticos resueltos;
-* criterios verificables;
-* estrategia de testing;
-* dependencias conocidas;
-* rollout y rollback viables;
-* descomposición candidata en vertical slices.
+* clear problem and outcome;
+* explicit scope and non-goals;
+* complete flows;
+* coherent rules;
+* defined permissions and ownership;
+* valid states and transitions;
+* critical errors and edge cases resolved;
+* verifiable criteria;
+* testing strategy;
+* known dependencies;
+* viable rollout and rollback;
+* candidate vertical slice decomposition.
 
-Puede continuar a `create-exec-plan`.
+It may continue to `create-exec-plan`.
 
 ### CONDITIONALLY READY FOR PLANNING
 
-La feature puede planificarse, pero existen:
+The feature can be planned, but there are:
 
-* supuestos aceptados;
-* decisiones menores pendientes;
-* dependencias no bloqueantes;
-* riesgos residuales explícitos.
+* accepted assumptions;
+* minor pending decisions;
+* non-blocking dependencies;
+* explicit residual risks.
 
-Las condiciones deben quedar registradas con owner y fecha o condición de resolución.
+Conditions must be recorded with owner and resolution date or condition.
 
 ### DESIGN REVIEW REQUIRED
 
-La especificación está completa para ser revisada, pero todavía necesita una revisión independiente mediante `review-feature`.
+The specification is complete enough to be reviewed, but still needs independent review via `review-feature`.
 
-Este gate es apropiado cuando el agente autor no debe aprobar su propio diseño.
+This gate is appropriate when the authoring agent must not approve its own design.
 
 ### REFINEMENT REQUIRED
 
-Existen ambigüedades, contradicciones, reglas incompletas o criterios insuficientes.
+There are ambiguities, contradictions, incomplete rules, or insufficient criteria.
 
-No debe iniciarse el plan de implementación.
+Implementation planning must not start.
 
 ### MORE EVIDENCE REQUIRED
 
-Una decisión central depende de evidencia de producto, usabilidad, operación o viabilidad todavía insuficiente.
+A central decision depends on product, usability, operational, or viability evidence that is still insufficient.
 
-Debe volver a validación, descubrimiento o un experimento.
+It must return to validation, discovery, or an experiment.
 
 ### ARCHITECTURE INPUT REQUIRED
 
-El comportamiento está claro, pero una decisión depende de:
+Behavior is clear, but a decision depends on:
 
-* atributos de calidad;
-* restricción sistémica;
+* quality attributes;
+* systemic constraint;
 * spike;
-* contrato compartido;
-* capacidad arquitectónica todavía no definida.
+* shared contract;
+* architectural capability not yet defined.
 
-No seleccionar una tecnología dentro de esta skill para cerrar artificialmente el bloqueo.
+Do not select a technology within this skill to artificially close the blocker.
 
 ### BLOCKED
 
-Faltan decisiones, autoridad, información, acceso o dependencias indispensables.
+Indispensable decisions, authority, information, access, or dependencies are missing.
 
 ### NOT READY FOR IMPLEMENTATION
 
-Puede existir documentación parcial, pero no hay condiciones para implementar de forma segura.
+Partial documentation may exist, but there are no conditions for safe implementation.
 
-Este gate puede acompañar cualquiera de los estados que requieran trabajo adicional.
+This gate may accompany any of the states that require additional work.
 
 ---
 
-## Criterios mínimos para implementación
+## Minimum criteria for implementation
 
-Una feature no está lista para implementación solamente porque exista una descripción general.
+A feature is not ready for implementation merely because a general description exists.
 
-Como mínimo debe tener:
+At minimum it must have:
 
-* alcance aprobado;
-* no objetivos;
-* actores;
-* flujo principal;
-* flujos alternativos críticos;
-* reglas;
-* permisos;
+* approved scope;
+* non-goals;
+* actors;
+* main flow;
+* critical alternative flows;
+* rules;
+* permissions;
 * ownership;
-* estados;
-* validaciones;
-* errores;
-* criterios de aceptación;
-* riesgos;
-* estrategia de testing;
-* dependencias;
+* states;
+* validations;
+* errors;
+* acceptance criteria;
+* risks;
+* testing strategy;
+* dependencies;
 * rollout;
-* rollback o contingencia;
-* revisión independiente cuando corresponda;
-* plan de ejecución aprobado.
+* rollback or contingency;
+* independent review when applicable;
+* approved execution plan.
 
-La implementación debe comenzar después de `create-exec-plan`, salvo cambios triviales expresamente permitidos por `AGENTS.md`.
+Implementation must begin after `create-exec-plan`, except for trivial changes expressly permitted by `AGENTS.md`.
 
 ---
 
-## Aprobaciones humanas
+## Human approvals
 
-Solicitar aprobación humana cuando la feature incluya decisiones difíciles de revertir, como:
+Request human approval when the feature includes hard-to-reverse decisions, such as:
 
-* autenticación;
-* autorización;
+* authentication;
+* authorization;
 * billing;
-* precios;
-* monetización;
-* eliminación de datos;
-* migraciones destructivas;
-* tratamiento de datos sensibles;
-* cambios legales;
-* integraciones contractuales;
-* exposición pública;
-* transferencias de ownership;
-* moderación;
-* mecanismos antifraude;
-* operaciones irreversibles;
-* cambios importantes de alcance.
+* pricing;
+* monetization;
+* data deletion;
+* destructive migrations;
+* handling of sensitive data;
+* legal changes;
+* contractual integrations;
+* public exposure;
+* ownership transfers;
+* moderation;
+* anti-fraud mechanisms;
+* irreversible operations;
+* material scope changes.
 
-El agente puede analizar y proponer, pero no debe asumir autoridad para aprobar estas decisiones.
-
----
-
-## Prohibiciones
-
-Esta skill no debe:
-
-* escribir código;
-* modificar producción;
-* crear migraciones;
-* seleccionar tecnologías sin necesidad aprobada;
-* inventar evidencia;
-* ampliar alcance silenciosamente;
-* convertir todos los deseos en requisitos;
-* diseñar solamente el happy path;
-* omitir permisos;
-* confundir interfaz oculta con autorización;
-* ignorar operaciones o soporte;
-* definir analytics invasivo;
-* declarar rollback posible sin explicar cómo;
-* usar criterios de aceptación vagos;
-* crear tareas exclusivamente por capa técnica;
-* aprobar automáticamente el diseño propio;
-* reemplazar documentación estable por un handoff temporal.
+The agent may analyze and propose, but must not assume authority to approve these decisions.
 
 ---
 
-## Formato recomendado de `spec.md`
+## Prohibitions
+
+This skill must not:
+
+* write code;
+* modify production;
+* create migrations;
+* select technologies without approved need;
+* invent evidence;
+* silently expand scope;
+* turn every wish into a requirement;
+* design only the happy path;
+* omit permissions;
+* confuse a hidden interface with authorization;
+* ignore operations or support;
+* define invasive analytics;
+* declare rollback possible without explaining how;
+* use vague acceptance criteria;
+* create tasks exclusively by technical layer;
+* automatically approve its own design;
+* replace stable documentation with a temporary handoff.
+
+---
+
+## Recommended format for `spec.md`
 
 ```markdown
 # <Feature Name>
@@ -1497,7 +1497,7 @@ Esta skill no debe:
 
 ---
 
-## Formato recomendado de `test-plan.md`
+## Recommended format for `test-plan.md`
 
 ```markdown
 # Test Plan — <Feature Name>
@@ -1527,27 +1527,27 @@ Esta skill no debe:
 
 ---
 
-## Informe final
+## Final report
 
-Al finalizar, informar:
+On completion, report:
 
-* feature diseñada;
-* gate obtenido;
-* resultado esperado;
-* alcance principal;
-* no objetivos más relevantes;
-* cantidad de reglas;
-* cantidad de criterios de aceptación;
-* riesgos críticos;
-* dependencias bloqueantes;
-* preguntas abiertas;
-* aprobación humana requerida;
-* siguiente skill recomendada.
+* feature designed;
+* gate obtained;
+* expected outcome;
+* main scope;
+* most relevant non-goals;
+* number of rules;
+* number of acceptance criteria;
+* critical risks;
+* blocking dependencies;
+* open questions;
+* human approval required;
+* next recommended skill.
 
-La siguiente skill normalmente será:
+The next skill will normally be:
 
-* `review-feature`, para revisión independiente;
-* `validate-assumptions`, si falta evidencia;
-* `define-quality-attributes`, si falta una restricción sistémica;
-* `review-architecture`, si existe impacto arquitectónico relevante;
-* `create-exec-plan`, si la feature fue aprobada y está lista para planificación.
+* `review-feature`, for independent review;
+* `validate-assumptions`, if evidence is missing;
+* `define-quality-attributes`, if a systemic constraint is missing;
+* `review-architecture`, if there is relevant architectural impact;
+* `create-exec-plan`, if the feature was approved and is ready for planning.

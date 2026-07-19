@@ -1,410 +1,410 @@
 ---
 name: define-product-scope
 description: >
-  Define un alcance de producto explícito, coherente, priorizado y verificable
-  antes de diseñar o implementar. Convierte descubrimiento, auditoría y
-  validación de supuestos en una decisión concreta sobre qué se construye, para
-  quién, con qué resultado, qué queda fuera, qué se entrega primero y bajo qué
-  condiciones se puede ampliar. Congela temporalmente el próximo incremento
-  (no el producto entero) para evitar ambigüedad, sobreconstrucción y scope
-  creep. Úsala cuando el problema y los actores ya están suficientemente
-  descubiertos, hay que acotar una v1 o un incremento, reordenar prioridades o
-  resolver contradicciones de requisitos. Produce docs/product/scope.md con
-  resultado objetivo, actores, core loop, capacidades MUST/SHOULD/COULD/WON'T,
-  no objetivos, incrementos, métricas, control de cambios y un gate
-  (SCOPE READY / CONDITIONAL READY / REFINEMENT REQUIRED / MORE EVIDENCE
-  REQUIRED / BLOCKED). No implementa código, no diseña arquitectura ni UI
-  detallada, no inventa evidencia y no trata toda solicitud como obligatoria.
+  Define an explicit, coherent, prioritized, and verifiable product scope
+  before designing or implementing. Convert discovery, audit, and assumption
+  validation into a concrete decision about what is built, for whom, for what
+  outcome, what is out of scope, what ships first, and under which conditions
+  scope may expand. Temporarily freeze the next increment (not the entire
+  product) to avoid ambiguity, overbuilding, and scope creep. Use when the
+  problem and actors are sufficiently discovered, a v1 or increment must be
+  bounded, priorities reordered, or requirement contradictions resolved.
+  Produces docs/product/scope.md with objective outcome, actors, core loop,
+  MUST/SHOULD/COULD/WON'T capabilities, non-goals, increments, metrics,
+  change control, and a gate (SCOPE READY / CONDITIONAL READY / REFINEMENT
+  REQUIRED / MORE EVIDENCE REQUIRED / BLOCKED). Does not implement code,
+  design detailed architecture or UI, invent evidence, or treat every request
+  as mandatory.
 ---
 
 # define-product-scope
 
-## Propósito
+## Purpose
 
-Definir un alcance de producto explícito, coherente, priorizado y verificable antes de diseñar o implementar.
+Define an explicit, coherent, prioritized, and verifiable product scope before designing or implementing.
 
-Esta skill convierte los resultados de descubrimiento, auditoría y validación en una decisión concreta sobre:
+This skill converts discovery, audit, and validation outcomes into a concrete decision about:
 
-* qué se construirá;
-* para quién;
-* para qué resultado;
-* qué no se construirá;
-* qué se entregará primero;
-* qué condiciones permitirán ampliar el alcance.
+* what will be built;
+* for whom;
+* for what outcome;
+* what will not be built;
+* what will be delivered first;
+* which conditions will allow expanding the scope.
 
-No intenta congelar permanentemente el producto. Congela temporalmente el alcance del próximo incremento para evitar ambigüedad, sobreconstrucción y scope creep.
-
----
-
-## Cuándo utilizarla
-
-Utilizar esta skill cuando:
-
-* exista una idea de producto suficientemente descubierta;
-* se hayan identificado usuarios, problemas y resultados esperados;
-* haya supuestos validados, refutados o aceptados como riesgo;
-* sea necesario definir una primera versión o próximo incremento;
-* un proyecto existente necesite reorganizar prioridades;
-* diferentes documentos presenten requisitos contradictorios;
-* el equipo no pueda explicar claramente qué queda dentro y fuera.
-
-No utilizarla para diseñar interfaces detalladas, elegir arquitectura, modelar tablas definitivas ni crear un plan técnico de implementación.
+It does not attempt to freeze the product permanently. It temporarily freezes the scope of the next increment to avoid ambiguity, overbuilding, and scope creep.
 
 ---
 
-## Entradas esperadas
+## When to use it
 
-Revisar, cuando existan:
+Use this skill when:
+
+* there is a sufficiently discovered product idea;
+* users, problems, and expected outcomes have been identified;
+* assumptions have been validated, refuted, or accepted as risk;
+* a first version or next increment must be defined;
+* an existing project needs priority reorganization;
+* different documents present contradictory requirements;
+* the team cannot clearly explain what is in and out of scope.
+
+Do not use it to design detailed interfaces, choose architecture, model definitive tables, or create a technical implementation plan.
+
+---
+
+## Expected inputs
+
+Review, when they exist:
 
 * `AGENTS.md`;
 * `docs/project-status.md`;
-* documentación de descubrimiento;
-* registro de supuestos;
-* resultados de experimentos;
-* auditoría del proyecto existente;
-* requisitos proporcionados por stakeholders;
-* restricciones comerciales, legales, técnicas u operativas;
-* métricas o evidencia de uso;
-* decisiones previas relevantes.
+* discovery documentation;
+* assumption register;
+* experiment results;
+* audit of the existing project;
+* requirements provided by stakeholders;
+* commercial, legal, technical, or operational constraints;
+* metrics or usage evidence;
+* relevant prior decisions.
 
-No asumir que todos los requisitos solicitados pertenecen automáticamente al alcance.
+Do not assume that every requested requirement automatically belongs in scope.
 
 ---
 
-## Procedimiento
+## Procedure
 
-### 1. Establecer el contexto de decisión
+### 1. Establish the decision context
 
-Identificar:
+Identify:
 
-* producto o área afectada;
-* horizonte de planificación;
-* incremento que se desea definir;
-* responsables de aprobarlo;
-* fecha o condición de revisión;
-* restricciones conocidas.
+* product or affected area;
+* planning horizon;
+* increment to be defined;
+* people responsible for approving it;
+* review date or condition;
+* known constraints.
 
-Distinguir entre:
+Distinguish between:
 
-* alcance general del producto;
-* alcance de una versión;
-* alcance del próximo incremento;
-* alcance de una única feature.
+* general product scope;
+* version scope;
+* next-increment scope;
+* single-feature scope.
 
-### 2. Consolidar la evidencia
+### 2. Consolidate the evidence
 
-Resumir únicamente lo respaldado por evidencia disponible:
+Summarize only what is backed by available evidence:
 
-* usuarios o actores prioritarios;
-* problemas relevantes;
-* resultados esperados;
-* comportamientos observados;
-* supuestos respaldados;
-* supuestos refutados;
-* incertidumbres todavía abiertas;
-* riesgos aceptados.
+* priority users or actors;
+* relevant problems;
+* expected outcomes;
+* observed behaviors;
+* supported assumptions;
+* refuted assumptions;
+* uncertainties still open;
+* accepted risks.
 
-Separar claramente:
+Clearly separate:
 
-* hechos;
-* evidencia indirecta;
-* decisiones;
-* hipótesis;
-* preferencias;
-* solicitudes sin validar.
+* facts;
+* indirect evidence;
+* decisions;
+* hypotheses;
+* preferences;
+* unvalidated requests.
 
-No presentar opiniones como hechos.
+Do not present opinions as facts.
 
-### 3. Definir el resultado objetivo
+### 3. Define the objective outcome
 
-Redactar un resultado concreto que el incremento debe habilitar.
+Write a concrete outcome that the increment must enable.
 
-Debe indicar:
+It must indicate:
 
-* quién obtiene valor;
-* qué podrá lograr;
-* qué cambio observable se espera;
-* por qué ese resultado es prioritario.
+* who receives value;
+* what they will be able to achieve;
+* what observable change is expected;
+* why that outcome is a priority.
 
-Evitar objetivos como:
+Avoid objectives such as:
 
-* “crear el módulo”;
-* “implementar la plataforma”;
-* “agregar funcionalidades”;
-* “mejorar la experiencia”.
+* “create the module”;
+* “implement the platform”;
+* “add features”;
+* “improve the experience”.
 
-Preferir resultados observables, por ejemplo:
+Prefer observable outcomes, for example:
 
-> Permitir que un comerciante publique y mantenga actualizado su primer perfil sin asistencia manual.
+> Enable a merchant to publish and keep their first profile up to date without manual assistance.
 
-### 4. Definir los actores prioritarios
+### 4. Define priority actors
 
-Clasificar los actores en:
+Classify actors as:
 
-* primarios: reciben el valor central;
-* secundarios: participan o reciben valor indirecto;
-* operadores: administran, moderan o brindan soporte;
-* sistemas externos: integraciones necesarias.
+* primary: receive the central value;
+* secondary: participate or receive indirect value;
+* operators: administer, moderate, or provide support;
+* external systems: required integrations.
 
-Indicar qué actores no serán atendidos en este incremento.
+Indicate which actors will not be served in this increment.
 
-No intentar satisfacer simultáneamente a todos los segmentos.
+Do not try to satisfy every segment at once.
 
-### 5. Identificar el core loop
+### 5. Identify the core loop
 
-Describir la secuencia mínima de acciones que genera valor repetible.
+Describe the minimum sequence of actions that generates repeatable value.
 
-Para cada paso indicar:
+For each step indicate:
 
 * actor;
-* acción;
-* precondición;
-* resultado;
-* posible fallo.
+* action;
+* precondition;
+* outcome;
+* possible failure.
 
-El alcance principal debe proteger este loop antes de agregar capacidades periféricas.
+The main scope must protect this loop before adding peripheral capabilities.
 
-### 6. Definir capacidades dentro del alcance
+### 6. Define in-scope capabilities
 
-Incluir solamente capacidades necesarias para completar el resultado objetivo.
+Include only capabilities needed to complete the objective outcome.
 
-Cada capacidad debe contener:
+Each capability must contain:
 
-* nombre;
-* actor beneficiado;
-* problema que resuelve;
-* comportamiento esperado;
-* evidencia o razón de inclusión;
-* prioridad;
-* dependencias;
-* criterios generales de aceptación.
+* name;
+* benefiting actor;
+* problem it solves;
+* expected behavior;
+* evidence or reason for inclusion;
+* priority;
+* dependencies;
+* general acceptance criteria.
 
-Clasificar cada capacidad como:
+Classify each capability as:
 
-* `MUST`: necesaria para que el incremento tenga sentido;
-* `SHOULD`: valiosa, pero puede aplazarse sin invalidarlo;
-* `COULD`: opcional si existe capacidad disponible;
-* `WON'T NOW`: explícitamente excluida.
+* `MUST`: necessary for the increment to make sense;
+* `SHOULD`: valuable, but can be deferred without invalidating it;
+* `COULD`: optional if capacity is available;
+* `WON'T NOW`: explicitly excluded.
 
-No utilizar `MUST` como sinónimo de “importante”. Un elemento es `MUST` únicamente cuando su ausencia impide alcanzar el resultado definido.
+Do not use `MUST` as a synonym for “important”. An item is `MUST` only when its absence prevents achieving the defined outcome.
 
-### 7. Definir límites funcionales
+### 7. Define functional boundaries
 
-Para cada capacidad incluida, especificar:
+For each included capability, specify:
 
-* comienzo y final del flujo;
-* datos mínimos necesarios;
-* roles autorizados;
-* estados soportados;
-* reglas esenciales;
-* errores que deben manejarse;
-* canales o plataformas contemplados;
-* volumen o escala esperada;
-* comportamiento manual permitido.
+* start and end of the flow;
+* minimum required data;
+* authorized roles;
+* supported states;
+* essential rules;
+* errors that must be handled;
+* channels or platforms covered;
+* expected volume or scale;
+* allowed manual behavior.
 
-Esto debe impedir interpretaciones silenciosamente más amplias.
+This must prevent silently broader interpretations.
 
-### 8. Definir no objetivos
+### 8. Define non-goals
 
-Crear una sección explícita de `Non-Goals`.
+Create an explicit `Non-Goals` section.
 
-Incluir:
+Include:
 
-* funcionalidades postergadas;
-* actores no cubiertos;
-* automatizaciones que seguirán siendo manuales;
-* integraciones excluidas;
-* casos extremos no soportados;
-* optimizaciones prematuras;
-* características deseables sin evidencia suficiente.
+* deferred features;
+* uncovered actors;
+* automations that will remain manual;
+* excluded integrations;
+* unsupported edge cases;
+* premature optimizations;
+* desirable features without sufficient evidence.
 
-Cada no objetivo debe explicar brevemente por qué queda fuera:
+Each non-goal must briefly explain why it is out of scope:
 
-* baja prioridad;
-* falta de evidencia;
-* alto riesgo;
-* dependencia pendiente;
-* coste desproporcionado;
-* no necesario para el resultado actual.
+* low priority;
+* lack of evidence;
+* high risk;
+* pending dependency;
+* disproportionate cost;
+* not needed for the current outcome.
 
-### 9. Dividir en incrementos
+### 9. Split into increments
 
-Organizar el alcance como una secuencia de incrementos verticales.
+Organize scope as a sequence of vertical increments.
 
-Cada incremento debe:
+Each increment must:
 
-* producir valor demostrable;
-* ser integrable;
-* ser revisable;
-* incluir comportamiento, datos, permisos, interfaz y verificación necesarios;
-* reducir una incertidumbre relevante;
-* evitar depender de una gran entrega final.
+* produce demonstrable value;
+* be integrable;
+* be reviewable;
+* include the behavior, data, permissions, interface, and verification needed;
+* reduce a relevant uncertainty;
+* avoid depending on one large final delivery.
 
-Para cada incremento definir:
+For each increment define:
 
-* resultado;
-* capacidades incluidas;
-* capacidades excluidas;
-* dependencias;
-* riesgos;
-* señal de éxito;
-* condición de finalización.
+* outcome;
+* included capabilities;
+* excluded capabilities;
+* dependencies;
+* risks;
+* success signal;
+* completion condition.
 
-### 10. Revisar dependencias y orden
+### 10. Review dependencies and order
 
-Identificar dependencias:
+Identify dependencies:
 
-* de producto;
-* de datos;
-* técnicas;
-* legales;
-* comerciales;
-* operativas;
-* de terceros;
-* de conocimiento.
+* product;
+* data;
+* technical;
+* legal;
+* commercial;
+* operational;
+* third-party;
+* knowledge.
 
-Distinguir entre dependencias reales y preferencias de implementación.
+Distinguish real dependencies from implementation preferences.
 
-No adelantar infraestructura compleja únicamente porque podría ser útil en el futuro.
+Do not advance complex infrastructure solely because it might be useful later.
 
-### 11. Definir restricciones
+### 11. Define constraints
 
-Documentar restricciones confirmadas, por ejemplo:
+Document confirmed constraints, for example:
 
-* presupuesto;
-* fechas externas;
-* regulaciones;
-* privacidad;
-* accesibilidad;
-* compatibilidad;
-* proveedores obligatorios;
-* sistemas existentes;
-* capacidad operativa;
-* límites de soporte.
+* budget;
+* external dates;
+* regulations;
+* privacy;
+* accessibility;
+* compatibility;
+* mandatory vendors;
+* existing systems;
+* operational capacity;
+* support limits.
 
-No inventar restricciones para justificar decisiones.
+Do not invent constraints to justify decisions.
 
-### 12. Establecer métricas y señales
+### 12. Establish metrics and signals
 
-Definir cómo se evaluará el incremento.
+Define how the increment will be evaluated.
 
-Incluir:
+Include:
 
-* resultado esperado;
-* indicador principal;
-* indicadores secundarios;
-* señales cualitativas;
+* expected outcome;
+* primary indicator;
+* secondary indicators;
+* qualitative signals;
 * guardrails;
-* método de medición;
-* periodo de evaluación.
+* measurement method;
+* evaluation period.
 
-Evitar métricas decorativas que no cambien decisiones.
+Avoid decorative metrics that do not change decisions.
 
-### 13. Establecer control de cambios
+### 13. Establish change control
 
-Todo cambio posterior debe registrar:
+Every later change must record:
 
-* descripción;
-* razón;
-* evidencia nueva;
-* impacto;
-* coste;
-* riesgo;
-* elementos desplazados;
-* decisión;
-* aprobador.
+* description;
+* reason;
+* new evidence;
+* impact;
+* cost;
+* risk;
+* displaced items;
+* decision;
+* approver.
 
-No ampliar el alcance silenciosamente durante diseño o implementación.
+Do not expand scope silently during design or implementation.
 
-Los defectos necesarios para cumplir el comportamiento acordado no son scope creep. Las nuevas capacidades sí lo son.
+Defects required to meet the agreed behavior are not scope creep. New capabilities are.
 
-### 14. Ejecutar revisión adversarial
+### 14. Run adversarial review
 
-Cuestionar:
+Challenge:
 
-* ¿El alcance resuelve un problema real o solo reproduce una lista de deseos?
-* ¿Existe algún `MUST` que no sea realmente indispensable?
-* ¿El core loop funciona de punta a punta?
-* ¿Se intenta cubrir demasiados usuarios?
-* ¿Hay capacidades incluidas solo “para el futuro”?
-* ¿Se omitieron operaciones, soporte, permisos o estados de error?
-* ¿El incremento puede demostrar valor sin completar todo el producto?
-* ¿Los no objetivos son suficientemente explícitos?
-* ¿El éxito puede medirse?
-* ¿Las incertidumbres críticas tienen tratamiento?
+* Does the scope solve a real problem, or only reproduce a wish list?
+* Is there any `MUST` that is not truly indispensable?
+* Does the core loop work end to end?
+* Is the scope trying to cover too many users?
+* Are there capabilities included only “for the future”?
+* Were operations, support, permissions, or error states omitted?
+* Can the increment demonstrate value without completing the entire product?
+* Are non-goals sufficiently explicit?
+* Can success be measured?
+* Do critical uncertainties have a treatment?
 
 ---
 
-## Entregables
+## Deliverables
 
-Crear o actualizar `docs/product/scope.md` con:
+Create or update `docs/product/scope.md` with:
 
-1. contexto;
-2. evidencia utilizada;
-3. resultado objetivo;
-4. actores prioritarios;
+1. context;
+2. evidence used;
+3. objective outcome;
+4. priority actors;
 5. core loop;
-6. capacidades priorizadas;
-7. límites funcionales;
-8. no objetivos;
-9. incrementos;
-10. dependencias;
-11. restricciones;
-12. métricas;
-13. riesgos y unknowns;
-14. política de cambios;
-15. gate final.
+6. prioritized capabilities;
+7. functional boundaries;
+8. non-goals;
+9. increments;
+10. dependencies;
+11. constraints;
+12. metrics;
+13. risks and unknowns;
+14. change policy;
+15. final gate.
 
-Actualizar `docs/project-status.md` con el estado, bloqueantes y próxima skill recomendada.
+Update `docs/project-status.md` with status, blockers, and the next recommended skill.
 
 ---
 
-## Gate final
+## Final gate
 
-Asignar uno de estos resultados:
+Assign one of these outcomes:
 
 ### SCOPE READY
 
-El resultado, los límites, los no objetivos y el próximo incremento están suficientemente claros para continuar.
+The outcome, boundaries, non-goals, and next increment are clear enough to continue.
 
 ### CONDITIONAL READY
 
-Puede continuarse con condiciones explícitas, riesgos aceptados o decisiones pendientes no bloqueantes.
+Work may continue under explicit conditions, accepted risks, or non-blocking pending decisions.
 
 ### REFINEMENT REQUIRED
 
-Existen ambigüedades, contradicciones o exceso de alcance que deben resolverse antes de diseñar.
+Ambiguities, contradictions, or excess scope must be resolved before design.
 
 ### MORE EVIDENCE REQUIRED
 
-Una decisión crítica de alcance depende de supuestos todavía no validados.
+A critical scope decision depends on assumptions that are still unvalidated.
 
 ### BLOCKED
 
-Faltan autoridad, información, restricciones o decisiones indispensables.
+Authority, information, constraints, or indispensable decisions are missing.
 
 ---
 
-## Reglas
+## Rules
 
-Esta skill no debe:
+This skill must not:
 
-* implementar código;
-* diseñar arquitectura definitiva;
-* producir wireframes detallados;
-* inventar evidencia;
-* tratar todas las solicitudes como obligatorias;
-* convertir posibilidades futuras en requisitos actuales;
-* ocultar contradicciones;
-* ampliar el alcance sin registrarlo;
-* declarar listo un alcance imposible de verificar.
+* implement code;
+* design definitive architecture;
+* produce detailed wireframes;
+* invent evidence;
+* treat every request as mandatory;
+* convert future possibilities into current requirements;
+* hide contradictions;
+* expand scope without recording it;
+* declare ready a scope that cannot be verified.
 
-El informe final debe indicar:
+The final report must indicate:
 
-* gate obtenido;
-* resultado objetivo;
-* incremento recomendado;
-* principales exclusiones;
-* riesgos aceptados;
-* preguntas bloqueantes;
-* siguiente skill sugerida.
+* gate obtained;
+* objective outcome;
+* recommended increment;
+* main exclusions;
+* accepted risks;
+* blocking questions;
+* suggested next skill.

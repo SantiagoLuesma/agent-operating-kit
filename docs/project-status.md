@@ -31,17 +31,16 @@ software projects without depending on a specific model or vendor workflow.
 - Canonical `AGENTS.md` with authority hierarchy
 - Git archive: `main`, `version-original`, tag `original-baseline`
 - Work branch: `grok`
+- Phase 1 kit packaging (README, profiles, adapters, templates, scripts)
+- All skills normalized to **English** (previously mixed ES/EN)
 
 ## In progress
 
-- README, `TOOLING.md`, profiles, adapters
-- Doc templates and path normalization (`docs/product/scope.md`)
-- Skill frontmatter normalization
+- None
 
 ## Next
 
-- Finish Phase 1 packaging
-- Phase 2: script contracts + stronger validation helpers
+- Phase 2: stronger script contracts and validation helpers
 - Dry-run the kit on a tiny real or sample product later
 
 ## Authoritative documents
