@@ -5,8 +5,8 @@
 #   scripts/bootstrap-project /path/to/project
 #   scripts/bootstrap-project /path/to/project --force
 #
-# Copies portable kit files. Does not copy .git or invent product content.
-# Existing files are skipped unless --force is set.
+# Copies the portable kit surface so the target is check-docs capable.
+# Does not invent product facts. Existing files are skipped unless --force.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -33,11 +33,13 @@ if [[ "$TARGET" == "$ROOT" ]]; then
   exit "$KIT_EXIT_FAIL"
 fi
 
+# Resolve absolute target when possible
 mkdir -p "$TARGET"
+TARGET="$(cd "$TARGET" && pwd)"
 
 copy_file() {
   local src="$1"
-  local dest="$2"
+  local dest="${2:-$1}"
   if [[ ! -e "$ROOT/$src" ]]; then
     kit_warn "skip missing source: $src"
     return 0
@@ -48,28 +50,33 @@ copy_file() {
     return 0
   fi
   cp "$ROOT/$src" "$TARGET/$dest"
+  if [[ -x "$ROOT/$src" ]]; then
+    chmod +x "$TARGET/$dest"
+  fi
   kit_ok "copied $dest"
 }
 
 copy_tree() {
   local src="$1"
-  local dest="$2"
+  local dest="${2:-$1}"
   if [[ ! -d "$ROOT/$src" ]]; then
     kit_warn "skip missing tree: $src"
     return 0
   fi
   mkdir -p "$TARGET/$dest"
-  # copy contents; skip if dest file exists unless force
   (
     cd "$ROOT/$src"
     find . -type f | while IFS= read -r rel; do
       rel="${rel#./}"
+      # never copy local-only noise
+      case "$rel" in
+        .DS_Store|*/.DS_Store) continue ;;
+      esac
       mkdir -p "$TARGET/$dest/$(dirname "$rel")"
       if [[ -e "$TARGET/$dest/$rel" && "$FORCE" -ne 1 ]]; then
         kit_info "skip existing: $dest/$rel"
       else
         cp "$ROOT/$src/$rel" "$TARGET/$dest/$rel"
-        # preserve executability for scripts
         if [[ -x "$ROOT/$src/$rel" ]]; then
           chmod +x "$TARGET/$dest/$rel"
         fi
@@ -82,35 +89,40 @@ copy_tree() {
 kit_info "bootstrap: kit=$ROOT"
 kit_info "bootstrap: target=$TARGET force=$FORCE"
 
-# Root kit files
-for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md; do
-  copy_file "$f" "$f"
+# Root kit files (README handled separately)
+for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md SECURITY.md CHANGELOG.md .gitignore; do
+  copy_file "$f"
 done
 
-# Do not overwrite a product README if present unless forced — use kit README only for greenfield
+# Optional kit docs for operators of the method
+copy_file "README.md" "README.kit.md"
+
 if [[ ! -f "$TARGET/README.md" || "$FORCE" -eq 1 ]]; then
   if [[ -f "$TARGET/README.md" && "$FORCE" -eq 1 ]]; then
-    copy_file "README.md" "README.kit.md"
-    kit_info "wrote kit README as README.kit.md (force mode preserves awareness)"
-  else
-    # For new projects, install a short instance README pointer instead of the kit manifesto
+    kit_info "force: leaving product README strategy to stub overwrite"
+  fi
+  if [[ ! -f "$TARGET/README.md" || "$FORCE" -eq 1 ]]; then
     cat > "$TARGET/README.md" <<EOF
 # Project
 
 This repository uses the **agent operating kit** (version $(tr -d '[:space:]' < "$ROOT/VERSION")).
 
-- Rules: \`AGENTS.md\`
-- Skills: \`.agents/skills/\`
-- Status: \`docs/project-status.md\`
-- Profiles: \`profiles/\`
-- Verify: \`./scripts/verify\`
-
-See \`TOOLING.md\` for agent/model-agnostic usage.
-Bootstrap source kit version recorded below.
+| Resource | Path |
+| --- | --- |
+| Rules | \`AGENTS.md\` |
+| Skills | \`.agents/skills/\` |
+| Status | \`docs/project-status.md\` |
+| Profiles | \`profiles/\` |
+| Verify | \`./scripts/verify\` |
+| Kit guide | \`README.kit.md\` |
+| Completeness | \`docs/kit/completeness.md\` |
+| Script contracts | \`docs/kit/scripts.md\` |
 
 \`\`\`text
 kit_version: $(tr -d '[:space:]' < "$ROOT/VERSION")
 \`\`\`
+
+Empty documentation sections mean **not decided**, not unrestricted scope.
 EOF
     kit_ok "wrote project README.md stub"
   fi
@@ -118,41 +130,47 @@ else
   kit_info "skip existing: README.md"
 fi
 
+# Core trees
 copy_tree ".agents" ".agents"
 copy_tree "profiles" "profiles"
 copy_tree "adapters" "adapters"
 copy_tree "scripts" "scripts"
+copy_tree "contracts" "contracts"
+copy_tree "docs" "docs"
 
-# Docs: templates + skeleton, not fictional product
-copy_tree "docs/_templates" "docs/_templates"
-copy_tree "docs/features/_templates" "docs/features/_templates"
-copy_tree "docs/plans/_templates" "docs/plans/_templates"
-copy_tree "docs/handoffs/_templates" "docs/handoffs/_templates"
-copy_tree "docs/decisions" "docs/decisions"
+# GitHub template + workflow (useful defaults; project may replace CI)
+copy_file ".github/pull_request_template.md"
+copy_file ".github/workflows/kit-ci.yml" ".github/workflows/kit-ci.yml"
 
-copy_file "docs/product/scope.md" "docs/product/scope.md"
-copy_file "docs/_templates/project-status.md" "docs/project-status.md"
-copy_file "contracts/README.md" "contracts/README.md"
-copy_file ".github/pull_request_template.md" ".github/pull_request_template.md"
-copy_file ".gitignore" ".gitignore"
-
-# Ensure script executables
+# Executables
 if [[ -d "$TARGET/scripts" ]]; then
-  chmod +x "$TARGET/scripts/check-docs" "$TARGET/scripts/verify" "$TARGET/scripts/test" \
-    "$TARGET/scripts/list-skills" "$TARGET/scripts/bootstrap-project" 2>/dev/null || true
+  chmod +x "$TARGET"/scripts/check-docs "$TARGET"/scripts/verify "$TARGET"/scripts/test \
+    "$TARGET"/scripts/list-skills "$TARGET"/scripts/bootstrap-project 2>/dev/null || true
 fi
 
-# Record kit version stamp
-mkdir -p "$TARGET/docs"
+# Prefer template project-status for instances if force or missing filled status
+if [[ ! -f "$TARGET/docs/project-status.md" || "$FORCE" -eq 1 ]]; then
+  if [[ -f "$ROOT/docs/_templates/project-status.md" ]]; then
+    # only replace with template when missing; if force and file is kit's own status, overwrite with template
+    if [[ ! -f "$TARGET/docs/project-status.md" ]]; then
+      copy_file "docs/_templates/project-status.md" "docs/project-status.md"
+    elif [[ "$FORCE" -eq 1 ]]; then
+      cp "$ROOT/docs/_templates/project-status.md" "$TARGET/docs/project-status.md"
+      kit_ok "reset docs/project-status.md from template (--force)"
+    fi
+  fi
+fi
+
 {
   echo "# Kit bootstrap stamp"
   echo
   echo "- kit_version: $(tr -d '[:space:]' < "$ROOT/VERSION")"
   echo "- bootstrapped_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
   echo "- source: agent operating kit"
+  echo "- completeness: see docs/kit/completeness.md"
 } > "$TARGET/docs/kit-version.md"
 kit_ok "wrote docs/kit-version.md"
 
 kit_log "bootstrap: done"
-kit_info "next: edit docs/project-status.md and run discover-product or audit-existing-project"
+kit_info "next: edit docs/project-status.md; run ./scripts/check-docs; then discover-product or audit-existing-project"
 exit "$KIT_EXIT_OK"

@@ -6,72 +6,68 @@
 | --- | --- |
 | Project | Agent operating kit (`starter-project`) |
 | Kind | Portable kit (process + skills + doc skeleton), not an application |
-| Kit version | `0.3.0` (see `VERSION`) |
-| Branch policy | Work on feature branches (e.g. `grok`); archive snapshot on `version-original` / tag `original-baseline` |
+| Kit version | `0.3.1` (see `VERSION`) |
+| Branch policy | Work on feature branches (e.g. `grok`); archive on `version-original` / `original-baseline` |
 
 ## Current phase
 
-**Kit packaging — Phase 3 complete (pipeline skills)**
+**Block A complete — Level A packaging (merge-ready kit surface)**
 
 ## Gate
 
-`KIT PHASE 3 READY`
+`KIT LEVEL A COMPLETE`
 
 ## Objective
 
-Produce a cloneable, agent-agnostic kit covering product → design → build →
-verify → release preparation without depending on a specific model or vendor.
+Ship a cloneable, agent-agnostic kit with non-empty skeletons, security baseline,
+aligned templates, bootstrap parity, and an explicit completeness definition.
 
 ## Completed
 
-- Phase 1: packaging (AGENTS, profiles, adapters, templates, README)
-- Phase 2: script contracts, bootstrap, CI, VERSION 0.2.x
-- All skills in English
-- Phase 3 pipeline skills:
-  - expanded `validate-assumptions`
-  - `design-information-architecture`
-  - `design-architecture`
-  - `build-walking-skeleton`
-  - `prepare-release`
-- Catalog and profiles updated for full lifecycle
+- Phases 1–3 (packaging, scripts, pipeline skills, English skills)
+- Block A:
+  - skeletons for product / ux / architecture / runbooks
+  - `SECURITY.md`
+  - skill-aligned templates (feature/architecture review, experiments, validation)
+  - bootstrap parity with full `docs/` + CI + security
+  - `docs/kit/completeness.md` + `CHANGELOG.md`
+  - removed `example-feature-1` and `.commandcode`
+  - stricter `check-docs` (non-empty skeletons)
 
 ## In progress
 
-- None
+- None (Level A)
 
-## Next
+## Next (Level B — not part of Block A)
 
-- Dry-run: bootstrap kit into a sample/real mini-project
-- Optional: merge `grok` → `main` and tag `v0.3.0`
-- Optional later: design-ux visual skill, incident/postmortem skill
+- Dry-run bootstrap + quick/standard path on a sample repo
+- Merge `grok` → `main` and tag `v0.3.1` when approved
+- Optional Level C skills later
 
 ## Authoritative documents
 
 | Concern | Path |
 | --- | --- |
-| Agent rules | `AGENTS.md` |
-| Tooling baseline | `TOOLING.md` |
+| Completeness | `docs/kit/completeness.md` |
 | Script contracts | `docs/kit/scripts.md` |
-| Profiles | `profiles/` |
-| Skills | `.agents/skills/` |
+| Agent rules | `AGENTS.md` |
+| Security | `SECURITY.md` |
+| Changelog | `CHANGELOG.md` |
 
 ## Blockers
 
-None.
+None for Level A.
 
 ## Risks
 
-- Full profile is long by design; agents must still pick the smallest profile
-  that matches risk (`quick` / `standard` / `full`).
-- New skills are procedural templates—not a substitute for project-specific
-  architecture decisions.
+- Level A does not prove the kit on a real product (that is Level B).
+- Skeleton sections remain empty by design until a product fills them.
 
 ## Next recommended action
 
-Use the kit on a real or sample product (`bootstrap-project`), or merge/tag
-0.3.0 when satisfied.
+Human review of Block A → dry-run (Level B) → merge/tag.
 
 ## Next recommended skill
 
-None for kit maintenance. For a new product instance: `discover-product` or
+None for kit maintenance. For a product instance: `discover-product` or
 `audit-existing-project`.

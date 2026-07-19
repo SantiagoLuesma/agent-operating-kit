@@ -17,7 +17,9 @@ same rules, evidence standards, and delivery workflow.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: **0.3.0** — see [`VERSION`](./VERSION).
+Current kit version: **0.3.1** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
+
+Kit completeness criteria: [`docs/kit/completeness.md`](./docs/kit/completeness.md) (Level A = merge-ready packaging).
 
 ## Principles
 
@@ -51,12 +53,17 @@ Generic paste-in prompt: [`adapters/generic-prompt.md`](./adapters/generic-promp
 ./scripts/bootstrap-project /path/to/project --force
 ```
 
-The bootstrap copies `AGENTS.md`, skills, profiles, adapters, scripts,
-templates, and writes `docs/kit-version.md`. Then:
+The bootstrap copies the full kit surface: `AGENTS.md`, `SECURITY.md`, skills,
+profiles, adapters, scripts, **all doc skeletons/templates**, contracts, PR
+template, kit CI workflow, and `docs/kit-version.md`. Kit guide is saved as
+`README.kit.md`; a short project `README.md` stub is created when missing.
+
+Then:
 
 1. Edit `docs/project-status.md` for the product.
-2. Wire stack checks: `cp scripts/project-verify.example scripts/project-verify`.
-3. Run `discover-product` or `audit-existing-project` as appropriate.
+2. Run `./scripts/check-docs` in the target.
+3. Wire stack checks: `cp scripts/project-verify.example scripts/project-verify`.
+4. Run `discover-product` or `audit-existing-project` as appropriate.
 
 Recommended first skill:
 

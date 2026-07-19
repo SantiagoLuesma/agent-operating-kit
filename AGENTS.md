@@ -162,6 +162,9 @@ Default for non-trivial product work: **standard**.
 - Do not invent users, metrics, interviews, or validation results.
 - Keep language consistent within each artifact. Prefer the repository’s
   existing documentation language; otherwise use the language of the task.
+- **Kit artifacts** (this repository’s rules, skills, templates, scripts) are
+  written in **English**. Product instances may document the product in another
+  language; do not mix languages inside one artifact.
 
 ## Autonomy and questions
 

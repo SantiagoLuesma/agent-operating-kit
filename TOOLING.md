@@ -65,7 +65,9 @@ Full contract: [`docs/kit/scripts.md`](./docs/kit/scripts.md).
 | `scripts/verify` | Health entrypoint: check-docs + optional project hooks |
 | `scripts/test` | Test entrypoint (`project-test` or stack defaults) |
 | `scripts/list-skills` | Inventory skills with paths and descriptions |
-| `scripts/bootstrap-project` | Copy kit into another project directory |
+| `scripts/bootstrap-project` | Copy full kit surface into another project (docs skeletons included) |
+
+Completeness levels: [`docs/kit/completeness.md`](./docs/kit/completeness.md).
 
 ### Project hooks (instances)
 

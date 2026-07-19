@@ -29,6 +29,19 @@ note() {
   kit_info "$*"
 }
 
+require_nonempty_file() {
+  local f="$1"
+  if [[ ! -f "$f" ]]; then
+    fail "missing required file: $f"
+    return 1
+  fi
+  if [[ ! -s "$f" ]]; then
+    fail "required file is empty: $f"
+    return 1
+  fi
+  ok "found $f"
+}
+
 # --- Required core files ---
 for f in \
   AGENTS.md \
@@ -36,8 +49,12 @@ for f in \
   TOOLING.md \
   CLAUDE.md \
   README.md \
+  SECURITY.md \
+  CHANGELOG.md \
   docs/project-status.md \
   docs/product/scope.md \
+  docs/kit/scripts.md \
+  docs/kit/completeness.md \
   profiles/quick.md \
   profiles/standard.md \
   profiles/full.md \
@@ -47,14 +64,52 @@ for f in \
   docs/features/_templates/spec.md \
   docs/features/_templates/test-plan.md \
   docs/features/_templates/open-questions.md \
+  docs/features/_templates/review.md \
+  docs/features/README.md \
   docs/plans/_templates/exec-plan.md \
+  docs/plans/_templates/release.md \
   docs/handoffs/_templates/handoff.md \
-  docs/decisions/adr/_template.md
+  docs/decisions/adr/_template.md \
+  docs/architecture/_templates/review.md \
+  docs/product/_templates/validation-summary.md \
+  docs/product/_templates/experiments.md
 do
-  if [[ -f "$f" ]]; then
-    ok "found $f"
-  else
-    fail "missing required file: $f"
+  require_nonempty_file "$f" || true
+done
+
+# --- Skeleton docs must not be zero-byte ---
+skeleton_dirs=(
+  docs/product
+  docs/ux
+  docs/architecture
+  docs/runbooks
+)
+for d in "${skeleton_dirs[@]}"; do
+  if [[ ! -d "$d" ]]; then
+    fail "missing skeleton directory: $d"
+    continue
+  fi
+  while IFS= read -r -d '' f; do
+    # skip templates subdirs if any under these (architecture has _templates)
+    case "$f" in
+      */_templates/*) continue ;;
+    esac
+    if [[ ! -s "$f" ]]; then
+      fail "skeleton file is empty: $f"
+    fi
+  done < <(find "$d" -type f -name '*.md' -print0)
+done
+ok "skeleton markdown files are non-empty (product/ux/architecture/runbooks)"
+
+# Must include Skeleton form marker on canonical skeletons (best-effort)
+for f in \
+  docs/product/problem.md \
+  docs/ux/information-architecture.md \
+  docs/architecture/system-context.md \
+  docs/runbooks/incident-response.md
+do
+  if [[ -f "$f" ]] && ! grep -q 'Skeleton form' "$f"; then
+    warn "expected skeleton marker in $f"
   fi
 done
 
@@ -101,7 +156,6 @@ else
       continue
     fi
 
-    # closing frontmatter fence must exist after line 1
     if ! awk 'NR>1 && $0=="---" { found=1; exit } END { exit !found }' "$skill"; then
       fail "skill missing closing frontmatter ---: $skill"
     fi
@@ -130,7 +184,6 @@ else
 fi
 
 # --- AGENTS.md catalog table vs disk ---
-# Only rows shaped like: | ... | `skill-id` |
 if [[ -f AGENTS.md && -d .agents/skills ]]; then
   catalog_tmp="$(mktemp)"
   disk_tmp="$(mktemp)"
@@ -165,12 +218,18 @@ if [[ -f AGENTS.md && -d .agents/skills ]]; then
   rm -f "$catalog_tmp" "$disk_tmp"
 fi
 
+# --- No example-feature noise required ---
+if [[ -d docs/features/example-feature-1 ]]; then
+  warn "docs/features/example-feature-1 still present; prefer templates only"
+fi
+
 # --- Suspicious markers in core kit text ---
 if grep -R --line-number -E 'TODO\(|FIXME\(|xxxSECRET|AKIA[0-9A-Z]{16}' \
-  AGENTS.md TOOLING.md README.md profiles adapters scripts 2>/dev/null \
+  AGENTS.md TOOLING.md README.md SECURITY.md profiles adapters scripts docs/kit 2>/dev/null \
   | grep -v 'check-docs' \
   | grep -v 'common.sh' \
   | grep -v 'NOT CONFIGURED' \
+  | grep -v 'TODO markers' \
   | grep .; then
   fail "suspicious markers found in core kit files"
 else

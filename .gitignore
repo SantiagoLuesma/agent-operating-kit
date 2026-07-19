@@ -9,6 +9,9 @@ Thumbs.db
 *.swo
 *~
 
+# Tool-specific local agent noise (not part of the portable kit)
+.commandcode/
+
 # Local env and secrets
 .env
 .env.*
