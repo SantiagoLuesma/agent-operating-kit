@@ -6,28 +6,28 @@
 | --- | --- |
 | Project | Agent operating kit (`starter-project`) |
 | Kind | Portable kit (process + skills + doc skeleton), not an application |
-| Kit version | `0.3.2` (see `VERSION`) |
-| Branch policy | Work on feature branches (e.g. `grok`); archive on `version-original` / `original-baseline` |
+| Kit version | `0.3.2` (see `VERSION`, tag `v0.3.2`) |
+| Branch | `main` (merged from `grok`) |
+| Archive | `version-original` / tag `original-baseline` |
 
 ## Current phase
 
-**Level B complete — dry-run trusted packaging**
+**Released on main — Level A + Level B complete**
 
 ## Gate
 
-`KIT LEVEL B COMPLETE`
+`KIT ON MAIN`
 
 ## Objective
 
-Prove the kit bootstraps cleanly and supports quick + standard smoke paths with
-STRICT verification hooks before merge/tag.
+Maintain a cloneable, agent-agnostic kit for multi-project use.
 
 ## Completed
 
 - Level A packaging (skeletons, SECURITY, templates, bootstrap parity)
-- Level B dry-run via `scripts/smoke-level-b`
-- Fix: bootstrap installs instance `project-status` template (not kit status)
-- Evidence: `docs/kit/level-b-report.md`
+- Level B dry-run (`scripts/smoke-level-b`, `docs/kit/level-b-report.md`)
+- Merge `grok` → `main` (fast-forward)
+- Tag `v0.3.2`
 
 ## In progress
 
@@ -35,10 +35,9 @@ STRICT verification hooks before merge/tag.
 
 ## Next
 
-- Human review → merge `grok` → `main`
-- Tag `v0.3.2` (optional but recommended)
-- Use kit on a real product project when ready
-- Level C optional skills later
+- Bootstrap into a real product repository when ready
+- Optional Level C (UX visual skill, incident skill, richer sample, …)
+- Push remote + enable GitHub Actions when a remote exists
 
 ## Authoritative documents
 
@@ -46,22 +45,17 @@ STRICT verification hooks before merge/tag.
 | --- | --- |
 | Completeness | `docs/kit/completeness.md` |
 | Level B report | `docs/kit/level-b-report.md` |
-| Script contracts | `docs/kit/scripts.md` |
+| Changelog | `CHANGELOG.md` |
 | Agent rules | `AGENTS.md` |
 
 ## Blockers
 
-None for Level B.
-
-## Risks
-
-- Smoke does not replace a full multi-day product discovery or production release.
-- CI must have `git` available for smoke commits (standard on GitHub-hosted runners).
+None.
 
 ## Next recommended action
 
-Merge to `main` and tag when satisfied; or bootstrap into a real repo.
+Use `./scripts/bootstrap-project <path>` on a real project, or push `main` + tag to a remote.
 
 ## Next recommended skill
 
-For a real product: `discover-product` or `audit-existing-project`.
+For a product instance: `discover-product` or `audit-existing-project`.
