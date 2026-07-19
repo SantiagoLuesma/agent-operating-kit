@@ -1,55 +1,126 @@
 #!/usr/bin/env bash
-# Structural checks for the agent kit (and project instances that keep the layout).
+# Structural integrity checks for the agent kit (and project instances).
+# Exit: 0 pass | 1 fail
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/common.sh
+source "$ROOT/scripts/lib/common.sh"
 cd "$ROOT"
 
 errors=0
+warnings=0
 
 fail() {
-  echo "FAIL: $*" >&2
+  kit_fail "$*"
   errors=$((errors + 1))
 }
 
+warn() {
+  kit_warn "$*"
+  warnings=$((warnings + 1))
+}
+
 ok() {
-  echo "OK: $*"
+  kit_ok "$*"
 }
 
-require_file() {
-  if [[ -f "$1" ]]; then
-    ok "found $1"
+note() {
+  kit_info "$*"
+}
+
+# --- Required core files ---
+for f in \
+  AGENTS.md \
+  VERSION \
+  TOOLING.md \
+  CLAUDE.md \
+  README.md \
+  docs/project-status.md \
+  docs/product/scope.md \
+  profiles/quick.md \
+  profiles/standard.md \
+  profiles/full.md \
+  adapters/generic-prompt.md \
+  contracts/README.md \
+  docs/_templates/project-status.md \
+  docs/features/_templates/spec.md \
+  docs/features/_templates/test-plan.md \
+  docs/features/_templates/open-questions.md \
+  docs/plans/_templates/exec-plan.md \
+  docs/handoffs/_templates/handoff.md \
+  docs/decisions/adr/_template.md
+do
+  if [[ -f "$f" ]]; then
+    ok "found $f"
   else
-    fail "missing required file: $1"
+    fail "missing required file: $f"
   fi
-}
+done
 
-require_file "AGENTS.md"
-require_file "VERSION"
-require_file "docs/project-status.md"
-require_file "docs/product/scope.md"
-require_file "TOOLING.md"
-require_file "profiles/quick.md"
-require_file "profiles/standard.md"
-require_file "profiles/full.md"
+# --- Scripts ---
+for s in check-docs verify test list-skills bootstrap-project; do
+  if [[ -f "scripts/$s" ]]; then
+    if [[ -x "scripts/$s" ]]; then
+      ok "executable scripts/$s"
+    else
+      fail "not executable: scripts/$s"
+    fi
+  else
+    fail "missing scripts/$s"
+  fi
+done
 
+if [[ -f "scripts/lib/common.sh" ]]; then
+  ok "found scripts/lib/common.sh"
+else
+  fail "missing scripts/lib/common.sh"
+fi
+
+# --- VERSION ---
+if [[ -f VERSION ]]; then
+  ver="$(tr -d '[:space:]' < VERSION)"
+  if semver_ok "$ver"; then
+    ok "VERSION is semver: $ver"
+  else
+    fail "VERSION is not valid semver: '$ver'"
+  fi
+fi
+
+# --- Skills inventory ---
 if [[ ! -d ".agents/skills" ]]; then
   fail "missing .agents/skills directory"
 else
   skill_count=0
   while IFS= read -r -d '' skill; do
     skill_count=$((skill_count + 1))
-    if ! grep -q '^name:' "$skill"; then
-      fail "skill missing frontmatter name: $skill"
-    fi
-    if ! grep -q '^description:' "$skill"; then
-      fail "skill missing frontmatter description: $skill"
-    fi
-    # Basic YAML frontmatter fence
+    dir_name="$(basename "$(dirname "$skill")")"
+
     if ! head -1 "$skill" | grep -q '^---$'; then
       fail "skill missing opening frontmatter ---: $skill"
+      continue
     fi
-  done < <(find .agents/skills -name SKILL.md -print0 | sort -z)
+
+    # closing frontmatter fence must exist after line 1
+    if ! awk 'NR>1 && $0=="---" { found=1; exit } END { exit !found }' "$skill"; then
+      fail "skill missing closing frontmatter ---: $skill"
+    fi
+
+    name="$(frontmatter_field "$skill" "name" | head -1 | tr -d '\r')"
+    desc="$(frontmatter_field "$skill" "description" | head -1 | tr -d '\r')"
+
+    if [[ -z "${name:-}" ]]; then
+      fail "skill missing frontmatter name: $skill"
+    else
+      if [[ "$name" != "$dir_name" ]]; then
+        fail "skill name '$name' != directory '$dir_name' ($skill)"
+      fi
+    fi
+
+    if [[ -z "${desc:-}" ]]; then
+      fail "skill missing frontmatter description: $skill"
+    fi
+  done < <(find .agents/skills -mindepth 2 -maxdepth 2 -name SKILL.md -print0 | sort -z)
 
   if [[ "$skill_count" -eq 0 ]]; then
     fail "no skills found under .agents/skills"
@@ -58,15 +129,63 @@ else
   fi
 fi
 
-if grep -R --line-number -E 'TODO\(|FIXME\(|xxxSECRET' AGENTS.md TOOLING.md profiles adapters 2>/dev/null | grep -v 'check-docs'; then
-  fail "suspicious markers found"
+# --- AGENTS.md catalog table vs disk ---
+# Only rows shaped like: | ... | `skill-id` |
+if [[ -f AGENTS.md && -d .agents/skills ]]; then
+  catalog_tmp="$(mktemp)"
+  disk_tmp="$(mktemp)"
+
+  grep -E '^\|[^|]+\| `([a-z0-9]+(-[a-z0-9]+)+)`' AGENTS.md \
+    | sed -E 's/.*`([a-z0-9]+(-[a-z0-9]+)+)`.*/\1/' \
+    | sort -u > "$catalog_tmp" || true
+
+  find .agents/skills -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+    | sort -u > "$disk_tmp"
+
+  missing=0
+  while IFS= read -r skill_id; do
+    [[ -z "$skill_id" ]] && continue
+    if [[ ! -d ".agents/skills/$skill_id" ]]; then
+      fail "AGENTS.md catalogs skill not on disk: $skill_id"
+      missing=$((missing + 1))
+    fi
+  done < "$catalog_tmp"
+
+  while IFS= read -r dir_skill; do
+    [[ -z "$dir_skill" ]] && continue
+    if ! grep -qx "$dir_skill" "$catalog_tmp"; then
+      warn "skill on disk not listed in AGENTS.md catalog table: $dir_skill"
+    fi
+  done < "$disk_tmp"
+
+  if [[ "$missing" -eq 0 ]]; then
+    ok "AGENTS.md skill catalog matches disk (table entries)"
+  fi
+
+  rm -f "$catalog_tmp" "$disk_tmp"
+fi
+
+# --- Suspicious markers in core kit text ---
+if grep -R --line-number -E 'TODO\(|FIXME\(|xxxSECRET|AKIA[0-9A-Z]{16}' \
+  AGENTS.md TOOLING.md README.md profiles adapters scripts 2>/dev/null \
+  | grep -v 'check-docs' \
+  | grep -v 'common.sh' \
+  | grep -v 'NOT CONFIGURED' \
+  | grep .; then
+  fail "suspicious markers found in core kit files"
 else
-  ok "no suspicious markers in core kit docs"
+  ok "no suspicious markers in core kit docs/scripts"
+fi
+
+# --- Summary ---
+if [[ "$warnings" -gt 0 ]]; then
+  note "check-docs: $warnings warning(s)"
 fi
 
 if [[ "$errors" -gt 0 ]]; then
-  echo "check-docs: $errors error(s)" >&2
-  exit 1
+  kit_fail "check-docs: $errors error(s)"
+  exit "$KIT_EXIT_FAIL"
 fi
 
-echo "check-docs: passed"
+kit_log "check-docs: passed"
+exit "$KIT_EXIT_OK"

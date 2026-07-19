@@ -1,19 +1,83 @@
 #!/usr/bin/env bash
-# Project health entrypoint. Kit default: structural docs checks.
-# When instantiating for an app, extend this script to call stack checks.
+# Project health entrypoint.
+#
+# Contract:
+#   1. Always runs scripts/check-docs (kit integrity), unless SKIP_DOCS=1.
+#   2. If scripts/project-verify exists and is executable, runs it (app stack).
+#   3. Else runs any executable files under scripts/verify.d/ in sorted order.
+#   4. Else reports kit-only or unconfigured stack status.
+#
+# Exit codes:
+#   0 — all configured checks passed
+#   1 — a check failed
+#   2 — STRICT=1 and required project checks are not configured
+#
+# Env:
+#   STRICT=1     fail when a stack manifest exists but no project hooks are wired
+#   SKIP_DOCS=1  skip check-docs (not recommended)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/common.sh
+source "$ROOT/scripts/lib/common.sh"
 cd "$ROOT"
 
-echo "verify: running kit structural checks"
-"$ROOT/scripts/check-docs"
+kit_info "verify: start (root=$ROOT)"
 
-if [[ -f "package.json" ]] || [[ -f "pyproject.toml" ]] || [[ -f "go.mod" ]] || [[ -f "Cargo.toml" ]] || [[ -f "Gemfile" ]]; then
-  echo "verify: application stack manifests detected"
-  echo "verify: configure stack-specific checks in scripts/verify for this project"
+if [[ "${SKIP_DOCS:-0}" != "1" ]]; then
+  kit_info "verify: running check-docs"
+  "$ROOT/scripts/check-docs"
 else
-  echo "verify: no application stack configured (expected for the kit itself)"
+  kit_warn "verify: SKIP_DOCS=1 — skipping check-docs"
 fi
 
-echo "verify: passed"
+stack_detected=0
+for manifest in package.json pyproject.toml go.mod Cargo.toml Gemfile composer.json mix.exs; do
+  if [[ -f "$manifest" ]]; then
+    stack_detected=1
+    kit_info "verify: detected stack manifest: $manifest"
+  fi
+done
+
+hooks_ran=0
+
+if [[ -x "$ROOT/scripts/project-verify" ]]; then
+  kit_info "verify: running scripts/project-verify"
+  "$ROOT/scripts/project-verify"
+  hooks_ran=1
+fi
+
+if [[ -d "$ROOT/scripts/verify.d" ]]; then
+  while IFS= read -r hook; do
+    [[ -z "$hook" ]] && continue
+    base="$(basename "$hook")"
+    # skip docs and examples
+    case "$base" in
+      README.md|*.example|*.md) continue ;;
+    esac
+    if [[ -x "$hook" ]]; then
+      kit_info "verify: running hook $base"
+      "$hook"
+      hooks_ran=1
+    elif [[ -f "$hook" ]]; then
+      # non-executable non-doc files are ignored with a warning
+      kit_warn "verify: ignoring non-executable hook: $hook"
+    fi
+  done < <(find "$ROOT/scripts/verify.d" -maxdepth 1 -type f 2>/dev/null | sort)
+fi
+
+if [[ "$hooks_ran" -eq 1 ]]; then
+  kit_ok "verify: project hooks completed"
+elif [[ "$stack_detected" -eq 1 ]]; then
+  kit_warn "verify: stack manifests present but no scripts/project-verify or verify.d hooks"
+  kit_info "verify: copy scripts/project-verify.example → scripts/project-verify and wire your stack"
+  if [[ "${STRICT:-0}" == "1" ]]; then
+    kit_fail "verify: STRICT=1 requires project verification hooks when a stack exists"
+    exit "$KIT_EXIT_NOT_CONFIGURED"
+  fi
+else
+  kit_info "verify: kit-only mode (no application stack configured)"
+fi
+
+kit_log "verify: passed"
+exit "$KIT_EXIT_OK"

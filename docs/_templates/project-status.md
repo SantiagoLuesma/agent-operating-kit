@@ -6,7 +6,7 @@
 | --- | --- |
 | Project | |
 | Kind | new product / existing product / kit instance |
-| Kit version | |
+| Kit version | (from `VERSION` / `docs/kit-version.md`) |
 | Repository | |
 
 ## Current phase

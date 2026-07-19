@@ -24,7 +24,11 @@
 ```bash
 ./scripts/check-docs
 ./scripts/verify
+./scripts/list-skills --paths
+./scripts/test
 ```
+
+Script contracts: `docs/kit/scripts.md`. CI: `.github/workflows/kit-ci.yml`.
 
 ## Pull requests
 

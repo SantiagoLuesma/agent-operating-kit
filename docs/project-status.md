@@ -6,19 +6,16 @@
 | --- | --- |
 | Project | Agent operating kit (`starter-project`) |
 | Kind | Portable kit (process + skills + doc skeleton), not an application |
-| Kit version | `0.1.0` (see `VERSION`) |
+| Kit version | `0.2.0` (see `VERSION`) |
 | Branch policy | Work on feature branches (e.g. `grok`); archive snapshot on `version-original` / tag `original-baseline` |
 
 ## Current phase
 
-**Kit packaging — Phase 1**
-
-Making the repository usable as a multi-project base: canonical rules, complete
-skill inventory, rigor profiles, adapters, templates, and onboarding docs.
+**Kit packaging — Phase 2 complete (scripts & portability)**
 
 ## Gate
 
-`KIT PACKAGING IN PROGRESS`
+`KIT PHASE 2 READY`
 
 ## Objective
 
@@ -27,12 +24,12 @@ software projects without depending on a specific model or vendor workflow.
 
 ## Completed
 
-- Baseline skills under `.agents/skills/`
-- Canonical `AGENTS.md` with authority hierarchy
+- Baseline skills under `.agents/skills/` (English)
+- Canonical `AGENTS.md` with authority hierarchy and full skill catalog
 - Git archive: `main`, `version-original`, tag `original-baseline`
 - Work branch: `grok`
-- Phase 1 kit packaging (README, profiles, adapters, templates, scripts)
-- All skills normalized to **English** (previously mixed ES/EN)
+- Phase 1: README, profiles, adapters, templates, basic scripts
+- Phase 2: script contracts, hooks, bootstrap, list-skills, kit CI, VERSION 0.2.0
 
 ## In progress
 
@@ -40,8 +37,8 @@ software projects without depending on a specific model or vendor workflow.
 
 ## Next
 
-- Phase 2: stronger script contracts and validation helpers
-- Dry-run the kit on a tiny real or sample product later
+- Phase 3 (optional): pipeline skill gaps (UX/architecture design, release)
+- Dry-run bootstrap + standard profile on a tiny real or sample product
 
 ## Authoritative documents
 

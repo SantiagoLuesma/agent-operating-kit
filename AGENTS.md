@@ -257,9 +257,13 @@ the approved scope and established conventions.
 
 Prefer repository scripts when present:
 
-- `scripts/verify`
-- `scripts/test`
-- `scripts/check-docs`
+- `scripts/verify` — health entrypoint (docs + optional project hooks)
+- `scripts/test` — tests (`project-test` or stack defaults)
+- `scripts/check-docs` — kit/layout structural checks
+- `scripts/list-skills` — inventory available skills
+
+See `docs/kit/scripts.md` for exit codes and hooks (`project-verify`,
+`verify.d/`). Do not claim success when output is `NOT CONFIGURED`.
 
 Otherwise run the relevant checks for the change:
 

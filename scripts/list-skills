@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# List installed kit skills (directory, name, description).
+# Usage:
+#   scripts/list-skills
+#   scripts/list-skills --paths
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/common.sh
+source "$ROOT/scripts/lib/common.sh"
+cd "$ROOT"
+
+paths_only=0
+if [[ "${1:-}" == "--paths" ]]; then
+  paths_only=1
+fi
+
+if [[ ! -d .agents/skills ]]; then
+  kit_fail "no .agents/skills directory"
+  exit "$KIT_EXIT_FAIL"
+fi
+
+count=0
+while IFS= read -r -d '' skill; do
+  dir_name="$(basename "$(dirname "$skill")")"
+  name="$(frontmatter_field "$skill" "name" | head -1 | tr -d '\r')"
+  # first non-empty description line
+  desc="$(frontmatter_field "$skill" "description" | head -1 | tr -d '\r')"
+  [[ -z "$name" ]] && name="$dir_name"
+  [[ -z "$desc" ]] && desc="(missing description)"
+
+  if [[ "$paths_only" -eq 1 ]]; then
+    printf '%s\n' "$skill"
+  else
+    printf '%s\n' "$name"
+    printf '  path: %s\n' "$skill"
+    printf '  %s\n\n' "$desc"
+  fi
+  count=$((count + 1))
+done < <(find .agents/skills -mindepth 2 -maxdepth 2 -name SKILL.md -print0 | sort -z)
+
+if [[ "$paths_only" -eq 0 ]]; then
+  kit_info "total: $count skills"
+fi

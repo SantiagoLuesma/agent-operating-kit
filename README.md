@@ -17,7 +17,7 @@ same rules, evidence standards, and delivery workflow.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: see [`VERSION`](./VERSION).
+Current kit version: **0.2.0** — see [`VERSION`](./VERSION).
 
 ## Principles
 
@@ -44,13 +44,19 @@ Generic paste-in prompt: [`adapters/generic-prompt.md`](./adapters/generic-promp
 ## Bootstrap a new software project
 
 ```bash
-# 1. Create the product repo, then copy kit essentials:
-cp AGENTS.md CLAUDE.md TOOLING.md VERSION /path/to/project/
-cp -R .agents profiles adapters scripts docs /path/to/project/
-# 2. Keep or trim docs/ skeleton; replace README with the product README
-# 3. Record kit version in docs/project-status.md
-# 4. Run discover-product or audit-existing-project as appropriate
+# From this kit repository:
+./scripts/bootstrap-project /path/to/project
+
+# Or with overwrite of kit-managed files:
+./scripts/bootstrap-project /path/to/project --force
 ```
+
+The bootstrap copies `AGENTS.md`, skills, profiles, adapters, scripts,
+templates, and writes `docs/kit-version.md`. Then:
+
+1. Edit `docs/project-status.md` for the product.
+2. Wire stack checks: `cp scripts/project-verify.example scripts/project-verify`.
+3. Run `discover-product` or `audit-existing-project` as appropriate.
 
 Recommended first skill:
 
@@ -136,6 +142,10 @@ scripts/
   check-docs
   verify
   test
+  list-skills
+  bootstrap-project
+  project-verify.example
+docs/kit/scripts.md       # script contracts
 ```
 
 ## Validation
@@ -143,8 +153,17 @@ scripts/
 ```bash
 ./scripts/check-docs
 ./scripts/verify
-./scripts/test          # NOT CONFIGURED until a stack exists
+./scripts/test            # NOT CONFIGURED until a stack exists
+./scripts/list-skills
+
+# After an app stack exists, enforce hooks in CI:
+STRICT=1 ./scripts/verify
+STRICT=1 ./scripts/test
 ```
+
+Script contracts: [`docs/kit/scripts.md`](./docs/kit/scripts.md).
+
+CI for this kit repo: [`.github/workflows/kit-ci.yml`](./.github/workflows/kit-ci.yml).
 
 ## Git workflow for this kit repo
 

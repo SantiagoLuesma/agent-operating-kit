@@ -57,14 +57,43 @@ Do **not** maintain parallel rule files per model.
 
 ## Scripts
 
+Full contract: [`docs/kit/scripts.md`](./docs/kit/scripts.md).
+
 | Script | Meaning |
 | --- | --- |
-| `scripts/check-docs` | Kit/doc structural checks |
-| `scripts/verify` | Project health entrypoint (delegates when stack exists) |
-| `scripts/test` | Test entrypoint |
+| `scripts/check-docs` | Kit/doc structural integrity (required layout, skills, VERSION) |
+| `scripts/verify` | Health entrypoint: check-docs + optional project hooks |
+| `scripts/test` | Test entrypoint (`project-test` or stack defaults) |
+| `scripts/list-skills` | Inventory skills with paths and descriptions |
+| `scripts/bootstrap-project` | Copy kit into another project directory |
 
-If a script reports `NOT CONFIGURED`, configure it for the project stack; do
-not invent a green result.
+### Project hooks (instances)
+
+| Path | Role |
+| --- | --- |
+| `scripts/project-verify` | App lint/type/build/security checks |
+| `scripts/project-test` | App test runner |
+| `scripts/verify.d/*` | Optional split verify hooks |
+
+Copy from `scripts/project-verify.example` / `project-test.example`.
+
+### Exit codes
+
+| Code | Meaning |
+| ---: | --- |
+| 0 | Success |
+| 1 | Failure |
+| 2 | Not configured when `STRICT=1` |
+
+If a script reports `NOT CONFIGURED`, wire the project hook. Do not invent a
+green result.
+
+```bash
+./scripts/check-docs
+./scripts/verify
+STRICT=1 ./scripts/verify   # after an app stack exists
+./scripts/bootstrap-project /path/to/project
+```
 
 ## Recommended agent matrix (illustrative)
 

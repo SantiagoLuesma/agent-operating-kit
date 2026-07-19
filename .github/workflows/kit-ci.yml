@@ -1,0 +1,28 @@
+name: kit-ci
+
+on:
+  push:
+    branches: [main, grok]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x scripts/check-docs scripts/verify scripts/test scripts/list-skills scripts/bootstrap-project
+
+      - name: check-docs
+        run: ./scripts/check-docs
+
+      - name: verify
+        run: ./scripts/verify
+
+      - name: list-skills
+        run: ./scripts/list-skills --paths | wc -l
+
+      - name: test (allow not configured)
+        run: ./scripts/test

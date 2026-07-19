@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Example project-specific verification hook.
+# Copy to scripts/project-verify and make executable:
+#   cp scripts/project-verify.example scripts/project-verify
+#   chmod +x scripts/project-verify
+#
+# scripts/verify will invoke this automatically when present.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+echo "project-verify: configure your stack checks here"
+echo "project-verify: examples:"
+echo "  npm run lint && npm run typecheck && npm test"
+echo "  cargo fmt --check && cargo clippy && cargo test"
+echo "  go test ./..."
+echo "  make check"
+
+# Exit non-zero on failure. Do not fake green results.
+exit 0

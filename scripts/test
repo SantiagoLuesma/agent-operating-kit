@@ -1,17 +1,74 @@
 #!/usr/bin/env bash
-# Test entrypoint. Kit default: no application tests.
+# Test entrypoint for kit and project instances.
+#
+# Contract:
+#   1. If scripts/project-test exists and is executable, run it and exit with its code.
+#   2. Else try common stack test commands when manifests exist.
+#   3. Else print NOT CONFIGURED.
+#
+# Exit codes:
+#   0 — tests passed, or kit-only NOT CONFIGURED (non-strict)
+#   1 — tests failed
+#   2 — STRICT=1 and no test runner configured
+#
+# Env:
+#   STRICT=1  fail when no test runner is configured
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/common.sh
+source "$ROOT/scripts/lib/common.sh"
 cd "$ROOT"
 
-if [[ -f "package.json" ]] && command -v npm >/dev/null 2>&1; then
-  if grep -q '"test"' package.json; then
-    npm test
-    exit 0
+if [[ -x "$ROOT/scripts/project-test" ]]; then
+  kit_info "test: running scripts/project-test"
+  exec "$ROOT/scripts/project-test"
+fi
+
+run_and_exit() {
+  kit_info "test: $*"
+  "$@"
+  exit $?
+}
+
+if [[ -f package.json ]] && command -v npm >/dev/null 2>&1; then
+  if grep -q '"test"[[:space:]]*:' package.json; then
+    run_and_exit npm test
   fi
 fi
 
-echo "test: NOT CONFIGURED"
-echo "test: add project test runner wiring in scripts/test when a stack exists"
-exit 0
+if [[ -f pyproject.toml ]] || [[ -f pytest.ini ]] || [[ -f setup.cfg ]]; then
+  if command -v pytest >/dev/null 2>&1; then
+    run_and_exit pytest
+  fi
+  if command -v python >/dev/null 2>&1 && python -m pytest --version >/dev/null 2>&1; then
+    run_and_exit python -m pytest
+  fi
+fi
+
+if [[ -f go.mod ]] && command -v go >/dev/null 2>&1; then
+  run_and_exit go test ./...
+fi
+
+if [[ -f Cargo.toml ]] && command -v cargo >/dev/null 2>&1; then
+  run_and_exit cargo test
+fi
+
+if [[ -f Gemfile ]] && command -v bundle >/dev/null 2>&1; then
+  if bundle exec rake -T 2>/dev/null | grep -q '^rake test'; then
+    run_and_exit bundle exec rake test
+  fi
+fi
+
+if [[ -f Makefile ]] && command -v make >/dev/null 2>&1; then
+  if grep -qE '^test:' Makefile; then
+    run_and_exit make test
+  fi
+fi
+
+kit_info "test: NOT CONFIGURED"
+kit_info "test: add scripts/project-test (see project-test.example) or a stack test command"
+if [[ "${STRICT:-0}" == "1" ]]; then
+  exit "$KIT_EXIT_NOT_CONFIGURED"
+fi
+exit "$KIT_EXIT_OK"

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Example project-specific test hook.
+# Copy to scripts/project-test and make executable.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+echo "project-test: configure your test runner here"
+# exec npm test
+# exec pytest
+# exec go test ./...
+# exec cargo test
+
+exit 0
