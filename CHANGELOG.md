@@ -2,6 +2,13 @@
 
 All notable changes to the **agent operating kit** are documented here.
 
+## [0.3.6] — 2026-07-19
+
+### Fixed
+
+- `check-docs` no longer requires `README.es.md` in bootstrapped project instances
+  (Spanish README is kit documentation for readers, not an app requirement).
+
 ## [0.3.5] — 2026-07-19
 
 ### Added
