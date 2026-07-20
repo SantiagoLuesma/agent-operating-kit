@@ -20,7 +20,7 @@ same rules, evidence standards, and delivery workflow.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: **0.3.2** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
+Current kit version: **0.3.3** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
 
 Kit completeness: [`docs/kit/completeness.md`](./docs/kit/completeness.md)  
 Level A = packaging · Level B = dry-run (`./scripts/smoke-level-b`, report in
@@ -199,4 +199,4 @@ CI for this kit repo: [`.github/workflows/kit-ci.yml`](./.github/workflows/kit-c
 
 ## License / ownership
 
-Private kit for your projects unless you add an explicit license later.
+Released under the [MIT License](./LICENSE). Copyright (c) 2026 Santiago Luesma.
