@@ -220,16 +220,8 @@ if [[ -f AGENTS.md && -d .agents/skills ]]; then
   rm -f "$catalog_tmp" "$disk_tmp"
 fi
 
-# --- Kit-only docs (optional in project instances) ---
-# README.es.md is for the public kit repository readers; bootstrapped apps may omit it.
-if [[ -f README.es.md ]]; then
-  ok "found optional README.es.md (kit bilingual entry)"
-elif [[ -f AUTHORS.md && -f docs/kit/completeness.md && -f scripts/smoke-level-b ]]; then
-  # Looks like the kit repo itself: bilingual README is expected there
-  warn "kit-like repo missing README.es.md (optional but recommended for public kit)"
-fi
-
 # --- No example-feature noise required ---
+
 if [[ -d docs/features/example-feature-1 ]]; then
   warn "docs/features/example-feature-1 still present; prefer templates only"
 fi
