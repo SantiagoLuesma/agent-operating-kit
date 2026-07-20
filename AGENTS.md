@@ -14,7 +14,10 @@ weaken security, approval gates, or source-of-truth requirements in this file.
 ## Kit identity
 
 This repository is an **agent operating kit**: portable process, skills, and
-documentation skeleton for software work with AI agents.
+documentation skeleton for software work with coding agents.
+
+**Author:** Santiago Luesma ([@luesmaaa](https://x.com/luesmaaa)). This kit’s
+methodology and packaging are the author’s work; model vendors are tools only.
 
 - Canonical rules: this file.
 - Canonical skills: `.agents/skills/*/SKILL.md` (single inventory).

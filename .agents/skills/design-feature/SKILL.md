@@ -38,16 +38,7 @@ It must not prematurely turn product decisions into irreversible technical decis
 
 This skill is agnostic to model, provider, and tool.
 
-It can be used by:
-
-* Codex;
-* OpenCode;
-* Claude Code;
-* Grok;
-* Kimi;
-* DeepSeek;
-* custom agents;
-* any agent capable of reading and writing repository documentation.
+It can be used by any coding agent capable of reading and writing repository documentation.
 
 The source of truth is the repository, not chat history or model memory.
 

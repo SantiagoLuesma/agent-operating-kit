@@ -2,6 +2,14 @@
 
 All notable changes to the **agent operating kit** are documented here.
 
+## [0.3.4] — 2026-07-19
+
+### Changed
+
+- Authorship and credit: Santiago Luesma only ([@luesmaaa](https://x.com/luesmaaa)).
+- Removed vendor/model brand laundry lists from docs and skills; kept client-agnostic wording.
+- Added `AUTHORS.md`.
+
 ## [0.3.3] — 2026-07-19
 
 ### Added

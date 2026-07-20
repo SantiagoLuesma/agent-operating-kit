@@ -35,7 +35,7 @@ This skill does not implement changes or silently replace the architecture with 
 
 ## Compatibility
 
-This skill is model-agnostic and compatible with Codex, OpenCode, Claude Code, Grok, Kimi, DeepSeek, and any coding agent capable of inspecting repositories and documentation.
+This skill is model- and client-agnostic. It works with any coding agent capable of inspecting repositories and documentation.
 
 The repository is the source of truth. Chat history is supporting context only.
 

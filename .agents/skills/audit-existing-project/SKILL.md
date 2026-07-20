@@ -1,6 +1,6 @@
 ---
 name: audit-existing-project
-description: Audit an existing software project to build a verifiable baseline of its product, architecture, code, data, security, operations, quality, and documentation. Use when onboarding AI agents to an existing repository, inheriting a system, resuming an abandoned project, assessing technical debt, preparing a migration, or before implementing major changes. Inspect real behavior, run safe verification, identify divergences among documentation, code, tests, and known production, classify risks, and propose a gradual adoption plan. Must not refactor, modernize, or change system behavior during the audit.
+description: Audit an existing software project to build a verifiable baseline of its product, architecture, code, data, security, operations, quality, and documentation. Use when onboarding coding agents to an existing repository, inheriting a system, resuming an abandoned project, assessing technical debt, preparing a migration, or before implementing major changes. Inspect real behavior, run safe verification, identify divergences among documentation, code, tests, and known production, classify risks, and propose a gradual adoption plan. Must not refactor, modernize, or change system behavior during the audit.
 ---
 
 # SKILL: Audit Existing Project

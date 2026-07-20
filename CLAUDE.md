@@ -1,8 +1,13 @@
 @AGENTS.md
 
-# Claude Code adapter
+# Client adapter
 
 Canonical project rules live in `AGENTS.md`. Do not duplicate or weaken them here.
+
+This file exists only because some clients load instructions from this path.
+It is **not** an endorsement or co-authorship by any vendor.
+
+**Kit author:** Santiago Luesma ([@luesmaaa](https://x.com/luesmaaa))
 
 ## Always
 

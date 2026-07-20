@@ -96,7 +96,7 @@ if [[ -f "$TARGET/docs/project-status.md" ]]; then
 fi
 
 # Root kit files (README handled separately)
-for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md SECURITY.md CHANGELOG.md LICENSE .gitignore; do
+for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md SECURITY.md CHANGELOG.md LICENSE AUTHORS.md .gitignore; do
   copy_file "$f"
 done
 

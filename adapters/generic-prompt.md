@@ -1,6 +1,8 @@
-# Generic agent bootstrap prompt
+# Generic coding-agent bootstrap prompt
 
-Copy into any agent, IDE chat, or CLI that does not auto-load project rules.
+Copy into any coding client, IDE chat, or CLI that does not auto-load project rules.
+
+Kit author: Santiago Luesma ([@luesmaaa](https://x.com/luesmaaa))
 
 ```text
 You are working in a repository that uses an agent kit.

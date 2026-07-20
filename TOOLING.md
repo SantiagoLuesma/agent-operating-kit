@@ -1,18 +1,20 @@
 # Tooling: baseline vs enhancers
 
-This kit is **agent- and model-agnostic**. Workflow truth lives in the
+This kit is **client- and model-agnostic**. Workflow truth lives in the
 repository, not in a vendor feature.
+
+**Author:** Santiago Luesma ([@luesmaaa](https://x.com/luesmaaa))
 
 ## Layers
 
 | Layer | Responsibility |
 | --- | --- |
-| Model | Reasoning and generation (GPT, Claude, Grok, Kimi, DeepSeek, …) |
+| Model | Reasoning and generation (any language model) |
 | Agent / client | Permissions, tools, how instructions load |
 | Repository kit | `AGENTS.md`, skills, docs, scripts, profiles |
 | Human | Irreversible decisions and final approvals |
 
-Configure the workflow for the **repository**. Choose the model inside the agent.
+Configure the workflow for the **repository**. Choose the model inside the client.
 
 ## Baseline (must work everywhere)
 
@@ -38,10 +40,10 @@ Use when available; never require them for correctness:
 
 | Capability | Examples | Fallback |
 | --- | --- | --- |
-| Auto-load `AGENTS.md` | Codex, OpenCode | Prompt: read AGENTS.md first |
-| Skill discovery | Agent Skills-compatible clients | Explicit path |
-| Subagents | Parallel implement/review | Separate sessions or models |
-| Managed worktrees | App-native worktrees | `git worktree` |
+| Auto-load `AGENTS.md` | Clients that load root instruction files | Prompt: read AGENTS.md first |
+| Skill discovery | Clients that load `.agents/skills` | Explicit path |
+| Subagents | Parallel implement/review sessions | Separate sessions or models |
+| Managed worktrees | Client-native worktrees | `git worktree` |
 | MCP / browsers | Issue trackers, web | CLI + docs |
 | Fine-grained permissions | Command allowlists | AGENTS gates + human |
 
@@ -49,11 +51,11 @@ Use when available; never require them for correctness:
 
 | File | Role |
 | --- | --- |
-| `AGENTS.md` | Canonical rules (all agents) |
-| `CLAUDE.md` | Thin Claude Code adapter |
+| `AGENTS.md` | Canonical rules (all clients) |
+| `CLAUDE.md` | Thin optional adapter for clients that read that filename |
 | `adapters/generic-prompt.md` | Universal bootstrap prompt |
 
-Do **not** maintain parallel rule files per model.
+Do **not** maintain parallel rule files per model brand.
 
 ## Scripts
 
@@ -66,6 +68,7 @@ Full contract: [`docs/kit/scripts.md`](./docs/kit/scripts.md).
 | `scripts/test` | Test entrypoint (`project-test` or stack defaults) |
 | `scripts/list-skills` | Inventory skills with paths and descriptions |
 | `scripts/bootstrap-project` | Copy full kit surface into another project (docs skeletons included) |
+| `scripts/smoke-level-b` | Level B dry-run harness |
 
 Completeness levels: [`docs/kit/completeness.md`](./docs/kit/completeness.md).
 
@@ -97,12 +100,12 @@ STRICT=1 ./scripts/verify   # after an app stack exists
 ./scripts/bootstrap-project /path/to/project
 ```
 
-## Recommended agent matrix (illustrative)
+## Recommended role matrix (illustrative)
 
 | Role | Preference |
 | --- | --- |
 | Coordinate / design | Strongest available reasoning |
 | Implement | Full filesystem + terminal + Git |
-| Review | Different model/session from implementer when possible |
-| Verify | Scripts first, then agent interpretation |
+| Review | Different session from implementer when possible |
+| Verify | Scripts first, then interpretation |
 | Human | Scope, irreversible ops, merge, production |

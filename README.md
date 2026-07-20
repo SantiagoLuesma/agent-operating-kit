@@ -1,14 +1,20 @@
 # Agent operating kit
 
 Portable **process + skills + documentation skeleton** for building software
-with AI agents — independent of model vendor and agent client.
+with coding agents — independent of any model vendor or client tool.
 
-License: [MIT](./LICENSE). Safe for public use: no application secrets, API keys,
-or production credentials are part of this repository.
+**Author:** [Santiago Luesma](https://github.com/SantiagoLuesma) ([@luesmaaa](https://x.com/luesmaaa))  
+**License:** [MIT](./LICENSE) · Copyright (c) 2026 Santiago Luesma  
+
+Safe for public use: no application secrets, API keys, or production credentials
+are part of this repository.
 
 This repository is **not** an application starter (no app stack). It is the
-shared operating system you copy into your projects so every agent follows the
-same rules, evidence standards, and delivery workflow.
+shared operating system you copy into your projects so every coding agent
+follows the same rules, evidence standards, and delivery workflow.
+
+All design, methodology, and packaging of this kit are by **Santiago Luesma**.
+No third-party model or vendor is an author or co-author of this work.
 
 | Piece | Role |
 | --- | --- |
@@ -29,8 +35,8 @@ Level A = packaging · Level B = dry-run (`./scripts/smoke-level-b`, report in
 ## Principles
 
 1. **Repository > chat.** Docs and code outrank conversation history.
-2. **One workflow.** Do not fork process per model (GPT/Claude/Grok/…).
-3. **Thin adapters.** Client-specific files only point at `AGENTS.md` + skills.
+2. **One workflow.** Do not fork process per model or client brand.
+3. **Thin adapters.** Optional client files only point at `AGENTS.md` + skills.
 4. **Skills by path.** If auto-discovery is missing, invoke  
    `.agents/skills/<name>/SKILL.md` explicitly.
 5. **Evidence.** Never claim success without executed checks on the right revision.
@@ -141,7 +147,7 @@ Live inventory: `.agents/skills/*/SKILL.md`.
 
 ```text
 AGENTS.md                 # constitution
-CLAUDE.md                 # Claude adapter
+CLAUDE.md                 # optional client adapter (filename required by that client)
 TOOLING.md                # baseline vs enhancers
 VERSION
 profiles/                 # quick | standard | full
@@ -197,6 +203,15 @@ CI for this kit repo: [`.github/workflows/kit-ci.yml`](./.github/workflows/kit-c
 3. Pull request merge  
 4. Production / destructive migration  
 
+## Author
+
+| | |
+| --- | --- |
+| Name | Santiago Luesma |
+| GitHub | [@SantiagoLuesma](https://github.com/SantiagoLuesma) |
+| X / Twitter | [@luesmaaa](https://x.com/luesmaaa) |
+
 ## License / ownership
 
-Released under the [MIT License](./LICENSE). Copyright (c) 2026 Santiago Luesma.
+Released under the [MIT License](./LICENSE).  
+Copyright (c) 2026 Santiago Luesma. All credit for this kit belongs to the author.

@@ -38,7 +38,7 @@ The review must produce evidence and explicit decisions, not a general opinion.
 
 This skill is agnostic to model, provider, language, and technology stack.
 
-It can be used with Codex, OpenCode, Claude Code, Grok, Kimi, DeepSeek, or any agent capable of inspecting documentation and repositories.
+It is client-agnostic and works with any agent capable of inspecting documentation and repositories.
 
 The source of truth is the repository. Chat history may provide context, but must not replace stable documentation.
 

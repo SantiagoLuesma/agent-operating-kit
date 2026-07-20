@@ -28,7 +28,7 @@ Its output must enable later architectural decisions to respond to demonstrable 
 
 This skill is agnostic to model, provider, language, framework, and platform.
 
-It can be used with Codex, OpenCode, Claude Code, Grok, Kimi, DeepSeek, or any agent capable of inspecting documentation and repositories.
+It is client-agnostic and works with any agent capable of inspecting documentation and repositories.
 
 The source of truth is the repository.
 
