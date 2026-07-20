@@ -1,5 +1,7 @@
 # Agent operating kit
 
+**Language:** **English** · [Español](./README.es.md)
+
 Portable **process + skills + documentation skeleton** for building software
 with coding agents — independent of any model vendor or client tool.
 
@@ -26,7 +28,7 @@ No third-party model or vendor is an author or co-author of this work.
 | `CLAUDE.md` / `adapters/` | Thin client adapters |
 | `VERSION` | Kit version to record in project instances |
 
-Current kit version: **0.3.4** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
+Current kit version: **0.3.5** — see [`VERSION`](./VERSION) and [`CHANGELOG.md`](./CHANGELOG.md).
 
 Kit completeness: [`docs/kit/completeness.md`](./docs/kit/completeness.md)  
 Level A = packaging · Level B = dry-run (`./scripts/smoke-level-b`, report in

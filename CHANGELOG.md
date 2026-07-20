@@ -2,6 +2,13 @@
 
 All notable changes to the **agent operating kit** are documented here.
 
+## [0.3.5] — 2026-07-19
+
+### Added
+
+- Bilingual documentation entry: `README.md` (English) and `README.es.md` (Spanish)
+  with cross-links.
+
 ## [0.3.4] — 2026-07-19
 
 ### Changed

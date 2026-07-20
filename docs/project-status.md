@@ -6,7 +6,7 @@
 | --- | --- |
 | Project | Agent operating kit (`starter-project`) |
 | Kind | Portable kit (process + skills + doc skeleton), not an application |
-| Kit version | `0.3.2` (see `VERSION`, tag `v0.3.2`) |
+| Kit version | `0.3.5` (see `VERSION`) |
 | Branch | `main` (merged from `grok`) |
 | Archive | `version-original` / tag `original-baseline` |
 

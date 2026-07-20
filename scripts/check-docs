@@ -49,6 +49,7 @@ for f in \
   TOOLING.md \
   CLAUDE.md \
   README.md \
+  README.es.md \
   SECURITY.md \
   CHANGELOG.md \
   LICENSE \

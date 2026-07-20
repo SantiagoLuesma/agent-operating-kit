@@ -100,8 +100,9 @@ for f in AGENTS.md CLAUDE.md TOOLING.md VERSION CONTRIBUTING.md SECURITY.md CHAN
   copy_file "$f"
 done
 
-# Optional kit docs for operators of the method
+# Optional kit docs for operators of the method (both languages)
 copy_file "README.md" "README.kit.md"
+copy_file "README.es.md" "README.kit.es.md"
 
 if [[ ! -f "$TARGET/README.md" || "$FORCE" -eq 1 ]]; then
   if [[ -f "$TARGET/README.md" && "$FORCE" -eq 1 ]]; then
