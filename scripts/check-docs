@@ -51,6 +51,7 @@ for f in \
   README.md \
   SECURITY.md \
   CHANGELOG.md \
+  LICENSE \
   docs/project-status.md \
   docs/product/scope.md \
   docs/kit/scripts.md \

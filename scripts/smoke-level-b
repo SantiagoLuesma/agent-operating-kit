@@ -309,11 +309,29 @@ section "6. Result"
 bullet "**LEVEL B SMOKE PASSED**"
 bullet "Finished (UTC): $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-# Copy report into kit docs for permanence when running from kit repo
+# Copy a redacted report into kit docs (no absolute local paths)
 if [[ -d "$ROOT/docs/kit" ]]; then
-  cp "$REPORT" "$ROOT/docs/kit/level-b-report.md"
-  # strip absolute machine-specific parent if desired — keep full paths for evidence
-  log "smoke-level-b: wrote $ROOT/docs/kit/level-b-report.md"
+  {
+    echo "# Level B dry-run report"
+    echo
+    echo "| Field | Value |"
+    echo "| --- | --- |"
+    echo "| Kit version | $KIT_VERSION |"
+    echo "| Kit root | \`(local kit checkout — redacted)\` |"
+    echo "| Smoke parent | \`(temp dir — redacted)\` |"
+    echo "| App path | \`(temp app — redacted)\` |"
+    echo "| Started (UTC) | $(date -u +"%Y-%m-%dT%H:%M:%SZ") |"
+    echo
+    echo "Full machine-local report (not for commit): \`$REPORT\`"
+    echo
+    # body without the machine-specific header table from $REPORT
+    awk '
+      BEGIN { skip=1 }
+      /^## / { skip=0 }
+      skip==0 { print }
+    ' "$REPORT"
+  } > "$ROOT/docs/kit/level-b-report.md"
+  log "smoke-level-b: wrote redacted $ROOT/docs/kit/level-b-report.md"
 fi
 
 log "smoke-level-b: PASSED"

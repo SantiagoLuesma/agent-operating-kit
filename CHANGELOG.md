@@ -2,6 +2,17 @@
 
 All notable changes to the **agent operating kit** are documented here.
 
+## [0.3.3] — 2026-07-19
+
+### Added
+
+- MIT `LICENSE` for public distribution.
+- Redacted Level B report (no local filesystem paths in committed evidence).
+
+### Fixed
+
+- `smoke-level-b` writes a redacted `docs/kit/level-b-report.md` suitable for public repos.
+
 ## [0.3.2] — 2026-07-19
 
 ### Added

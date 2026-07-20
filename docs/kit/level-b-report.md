@@ -3,11 +3,12 @@
 | Field | Value |
 | --- | --- |
 | Kit version | 0.3.2 |
-| Kit root | `/Users/jdv10/Documents/dev/top-projects/starter-project` |
-| Smoke parent | `/var/folders/_m/rx6qr3h12x93p8bbz6pxx3nh0000gn/T//kit-level-b.cwmPSd` |
-| App path | `/var/folders/_m/rx6qr3h12x93p8bbz6pxx3nh0000gn/T//kit-level-b.cwmPSd/app` |
+| Kit root | `(local kit checkout — redacted for public repo)` |
+| Smoke parent | `(temp dir — redacted)` |
+| App path | `(temp app — redacted)` |
 | Started (UTC) | 2026-07-19T09:14:06Z |
 
+Regenerate anytime with `./scripts/smoke-level-b` (local absolute paths are not committed).
 
 ## 1. Bootstrap
 

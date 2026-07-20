@@ -3,6 +3,9 @@
 Portable **process + skills + documentation skeleton** for building software
 with AI agents — independent of model vendor and agent client.
 
+License: [MIT](./LICENSE). Safe for public use: no application secrets, API keys,
+or production credentials are part of this repository.
+
 This repository is **not** an application starter (no app stack). It is the
 shared operating system you copy into your projects so every agent follows the
 same rules, evidence standards, and delivery workflow.
